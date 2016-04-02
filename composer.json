@@ -1,0 +1,62 @@
+{
+    "name": "hiqdev/asset-packagist.hiqdev.com",
+    "type": "project",
+    "description": "asset-packagist.hiqdev.com",
+    "keywords": [],
+    "homepage": "http://asset-packagist.hiqdev.com/",
+    "license": "BSD-3-Clause",
+    "support": {
+        "email": "support@hiqdev.com",
+        "source": "https://github.com/hiqdev/asset-packagist.hiqdev.com",
+        "issues": "https://github.com/hiqdev/asset-packagist.hiqdev.com/issues",
+        "wiki": "https://github.com/hiqdev/asset-packagist.hiqdev.com/wiki",
+        "forum": "http://forum.hiqdev.com/"
+    },
+    "authors": [
+        {
+            "name": "Andrii Vasyliev",
+            "role": "Project lead",
+            "email": "sol@hiqdev.com",
+            "homepage": "http://hipanel.com/"
+        },
+        {
+            "name": "Dmitry Naumenko",
+            "role": "Lead backend developer",
+            "email": "silverfire@hiqdev.com",
+            "homepage": "http://silverfire.me/"
+        },
+        {
+            "name": "Andrey Klochok",
+            "role": "Lead frontend developer",
+            "email": "tafid@hiqdev.com",
+            "homepage": "http://hiqdev.com/"
+        },
+        {
+            "name": "Yuriy Myronchuk",
+            "role": "QA Lead",
+            "email": "bladeroot@hiqdev.com",
+            "homepage": "http://hiqdev.com/"
+        }
+    ],
+    "require": {
+        "composer/composer": "*@dev",
+        "fxp/composer-asset-plugin": "*@dev",
+        "yiisoft/yii2": "^2.0",
+        "yiisoft/yii2-debug": "^2.0"
+    },
+    "require-dev": {
+        "hiqdev/composer-extension-plugin": "*@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "hiqdev\\assetpackagist\\": "src"
+        }
+    },
+    "replace": {
+        "bower-asset/bootstrap": "*",
+        "bower-asset/jquery": "*",
+        "bower-asset/jquery.inputmask": "*",
+        "bower-asset/punycode": "*",
+        "bower-asset/yii2-pjax": "*"
+    }
+}

@@ -1,0 +1,11 @@
+package:
+    name:           asset-packagist.hiqdev.com
+    namespace:      hiqdev\assetpackagist
+
+do:
+    class: hiqdev\assetpackagist\controllers\DoController
+
+require:
+    hiqdev/hidev-php:           "*"
+    hiqdev/hidev-yii2-web-app:  "*@dev"
+    hiqdev/hidev-vendor:        "*"
