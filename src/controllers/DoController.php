@@ -91,7 +91,10 @@ class DoController extends \yii\console\Controller
             ];
         }
 
-        return $this->updatePackage($full_name, $versions);
+        $hash = $this->updatePackage($full_name, $versions);
+        if ($hash) {
+            print "updated $hash $full_name\n";
+        }
     }
 
     static public function mkdir($dir)
@@ -123,7 +126,9 @@ class DoController extends \yii\console\Controller
     protected function updateProviderLatest($name, $hash)
     {
         $latest_path = Yii::getAlias('@web/provider-latest.json');
-        $data = Json::decode(file_get_contents($latest_path) ?: '[]');
+        if (file_exists($latest_path)) {
+            $data = Json::decode(file_get_contents($latest_path) ?: '[]');
+        }
         if (!is_array($data)) {
             $data = [];
         }
@@ -171,6 +176,6 @@ class DoController extends \yii\console\Controller
 
     public function actionTest()
     {
-        $this->updateProviderLatest('sadfasd/sadfa');
+        var_dump(Yii::getAlias('@web'));
     }
 }
