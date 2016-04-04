@@ -2,6 +2,10 @@ package:
     name:           asset-packagist.hiqdev.com
     namespace:      hiqdev\assetpackagist
 
+yii2webapp:
+    ssl:            true
+    sslPath:        crt/asset-packagist.hiqdev.com
+
 config: src/config/console.php
 
 do:
