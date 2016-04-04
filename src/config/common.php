@@ -1,6 +1,6 @@
 <?php
 
-$config = [
+return [
     'id' => 'asset-packagist',
     'basePath' => dirname(__DIR__),
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
@@ -33,14 +33,3 @@ $config = [
 
     'params' => require(__DIR__ . '/params.php'),
 ];
-
-
-if (YII_DEBUG) {
-    $config['bootstrap']['debug'] = 'debug';
-    $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
-        'allowedIPs' => ['*'],
-    ];
-}
-
-return $config;
