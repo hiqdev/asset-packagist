@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * asset-packagist.hiqdev.com
+ *
+ * @link      http://asset-packagist.hiqdev.com/
+ * @package   asset-packagist.hiqdev.com
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
+ */
+
 return [
     'id' => 'asset-packagist',
     'basePath' => dirname(__DIR__),
@@ -8,7 +17,7 @@ return [
     'controllerNamespace' => 'hiqdev\assetpackagist\controllers',
     'bootstrap' => ['log'],
     'components' => [
-        'log' => [      
+        'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets'    => [
                 'default' => [

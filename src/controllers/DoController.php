@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * asset-packagist.hiqdev.com
+ *
+ * @link      http://asset-packagist.hiqdev.com/
+ * @package   asset-packagist.hiqdev.com
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hiqdev\assetpackagist\controllers;
 
 use Composer\Composer;
@@ -21,15 +30,15 @@ class DoController extends \yii\console\Controller
 
     public function init2()
     {
-        $this->io = new NullIO;
+        $this->io = new NullIO();
         $this->config = new Config();
-        $this->config->merge(array(
-            'config' => array(
+        $this->config->merge([
+            'config' => [
                 'home' => Yii::getAlias('@runtime/composer_home'),
-            ),
-        ));
+            ],
+        ]);
         $this->remoteFilesystem = Factory::createRemoteFilesystem($this->io, $this->config);
-        $this->composer = new Composer;
+        $this->composer = new Composer();
         $this->composer->setConfig($this->config);
         $this->eventDispatcher = new EventDispatcher($this->composer, $this->io);
         $this->composer->setEventDispatcher($this->eventDispatcher);
@@ -38,7 +47,7 @@ class DoController extends \yii\console\Controller
 
     public function init()
     {
-        $this->io = new NullIO;
+        $this->io = new NullIO();
         $this->composer = Factory::create($this->io);
         $this->remoteFilesystem = Factory::createRemoteFilesystem($this->io, $this->config);
     }
@@ -93,11 +102,11 @@ class DoController extends \yii\console\Controller
 
         $hash = $this->updatePackage($full_name, $versions);
         if ($hash) {
-            print "updated $hash $full_name\n";
+            echo "updated $hash $full_name\n";
         }
     }
 
-    static public function mkdir($dir)
+    public static function mkdir($dir)
     {
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);
@@ -108,7 +117,7 @@ class DoController extends \yii\console\Controller
     {
         $data = [
             'packages' => [
-                $name => $versions
+                $name => $versions,
             ],
         ];
         $json = Json::encode($data);
