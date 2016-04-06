@@ -13,9 +13,9 @@ namespace hiqdev\assetpackagist\controllers;
 
 use Composer\Factory;
 use Composer\IO\NullIO;
+use hiqdev\assetpackagist\registry\RegistryFactory;
 use Yii;
 use yii\helpers\Json;
-use hiqdev\assetpackagist\registry\RegistryFactory;
 
 class DoController extends \yii\console\Controller
 {

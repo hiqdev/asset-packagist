@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * asset-packagist.hiqdev.com
+ *
+ * @link      http://asset-packagist.hiqdev.com/
+ * @package   asset-packagist.hiqdev.com
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hiqdev\assetpackagist\registry;
 
 class RegistryFactory
@@ -9,9 +18,9 @@ class RegistryFactory
         'npm'   => NpmRegistry::class,
     ];
 
-    static $registries = [];
+    public static $registries = [];
 
-    static public function getRegistry($type, $rm)
+    public static function getRegistry($type, $rm)
     {
         if (!isset(static::$registries[$type])) {
             static::$registries[$type] = static::buildRegistry($type, $rm);
@@ -20,7 +29,7 @@ class RegistryFactory
         return static::$registries[$type];
     }
 
-    static protected function buildRegistry($type, $rm)
+    protected static function buildRegistry($type, $rm)
     {
         $config = [
             'repository-manager' => $rm,
