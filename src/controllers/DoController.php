@@ -11,99 +11,70 @@
 
 namespace hiqdev\assetpackagist\controllers;
 
-use Composer\Composer;
-use Composer\Config;
-use Composer\EventDispatcher\EventDispatcher;
 use Composer\Factory;
 use Composer\IO\NullIO;
-use Fxp\Composer\AssetPlugin\Repository\AssetVcsRepository;
 use Yii;
 use yii\helpers\Json;
+use hiqdev\assetpackagist\registry\RegistryFactory;
 
 class DoController extends \yii\console\Controller
 {
-    public $remoteFilesystem;
-    public $eventDispatcher;
-    public $composer;
-    public $config;
-    public $io;
-
-    public function init2()
-    {
-        $this->io = new NullIO();
-        $this->config = new Config();
-        $this->config->merge([
-            'config' => [
-                'home' => Yii::getAlias('@runtime/composer_home'),
-            ],
-        ]);
-        $this->remoteFilesystem = Factory::createRemoteFilesystem($this->io, $this->config);
-        $this->composer = new Composer();
-        $this->composer->setConfig($this->config);
-        $this->eventDispatcher = new EventDispatcher($this->composer, $this->io);
-        $this->composer->setEventDispatcher($this->eventDispatcher);
-        $this->composer->setPackage($package);
-    }
+    protected $io;
+    protected $composer;
 
     public function init()
     {
         $this->io = new NullIO();
         $this->composer = Factory::create($this->io);
-        $this->remoteFilesystem = Factory::createRemoteFilesystem($this->io, $this->config);
-    }
-
-    protected function getContents($url)
-    {
-        return $this->remoteFilesystem->getContents($url, $url, false);
-    }
-
-    public function getApiUrl($type)
-    {
-        static $urls = [
-            'bower' => 'https://bower.herokuapp.com/packages/',
-            'npm'   => 'https://registry.npmjs.org/',
-        ];
-
-        return isset($urls[$type]) ? $urls[$type] : null;
     }
 
     public function actionUpdatePackage($type, $name)
     {
-        $apiurl = $this->getApiUrl($type);
-        if (!$apiurl) {
-            die('Type: $type');
+        $registry   = RegistryFactory::getRegistry($type, $this->composer->getRepositoryManager());
+        $repo       = $registry->buildVcsRepository($name);
+        $fullName   = $this->buildFullName($type, $name);
+        $versions   = $this->prepareVersions($repo, $fullName);
+        $hash       = $this->updatePackage($fullName, $versions);
+        if ($hash) {
+            echo "updated $hash $fullName\n";
         }
-        if (!$name) {
-            die('Name!');
-        }
+    }
 
-        $full_name = $type . '-asset/' . $name;
-        $regurl = $apiurl . $name;
-        $data = Json::decode($this->getContents($regurl, $regurl));
+    public function buildFullName($type, $name)
+    {
+        return $type . '-asset/' . $name;
+    }
 
-        $url = $data['url'];
-        $repo = new AssetVcsRepository(['url' => $url, 'type' => $type . '-assets'], $this->io, $this->composer->getConfig(), $this->composer->getEventDispatcher());
+    public function prepareVersions($repo, $fullName)
+    {
         $versions = [];
         foreach ($repo->getPackages() as $package) {
-            if (!$package->getDistType()) {
-                /// TODO investigate more why
-                continue;
-            }
-            $versions[$package->getVersion()] = [
+            $version = [
+                /// TODO XXX how to get uid properly ???
                 'uid'       => rand(1000000, 2000000),
-                'name'      => $full_name,
+                'name'      => $fullName,
                 'version'   => $package->getVersion(),
-                'dist'      => [
-                    'type' => $package->getDistType(),
-                    'url'  => $package->getDistUrl(),
-                ],
             ];
+            if ($package->getDistUrl()) {
+                $version['dist'] = [
+                    'type'      => $package->getDistType(),
+                    'url'       => $package->getDistUrl(),
+                    'reference' => $package->getDistReference(),
+                ];
+            }
+            if ($package->getSourceUrl()) {
+                $version['source'] = [
+                    'type'      => $package->getSourceType(),
+                    'url'       => $package->getSourceUrl(),
+                    'reference' => $package->getSourceReference(),
+                ];
+            }
+            if ($version['dist'] || $version['source']) {
+                $versions[$package->getVersion()] = $version;
+            }
         }
 
-        $hash = $this->updatePackage($full_name, $versions);
-        if ($hash) {
-            echo "updated $hash $full_name\n";
-        }
+        return $versions;
     }
 
     public static function mkdir($dir)
