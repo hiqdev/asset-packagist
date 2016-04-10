@@ -4,6 +4,9 @@ hiqdev/asset-packagist.hiqdev.com commits history
 ## Under development
 
 - Added basics
+    - 54434bf 2016-04-10 phpcsfixed (sol@hiqdev.com)
+    - 065c211 2016-04-10 added basic site pages (sol@hiqdev.com)
+    - 52d05bd 2016-04-10 used asset-packagist (sol@hiqdev.com)
     - 519b20d 2016-04-06 phpcsfixed (sol@hiqdev.com)
     - a292a67 2016-04-06 refactored with fxp registries (sol@hiqdev.com)
     - 4dfea1c 2016-04-04 phpcsfixed (sol@hiqdev.com)
