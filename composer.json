@@ -52,11 +52,10 @@
             "hiqdev\\assetpackagist\\": "src"
         }
     },
-    "replace": {
-        "bower-asset/bootstrap": "*",
-        "bower-asset/jquery": "*",
-        "bower-asset/jquery.inputmask": "*",
-        "bower-asset/punycode": "*",
-        "bower-asset/yii2-pjax": "*"
-    }
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.hiqdev.com"
+        }
+    ]
 }
