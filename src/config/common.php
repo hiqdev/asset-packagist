@@ -16,6 +16,10 @@ return [
     'runtimePath' => dirname(dirname(__DIR__)) . '/runtime',
     'controllerNamespace' => 'hiqdev\assetpackagist\controllers',
     'bootstrap' => ['log'],
+    'aliases' => [
+        '@bower' => '@vendor/bower-asset',
+        '@npm'   => '@vendor/npm-asset',
+    ],
     'components' => [
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -24,13 +28,6 @@ return [
                     'class'  => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
-            ],
-        ],
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'rules' => [
-                'packages.json' => 'packages/packages',
-                'p/provider-latest.json' => 'packages/provider',
             ],
         ],
         'request' => [

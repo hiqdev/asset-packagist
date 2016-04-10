@@ -10,4 +10,5 @@
  */
 
 return [
+    'logo-text' => 'Asset Packagist',
 ];

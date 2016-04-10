@@ -2,50 +2,55 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = Yii::$app->params['logo-text'];
 ?>
 <div class="site-index">
-
     <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+        <img src="https://getcomposer.org/img/logo-composer-transparent2.png" height="140px">
+        <img src="http://bower.io/img/bower-logo.svg" height="100px" style="margin:10px">
+        <img src="https://www.npmjs.com/static/images/npm-logo.svg" height="80px" style="margin:10px">
+        <h3>Composer, Bower and NPM friends forever!</h3>
     </div>
 
     <div class="body-content">
 
         <div class="row">
             <div class="col-lg-4">
-                <h2>Heading</h2>
+                <h2>What?</h2>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                <p>This repository allows installation of Bower and NPM packages with Composer.</p>
+                <p>It's like a server-side <code><a href="https://github.com/francoispluchino/composer-asset-plugin">fxp/composer-asset-plugin</a></code>.</p>
+                <p>But <b>NO</b> plugin and <b>NO</b> Node.js required.</p>
+                </p>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+                <p><a class="btn btn-default" href="/site/about">More info &raquo;</a></p>
             </div>
             <div class="col-lg-4">
-                <h2>Heading</h2>
+                <h2>How?</h2>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                <p>List required packages like this:</p>
+                <pre><code>"require": {
+    "bower-asset/bootstrap": "^3.3",
+    "npm-asset/jquery": "^2.2"
+}</code></pre>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
+                <p>And add these lines:</p>
+                <pre><code>"repositories": [
+    {
+        "type": "composer",
+        "url": "https://asset-packagist.hiqdev.com"
+    }
+]</code></pre>
             </div>
             <div class="col-lg-4">
-                <h2>Heading</h2>
+                <h2>Why?</h2>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+                <p>Got tired of <code><a href="https://github.com/francoispluchino/composer-asset-plugin">fxp/composer-asset-plugin</a></code>.
+                It's a cool thing anyway - good idea and decent realization.
+                But it slows down composer and requires global installation which makes a lot of different probllems (Travis and Scrutinizer integration were most annoying for me).
+                </p>
+                <p>This repository solves all these problems.</p>
+                <p><a class="btn btn-default" href="/site/contact">More questions? &raquo;</a></p>
             </div>
         </div>
 
