@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
 
-$config = require(__DIR__ . '/common.php');
+$config = require __DIR__ . '/common.php';
 
 $config['components']['urlManager'] = [
     'enablePrettyUrl' => true,
