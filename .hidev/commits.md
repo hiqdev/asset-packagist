@@ -4,6 +4,9 @@ hiqdev/asset-packagist.hiqdev.com commits history
 ## Under development
 
 - Added basics
+    - ac04710 2016-04-15 redone to local hidev installation (sol@hiqdev.com)
+    - 9b89c15 2016-04-15 moved DoController to console dir (sol@hiqdev.com)
+    - d75181d 2016-04-15 + set main package alias to bootstrap (sol@hiqdev.com)
     - 54434bf 2016-04-10 phpcsfixed (sol@hiqdev.com)
     - 065c211 2016-04-10 added basic site pages (sol@hiqdev.com)
     - 52d05bd 2016-04-10 used asset-packagist (sol@hiqdev.com)
