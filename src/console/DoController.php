@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\assetpackagist\controllers;
+namespace hiqdev\assetpackagist\console;
 
 use Composer\Factory;
 use Composer\IO\NullIO;
