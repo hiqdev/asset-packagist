@@ -45,7 +45,10 @@
         "yiisoft/yii2-debug": "^2.0"
     },
     "require-dev": {
-        "hiqdev/composer-extension-plugin": "*@dev"
+        "hiqdev/hidev": "dev-master",
+        "hiqdev/hidev-php": "*",
+        "hiqdev/hidev-hisite": "dev-master",
+        "hiqdev/hidev-vendor": "*"
     },
     "autoload": {
         "psr-4": {

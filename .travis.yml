@@ -14,13 +14,13 @@ cache:
 before_install:
     - 'composer self-update'
     - 'composer --version'
-    - 'wget http://hiqdev.com/hidev/hidev.phar -O hidev.phar && chmod a+x hidev.phar'
-    - './hidev.phar --version'
-    - './hidev.phar travis/before_install'
+    - 'composer install --no-interaction'
+    - './vendor/bin/hidev --version'
+    - './vendor/bin/hidev travis/before_install'
 sudo: false
 install:
-    - './hidev.phar travis/install'
+    - './vendor/bin/hidev travis/install'
 script:
-    - './hidev.phar travis/script'
+    - './vendor/bin/hidev travis/script'
 after_script:
-    - './hidev.phar travis/after_script'
+    - './vendor/bin/hidev travis/after_script'
