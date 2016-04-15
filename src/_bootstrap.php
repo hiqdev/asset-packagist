@@ -22,6 +22,8 @@ if (!defined('HISITE_VENDOR_DIR')) {
         exit(1);
     }
 
-    require HISITE_VENDOR_DIR . '/autoload.php';
-    require HISITE_VENDOR_DIR . '/yiisoft/yii2/Yii.php';
+    require_once HISITE_VENDOR_DIR . '/autoload.php';
+    require_once HISITE_VENDOR_DIR . '/yiisoft/yii2/Yii.php';
+
+    Yii::setAlias('hiqdev/assetpackagist', __DIR__);
 }
