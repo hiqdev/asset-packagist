@@ -15,6 +15,7 @@ hidev do/update-package bower jquery-resizable-columns
 hidev do/update-package bower jquery-ui
 hidev do/update-package bower less-space
 hidev do/update-package bower lightbox2
+hidev do/update-package bower matchheight
 hidev do/update-package bower moment
 hidev do/update-package bower octicons
 hidev do/update-package bower paulzi-form
