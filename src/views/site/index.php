@@ -6,9 +6,9 @@ $this->title = Yii::$app->params['logo-text'];
 ?>
 <div class="site-index">
     <div class="jumbotron">
-        <img src="https://getcomposer.org/img/logo-composer-transparent2.png" height="140px">
-        <img src="http://bower.io/img/bower-logo.svg" height="100px" style="margin:10px">
-        <img src="https://www.npmjs.com/static/images/npm-logo.svg" height="80px" style="margin:10px">
+        <img src="/logo/composer.png" height="140px">
+        <img src="/logo/bower.svg" height="100px" style="margin:10px">
+        <img src="/logo/npm.svg" height="80px" style="margin:10px">
         <h3>Composer, Bower and NPM friends forever!</h3>
     </div>
 
@@ -46,7 +46,8 @@ $this->title = Yii::$app->params['logo-text'];
                 <h2>Why?</h2>
 
                 <p>Got tired of <code><a href="https://github.com/francoispluchino/composer-asset-plugin">fxp/composer-asset-plugin</a></code>.
-                It's a cool thing anyway - good idea and decent realization.
+                </p>
+                <p>It's a cool thing anyway - good idea and good realization.
                 But it slows down composer and requires global installation which makes a lot of different probllems (Travis and Scrutinizer integration were most annoying for me).
                 </p>
                 <p>This repository solves all these problems.</p>
