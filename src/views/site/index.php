@@ -5,11 +5,13 @@
 $this->title = Yii::$app->params['logo-text'];
 ?>
 <div class="site-index">
-    <div class="jumbotron">
-        <img src="/logo/composer.png" height="140px">
-        <img src="/logo/bower.svg" height="100px" style="margin:10px">
-        <img src="/logo/npm.svg" height="80px" style="margin:10px">
-        <h3>Composer, Bower and NPM friends forever!</h3>
+    <div style="text-align:center;margin:30px 0px 20px">
+        <div>
+            <img src="/logo/composer.png" height="140px">
+            <img src="/logo/bower.svg" height="100px" style="margin:10px">
+            <img src="/logo/npm.svg" height="80px" style="margin:10px">
+            <h3>Composer, Bower and NPM friends forever!</h3>
+        </div>
     </div>
 
     <div class="body-content">

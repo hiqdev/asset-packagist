@@ -43,6 +43,7 @@ AppAsset::register($this);
     ]);
     NavBar::end();
     ?>
+    <?= $this->render('_search') ?>
 
     <div class="container">
         <?= Breadcrumbs::widget([
