@@ -11,17 +11,50 @@ class AssetPackage
     protected $_type;
     protected $_name;
     protected $_hash;
-    protected $_data;
+    protected $_releases = [];
+    protected $_saved;
 
     protected $_io;
     protected $_composer;
+    protected $_storage;
 
     static protected $_commonComposer;
+
+    public function __construct($type, $name)
+    {
+        $this->_type = $type;
+        $this->_name = $name;
+    }
+
+    public function getFullName()
+    {
+        return static::buildFullName($this->_type, $this->_name);
+    }
+
+    static public function buildFullName($type, $name)
+    {
+        return $type . '-asset/' . $name;
+    }
+
+    public function getType()
+    {
+        return $this->_type;
+    }
+
+    public function getName()
+    {
+        return $this->_name;
+    }
+
+    public function getHash()
+    {
+        return $this->_hash;
+    }
 
     static public function getCommonComposer()
     {
         if (static::$_commonComposer === null) {
-            static::$_commonComposer = Factory::create($this->getIO());
+            static::$_commonComposer = Factory::create(new NullIO());
         }
 
         return static::$_commonComposer;
@@ -50,84 +83,100 @@ class AssetPackage
         return $this->_io;
     }
 
-    static public function buildFullName($type, $name)
-    {
-        return $type . '-asset/' . $name;
-    }
-
-    static public function buildPath($type, $name, $hash)
-    {
-        $two = substr($name, 0, 2);
-        $dir = Yii::getAlias("@runtime/packages/$two/$type:$name");
-        if (!file_exists($dir)) {
-            mkdir($dir, 0777, true);
-        }
-        return $dir . "/$hash.json";
-    }
-
     /**
-     * findOne 
-     * 
-     * @param string $type 
-     * @param string $name 
+     * findOne
+     *
+     * @param string $type
+     * @param string $name
      * @return static|null
      */
     static public function findOne($type, $name)
     {
+        $package = new static($type, $name);
+        $package->load();
+
+        return $package;
     }
 
-    static public function findOneOrCreate($type, $name)
+    public function load()
     {
-        return static::findOne($type, $name) ?: static::create($type, $name);
+        $data = $this->getStorage()->readPackage($this);
+        $this->_hash = $data['hash'];
+        $this->_releases = $data['releases'];
     }
 
-    static protected function create($type, $name)
+    public function update()
     {
-        $registry   = RegistryFactory::getRegistry($type, $this->getComposer()->getRepositoryManager());
-        $repo       = $registry->buildVcsRepository($name);
-        $fullName   = static::buildFullName($type, $name);
-        $versions   = static::buildVersions($repo, $fullName);
-        $hash       = $this->updatePackage($fullName, $versions);
-        $package = new static($type, $name, compact('versions'));
+        $registry = RegistryFactory::getRegistry($this->getType(), $this->getComposer()->getRepositoryManager());
+        $repo = $registry->buildVcsRepository($this->getName());
+        $this->_releases = $this->prepareReleases($repo);
+        $this->_hash = $this->getStorage()->writePackage($this);
     }
 
-    protected function _construct($type, $name, $data)
+    public function prepareReleases($repo)
     {
-        $this->_type = $type;
-        $this->_name = $name;
-        $this->_data = $data;
-    }
-
-    static public function buildVersions($repo, $fullName)
-    {
-        $versions = [];
+        $releases = [];
         foreach ($repo->getPackages() as $package) {
-            $version = [
-                /// TODO XXX how to get uid properly ???
-                'uid'       => rand(1000000, 2000000),
-                'name'      => $fullName,
-                'version'   => $package->getVersion(),
+            $version = $package->getVersion();
+            $release = [
+                'uid'       => $this->prepareUid($version),
+                'name'      => $this->getFullName(),
+                'version'   => $version,
             ];
             if ($package->getDistUrl()) {
-                $version['dist'] = [
+                $release['dist'] = [
                     'type'      => $package->getDistType(),
                     'url'       => $package->getDistUrl(),
                     'reference' => $package->getDistReference(),
                 ];
             }
             if ($package->getSourceUrl()) {
-                $version['source'] = [
+                $release['source'] = [
                     'type'      => $package->getSourceType(),
                     'url'       => $package->getSourceUrl(),
                     'reference' => $package->getSourceReference(),
                 ];
             }
-            if ($version['dist'] || $version['source']) {
-                $versions[$package->getVersion()] = $version;
+            if ($release['dist'] || $release['source']) {
+                $releases[$version] = $release;
             }
         }
 
-        return $versions;
+        return $releases;
     }
 
+    public function prepareUid($version)
+    {
+        $known = $this->getSaved()->getRelease($version);
+
+        return isset($known['uid']) ? $known['uid'] : $this->getStorage()->getNextID();
+    }
+
+    public function getReleases()
+    {
+        return $this->_releases;
+    }
+
+    public function getRelease($version)
+    {
+        return isset($this->_releases[$version]) ? $this->_releases[$version] : [];
+    }
+
+    public function getSaved()
+    {
+        if ($this->_saved === null) {
+            $this->_saved = static::findOne($this->getType(), $this->getName());
+        }
+
+        return $this->_saved;
+    }
+
+    public function getStorage()
+    {
+        if ($this->_storage === null) {
+            $this->_storage = Storage::getInstance();
+        }
+
+        return $this->_storage;
+    }
 }

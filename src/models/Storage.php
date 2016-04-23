@@ -1,29 +1,74 @@
 <?php
 
+namespace hiqdev\assetpackagist\models;
+
+use Yii;
+use yii\helpers\Json;
+
 class Storage
 {
+    protected static $_instance;
 
-
-    protected function updatePackage($name, $versions)
+    protected function __construct()
     {
+    }
+
+    static public function getInstance()
+    {
+        if (static::$_instance === null) {
+            static::$_instance = new Storage();
+        }
+
+        return static::$_instance;
+    }
+
+    public function getNextID()
+    {
+        return rand(1000000, 2000000);
+    }
+
+    public function writePackage(AssetPackage $package)
+    {
+        $name = $package->getFullName();
         $data = [
             'packages' => [
-                $name => $versions,
+                $name => $package->getReleases(),
             ],
         ];
         $json = Json::encode($data);
         $hash = hash('sha256', $json);
-        $path = Yii::getAlias("@web/p/$name$$hash.json");
+        $path = static::buildPath($name, $hash);
         if (!file_exists($path)) {
             static::mkdir(dirname($path));
             file_put_contents($path, $json);
-            $this->updateProviderLatest($name, $hash);
+            file_put_contents(static::buildPath($name), $json);
+            $this->writeProviderLatest($name, $hash);
         }
 
         return $hash;
     }
 
-    protected function updateProviderLatest($name, $hash)
+    public function readPackage(AssetPackage $package)
+    {
+        $name = $package->getFullName();
+        $path = static::buildPath($name);
+        if (!file_exists($path)) {
+            return [];
+        }
+        $json = file_get_contents($path);
+        $hash = hash('sha256', $json);
+        $data = Json::decode($json);
+        $releases = isset($data['packages'][$name]) ? $data['packages'][$name] : [];
+
+        return compact('hash', 'releases');
+    }
+
+    public static function buildPath($name, $hash = 'latest')
+    {
+        return Yii::getAlias("@web/p/$name/$hash.json");
+    }
+
+    protected function writeProviderLatest($name, $hash)
     {
         $latest_path = Yii::getAlias('@web/provider-latest.json');
         if (file_exists($latest_path)) {
@@ -43,17 +88,17 @@ class Storage
             file_put_contents($path, $json);
             /// TODO lock
             file_put_contents($latest_path, Json::encode($data));
-            $this->updateIndex($hash);
+            $this->writePackagesJson($hash);
         }
 
         return $hash;
     }
 
-    protected function updateIndex($hash)
+    protected function writePackagesJson($hash)
     {
         $data = [
-            'providers-url'     => '/p/%package%$%hash%.json',
             'search'            => '/search.json?q=%query%',
+            'providers-url'     => '/p/%package%/%hash%.json',
             'provider-includes' => [
                 'p/provider-latest$%hash%.json' => [
                     'sha256' => $hash,
