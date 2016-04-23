@@ -8,5 +8,5 @@ yii2webapp:
 
 config: src/config/console.php
 
-do:
-    class: hiqdev\assetpackagist\console\DoController
+asset-package:
+    class: hiqdev\assetpackagist\console\AssetPackageController
