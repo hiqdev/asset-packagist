@@ -3,6 +3,14 @@ hiqdev/asset-packagist.hiqdev.com commits history
 
 ## Under development
 
+- Chandged: redone with `Storage`
+    - 12b17af 2016-04-23 renamed `do` goal -> `asset-packagist` (sol@hiqdev.com)
+    - f9dfeee 2016-04-23 still redoing with `Storage` NOT FINISHED (sol@hiqdev.com)
+    - 0deab6f 2016-04-23 inited tests (sol@hiqdev.com)
+    - 48f69b5 2016-04-23 redoing storage BROKEN (sol@hiqdev.com)
+    - 3134a13 2016-04-17 + search form (sol@hiqdev.com)
+    - 2a6f9ff 2016-04-16 + downloaded logos (sol@hiqdev.com)
+    - afcfcce 2016-04-16 + bower matchheight to `min_packages` (sol@hiqdev.com)
 - Added basics
     - ac04710 2016-04-15 redone to local hidev installation (sol@hiqdev.com)
     - 9b89c15 2016-04-15 moved DoController to console dir (sol@hiqdev.com)
