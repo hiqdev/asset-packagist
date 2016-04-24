@@ -76,13 +76,13 @@ class Storage
         ];
         $json = Json::encode($data);
         $hash = hash('sha256', $json);
-        $path = $this->buildPackagePath($name, $hash);
+        $path = $this->buildHashedPath($name, $hash);
         if (!file_exists($path)) {
             $this->getLocker()->lock();
             {
                 static::mkdir(dirname($path));
                 file_put_contents($path, $json);
-                file_put_contents($this->buildPackagePath($name), $json);
+                file_put_contents($this->buildHashedPath($name), $json);
                 $this->writeProviderLatest($name, $hash);
             }
             $this->getLocker()->release();
@@ -94,7 +94,7 @@ class Storage
     public function readPackage(AssetPackage $package)
     {
         $name = $package->getFullName();
-        $path = $this->buildPackagePath($name);
+        $path = $this->buildHashedPath($name);
         if (!file_exists($path)) {
             return [];
         }
@@ -114,14 +114,14 @@ class Storage
         return implode(DIRECTORY_SEPARATOR, $args);
     }
 
-    public function buildPackagePath($name, $hash = 'latest')
+    public function buildHashedPath($name, $hash = 'latest')
     {
         return $this->buildPath('p', $name, $hash . '.json');
     }
 
     protected function writeProviderLatest($name, $hash)
     {
-        $latest_path = $this->buildPath('provider-latest.json');
+        $latest_path = $this->buildHashedPath('provider-latest');
         if (file_exists($latest_path)) {
             $data = Json::decode(file_get_contents($latest_path) ?: '[]');
         }
@@ -134,12 +134,13 @@ class Storage
         $data['providers'][$name] = ['sha256' => $hash];
         $json = Json::encode($data);
         $hash = hash('sha256', $json);
-        $path = $this->buildPath('p', "provider-latest$$hash.json");
+        $path = $this->buildHashedPath('provider-latest', $hash);
         if (!file_exists($path)) {
             $this->getLocker()->lock();
             {
+                static::mkdir(dirname($path));
                 file_put_contents($path, $json);
-                file_put_contents($latest_path, Json::encode($data));
+                file_put_contents($latest_path, $json);
                 $this->writePackagesJson($hash);
             }
             $this->getLocker()->release();
@@ -154,7 +155,7 @@ class Storage
             'search'            => '/search.json?q=%query%',
             'providers-url'     => '/p/%package%/%hash%.json',
             'provider-includes' => [
-                'p/provider-latest$%hash%.json' => [
+                'p/provider-latest/%hash%.json' => [
                     'sha256' => $hash,
                 ],
             ],
