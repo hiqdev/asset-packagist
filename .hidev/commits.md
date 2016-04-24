@@ -3,7 +3,10 @@ hiqdev/asset-packagist.hiqdev.com commits history
 
 ## Under development
 
-- Chandged: redone with `Storage`
+- Chandged: redone with `Storage` and `Locker`
+    - a48dfb0 2016-04-24 renamed `do` goal -> `asset-packagist` in `min_packages.sh` (sol@hiqdev.com)
+    - 9a1769d 2016-04-24 redone buildPath and used Locker (sol@hiqdev.com)
+    - 9f38225 2016-04-24 added locking (sol@hiqdev.com)
     - 12b17af 2016-04-23 renamed `do` goal -> `asset-packagist` (sol@hiqdev.com)
     - f9dfeee 2016-04-23 still redoing with `Storage` NOT FINISHED (sol@hiqdev.com)
     - 0deab6f 2016-04-23 inited tests (sol@hiqdev.com)
