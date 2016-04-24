@@ -2,6 +2,7 @@
 
 namespace hiqdev\assetpackagist\models;
 
+use hiqdev\assetpackagist\helpers\Locker;
 use Exception;
 use Yii;
 use yii\helpers\Json;
@@ -9,11 +10,13 @@ use yii\helpers\Json;
 class Storage
 {
     protected static $_instance;
-    protected static $_lockHandle;
-    protected static $_lockCount = 0;
+
+    protected $_path;
+    protected $_locker;
 
     protected function __construct()
     {
+        $this->_path = Yii::getAlias('@web');
     }
 
     static public function getInstance()
@@ -25,12 +28,23 @@ class Storage
         return static::$_instance;
     }
 
+    protected function getLocker()
+    {
+        if ($this->_locker === null) {
+            $this->_locker = Locker::getInstance($this->buildPath('lock'));
+        }
+
+        return $this->_locker;
+    }
+
     public function getNextID()
     {
-        $this->getLock();
-        $nextID = $this->readLastID() + 1;
-        $this->writeLastID($nextID);
-        $this->releaseLock();
+        $this->getLocker()->lock();
+        {
+            $nextID = $this->readLastID() + 1;
+            $this->writeLastID($nextID);
+        }
+        $this->getLocker()->release();
 
         return $nextID;
     }
@@ -49,48 +63,7 @@ class Storage
 
     protected function getLastIDPath()
     {
-        return Yii::getAlias('@web/lastid');
-    }
-
-    protected function getLockHandle()
-    {
-        if (static::$_lockHandle === null) {
-            $path = Yii::getAlias('@web/lock');
-            if (!file_exists($path)) {
-                file_put_contents($path, 'lock');
-            }
-            static::$_lockHandle = fopen($path, 'r+');
-        }
-
-        return static::$_lockHandle;
-    }
-
-    public function hasLock()
-    {
-        return (bool)static::$_lockCount;
-    }
-
-    protected function getLock()
-    {
-        if (!$this->hasLock()) {
-            if (!flock($this->getLockHandle(), LOCK_EX)) {
-                throw new Exception('failed get lock');
-            }
-        }
-        ++$this->_lockCount;
-    }
-
-    protected function releaseLock()
-    {
-        if ($this->_lockCount<1) {
-            throw new Exception('no lock to release');
-        }
-        if ($this->_lockCount === 1) {
-            if (!flock($this->getLockHandle(), LOCK_UN)) {
-                throw new Exception('failed release lock');
-            }
-        }
-        --$this->_lockCount;
+        return $this->buildPath('lastid');
     }
 
     public function writePackage(AssetPackage $package)
@@ -103,16 +76,16 @@ class Storage
         ];
         $json = Json::encode($data);
         $hash = hash('sha256', $json);
-        $path = static::buildPath($name, $hash);
+        $path = $this->buildPackagePath($name, $hash);
         if (!file_exists($path)) {
-            $this->getLock();
+            $this->getLocker()->lock();
             {
                 static::mkdir(dirname($path));
                 file_put_contents($path, $json);
-                file_put_contents(static::buildPath($name), $json);
+                file_put_contents($this->buildPackagePath($name), $json);
                 $this->writeProviderLatest($name, $hash);
             }
-            $this->releaseLock();
+            $this->getLocker()->release();
         }
 
         return $hash;
@@ -121,7 +94,7 @@ class Storage
     public function readPackage(AssetPackage $package)
     {
         $name = $package->getFullName();
-        $path = static::buildPath($name);
+        $path = $this->buildPackagePath($name);
         if (!file_exists($path)) {
             return [];
         }
@@ -133,14 +106,22 @@ class Storage
         return compact('hash', 'releases');
     }
 
-    public static function buildPath($name, $hash = 'latest')
+    public function buildPath()
     {
-        return Yii::getAlias("@web/p/$name/$hash.json");
+        $args = func_get_args();
+        array_unshift($args, $this->_path);
+
+        return implode(DIRECTORY_SEPARATOR, $args);
+    }
+
+    public function buildPackagePath($name, $hash = 'latest')
+    {
+        return $this->buildPath('p', $name, $hash . '.json');
     }
 
     protected function writeProviderLatest($name, $hash)
     {
-        $latest_path = Yii::getAlias('@web/provider-latest.json');
+        $latest_path = $this->buildPath('provider-latest.json');
         if (file_exists($latest_path)) {
             $data = Json::decode(file_get_contents($latest_path) ?: '[]');
         }
@@ -153,15 +134,15 @@ class Storage
         $data['providers'][$name] = ['sha256' => $hash];
         $json = Json::encode($data);
         $hash = hash('sha256', $json);
-        $path = Yii::getAlias("@web/p/provider-latest$$hash.json");
+        $path = $this->buildPath('p', "provider-latest$$hash.json");
         if (!file_exists($path)) {
-            $this->getLock();
+            $this->getLocker()->lock();
             {
                 file_put_contents($path, $json);
                 file_put_contents($latest_path, Json::encode($data));
                 $this->writePackagesJson($hash);
             }
-            $this->releaseLock();
+            $this->getLocker()->release();
         }
 
         return $hash;
@@ -178,11 +159,11 @@ class Storage
                 ],
             ],
         ];
-        $this->getLock();
+        $this->getLocker()->lock();
         {
-            file_put_contents(Yii::getAlias('@web/packages.json'), Json::encode($data));
+            file_put_contents($this->buildPath('packages.json'), Json::encode($data));
         }
-        $this->releaseLock();
+        $this->getLocker()->release();
     }
 
     public static function mkdir($dir)
