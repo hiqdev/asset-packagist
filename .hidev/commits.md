@@ -4,6 +4,7 @@ hiqdev/asset-packagist.hiqdev.com commits history
 ## Under development
 
 - Added search
+    - 8afec1f 2016-04-25 fixed tests (sol@hiqdev.com)
     - 01d5501 2016-04-25 + search. it all works now (sol@hiqdev.com)
     - f9c3cb1 2016-04-25 + storage and clean-storage goals (sol@hiqdev.com)
     - 411bbea 2016-04-25 + ignore storage files (sol@hiqdev.com)
