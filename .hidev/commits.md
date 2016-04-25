@@ -3,6 +3,12 @@ hiqdev/asset-packagist.hiqdev.com commits history
 
 ## Under development
 
+- Added search
+    - 01d5501 2016-04-25 + search. it all works now (sol@hiqdev.com)
+    - f9c3cb1 2016-04-25 + storage and clean-storage goals (sol@hiqdev.com)
+    - 411bbea 2016-04-25 + ignore storage files (sol@hiqdev.com)
+    - d84636c 2016-04-25 used local hidev (sol@hiqdev.com)
+    - 868e934 2016-04-24 added `buildHashedPath` (sol@hiqdev.com)
 - Chandged: redone with `Storage` and `Locker`
     - a48dfb0 2016-04-24 renamed `do` goal -> `asset-packagist` in `min_packages.sh` (sol@hiqdev.com)
     - 9a1769d 2016-04-24 redone buildPath and used Locker (sol@hiqdev.com)
