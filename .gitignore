@@ -34,3 +34,9 @@ composer.phar
 php-cs-fixer.phar
 phpunit-skelgen.phar
 phpunit.phar
+
+# Asset packages files
+web/lastid
+web/lock
+web/p
+web/packages.json
