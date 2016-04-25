@@ -17,8 +17,9 @@ return [
     'controllerNamespace' => 'hiqdev\assetpackagist\controllers',
     'bootstrap' => ['log'],
     'aliases' => [
-        '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        'storage'   => dirname(dirname(__DIR__)) . '/web',
+        'npm'       => '@vendor/npm-asset',
+        'bower'     => '@vendor/bower-asset',
     ],
     'components' => [
         'log' => [

@@ -2,9 +2,10 @@
 
 namespace hiqdev\assetpackagist\models;
 
-use hiqdev\assetpackagist\registry\RegistryFactory;
+use Exception;
 use Composer\Factory;
 use Composer\IO\NullIO;
+use hiqdev\assetpackagist\registry\RegistryFactory;
 
 class AssetPackage
 {
@@ -22,8 +23,24 @@ class AssetPackage
 
     public function __construct($type, $name)
     {
+        if (!$this->checkType($type)) {
+            throw new Exception('wrong type');
+        }
+        if (!$this->checkName($name)) {
+            throw new Exception('wrong name');
+        }
         $this->_type = $type;
         $this->_name = $name;
+    }
+
+    public function checkType($type)
+    {
+        return $type === 'bower' || $type === 'npm';
+    }
+
+    public function checkName($name)
+    {
+        return strlen($name)>1;
     }
 
     public function getFullName()
@@ -55,6 +72,8 @@ class AssetPackage
     {
         if (static::$_commonComposer === null) {
             static::$_commonComposer = Factory::create(new NullIO());
+            #$factory = new Factory();
+            #static::$_commonComposer = $factory->createComposer(new NullIO(), null, false, null, false);
         }
 
         return static::$_commonComposer;

@@ -12,7 +12,6 @@
 namespace hiqdev\assetpackagist\console;
 
 use hiqdev\assetpackagist\models\AssetPackage;
-
 use Yii;
 
 class AssetPackageController extends \yii\console\Controller

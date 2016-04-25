@@ -16,7 +16,7 @@ class Storage
 
     protected function __construct()
     {
-        $this->_path = Yii::getAlias('@web');
+        $this->_path = Yii::getAlias('@storage');
     }
 
     static public function getInstance()

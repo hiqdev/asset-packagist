@@ -11,6 +11,6 @@
 
 return [
     'aliases' => [
-        '@web' => '@prjdir/web',
+        'storage'   => dirname(dirname(__DIR__)) . '/web',
     ],
 ];
