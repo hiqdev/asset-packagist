@@ -3,6 +3,7 @@ hiqdev/asset-packagist.hiqdev.com changelog
 
 ## Under development
 
+- Fixed minor issues for first release
 - Added search
 - Chandged: redone with `Storage` and `Locker`
 - Added basics

@@ -3,6 +3,11 @@ hiqdev/asset-packagist.hiqdev.com commits history
 
 ## Under development
 
+- Fixed minor issues for first release
+    - e0c6316 2016-05-04 added `params-local.php` (sol@hiqdev.com)
+    - 305b331 2016-05-04 fixed version constraints (sol@hiqdev.com)
+    - fcfa683 2016-05-04 Merge pull request #1 from samdark/patch-1 (sol@hiqdev.com)
+    - fa7bcae 2016-05-04 Better front page wording (sam@rmcreative.ru)
     - a90a482 2016-05-04 fixed version constraints (sol@hiqdev.com)
 - Added search
     - 8afec1f 2016-04-25 fixed tests (sol@hiqdev.com)
