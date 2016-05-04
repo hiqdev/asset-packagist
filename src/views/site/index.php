@@ -10,7 +10,7 @@ $this->title = Yii::$app->params['logo-text'];
             <img src="/logo/composer.png" height="140px">
             <img src="/logo/bower.svg" height="100px" style="margin:10px">
             <img src="/logo/npm.svg" height="80px" style="margin:10px">
-            <h3>Composer, Bower and NPM friends forever!</h3>
+            <h3>Composer + Bower + NPM = friends forever!</h3>
         </div>
     </div>
 
@@ -18,19 +18,18 @@ $this->title = Yii::$app->params['logo-text'];
 
         <div class="row">
             <div class="col-lg-4">
-                <h2>What?</h2>
+                <h2>What is that?</h2>
 
-                <p>This repository allows installation of Bower and NPM packages with Composer.</p>
-                <p>It's like a server-side <code><a href="https://github.com/francoispluchino/composer-asset-plugin">fxp/composer-asset-plugin</a></code>.</p>
-                <p>But <b>NO</b> plugin and <b>NO</b> Node.js required.</p>
+                <p>This repository allows installation of Bower and NPM packages as native Composer packages.</p>
+                <p><b>NO</b> plugins and <b>NO</b> Node.js are required.</p>
                 </p>
 
                 <p><a class="btn btn-default" href="/site/about">More info &raquo;</a></p>
             </div>
             <div class="col-lg-4">
-                <h2>How?</h2>
+                <h2>Usage</h2>
 
-                <p>List required packages like this:</p>
+                <p>List required packages like the following:</p>
                 <pre><code>"require": {
     "bower-asset/bootstrap": "^3.3",
     "npm-asset/jquery": "^2.2"
@@ -49,11 +48,12 @@ $this->title = Yii::$app->params['logo-text'];
 
                 <p>Got tired of <code><a href="https://github.com/francoispluchino/composer-asset-plugin">fxp/composer-asset-plugin</a></code>.
                 </p>
-                <p>It's a cool thing anyway - good idea and good implementation.
-                But it slows down composer and requires global installation which makes a lot of different probllems (Travis and Scrutinizer integration were most annoying for me).
+                <p>It's a good project with nice idea and good implementation.
+                But it has issues. It is slow and requires global installation
+                which introduces various problems. Travis and Scrutinizer integration
+                problems are especially annoying.
                 </p>
-                <p>This repository solves all these problems.</p>
-                <p><a class="btn btn-default" href="/site/contact">More questions? &raquo;</a></p>
+                <p>Questions? <a class="btn btn-default" href="/site/contact">Contact me! &raquo;</a></p>
             </div>
         </div>
 
