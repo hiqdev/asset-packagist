@@ -20,7 +20,7 @@ if (YII_DEBUG) {
     $config['bootstrap']['debug'] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
-        'allowedIPs' => ['94.244.188.156'],
+        'allowedIPs' => isset($params['debug_allowedIPs']) ? $params['debug_allowedIPs'] : [],
     ];
 }
 

@@ -9,6 +9,15 @@
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
 
-return [
+$params = [
     'logo-text' => 'Asset Packagist',
+    'cookieValidationKey' => '345sdfsadf',
 ];
+
+$local = __DIR__ . '/params-local.php';
+
+return array_merge(
+    $params,
+    file_exists($local) ? require $local : []
+);
+

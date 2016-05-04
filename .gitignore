@@ -22,12 +22,12 @@ vendor
 # composer lock files
 composer.lock
 
+# phpunit generated files
+coverage.clover
+
 # Yii2 web app directories
 runtime/*
 web/assets/*
-
-# phpunit generated files
-coverage.clover
 
 # PHARs
 composer.phar
@@ -40,3 +40,6 @@ web/lastid
 web/lock
 web/p
 web/packages.json
+
+# local config
+src/config/params-local.php

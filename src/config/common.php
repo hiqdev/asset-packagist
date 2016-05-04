@@ -9,6 +9,8 @@
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
 
+$params = require __DIR__ . '/params.php';
+
 return [
     'id' => 'asset-packagist',
     'basePath' => dirname(__DIR__),
@@ -32,11 +34,11 @@ return [
             ],
         ],
         'request' => [
-            'cookieValidationKey' => '345sdfsadf',
+            'cookieValidationKey' => $params['cookieValidationKey'],
         ],
     ],
     'modules' => [
     ],
 
-    'params' => require(__DIR__ . '/params.php'),
+    'params' => $params,
 ];
