@@ -49,7 +49,7 @@ $this->title = Yii::$app->params['logo-text'];
 
                 <p>Got tired of <code><a href="https://github.com/francoispluchino/composer-asset-plugin">fxp/composer-asset-plugin</a></code>.
                 </p>
-                <p>It's a cool thing anyway - good idea and good realization.
+                <p>It's a cool thing anyway - good idea and good implementation.
                 But it slows down composer and requires global installation which makes a lot of different probllems (Travis and Scrutinizer integration were most annoying for me).
                 </p>
                 <p>This repository solves all these problems.</p>
