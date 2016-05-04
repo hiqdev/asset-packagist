@@ -39,16 +39,16 @@
         }
     ],
     "require": {
-        "composer/composer": "*@dev",
-        "fxp/composer-asset-plugin": "*@dev",
+        "composer/composer": "dev-master",
+        "fxp/composer-asset-plugin": "dev-master",
         "yiisoft/yii2": "^2.0",
         "yiisoft/yii2-debug": "^2.0"
     },
     "require-dev": {
         "hiqdev/hidev": "dev-master",
-        "hiqdev/hidev-php": "*",
+        "hiqdev/hidev-php": "<2.0",
         "hiqdev/hidev-hisite": "dev-master",
-        "hiqdev/hidev-vendor": "*"
+        "hiqdev/hidev-vendor": "<2.0"
     },
     "autoload": {
         "psr-4": {
