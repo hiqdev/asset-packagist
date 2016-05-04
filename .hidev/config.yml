@@ -2,7 +2,7 @@ package:
     name:           asset-packagist.hiqdev.com
     namespace:      hiqdev\assetpackagist
 
-yii2webapp:
+hisite:
     ssl:            true
     sslPath:        crt/asset-packagist.hiqdev.com
 

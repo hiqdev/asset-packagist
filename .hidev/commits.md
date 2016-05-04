@@ -3,6 +3,7 @@ hiqdev/asset-packagist.hiqdev.com commits history
 
 ## Under development
 
+    - a90a482 2016-05-04 fixed version constraints (sol@hiqdev.com)
 - Added search
     - 8afec1f 2016-04-25 fixed tests (sol@hiqdev.com)
     - 01d5501 2016-04-25 + search. it all works now (sol@hiqdev.com)
