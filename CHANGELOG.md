@@ -3,6 +3,7 @@ hiqdev/asset-packagist changelog
 
 ## Under development
 
+- Changed: redone to `hiqdev/asset-packagist`
 - Fixed minor issues for first release
 - Added list operations
 - Added search
