@@ -174,4 +174,34 @@ class Storage
         }
     }
 
+    public function readJson($path)
+    {
+        return Json::decode(file_get_contents($this->buildPath($path)));
+    }
+
+    protected function readPackagesJson()
+    {
+        $data = $this->readJson('packages.json');
+
+        return $data['provider-includes'];
+    }
+
+    protected function readProvider($path)
+    {
+        $data = $this->readJson($path);
+
+        return $data['providers'];
+    }
+
+    public function listPackages()
+    {
+        $packages = [];
+        $providers = $this->readPackagesJson();
+        foreach ($providers as $path => $data) {
+            $path = strtr($path, ['%hash%' => $data['sha256']]);
+            $packages = array_merge($packages, $this->readProvider($path));
+        }
+
+        return $packages;
+    }
 }
