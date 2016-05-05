@@ -3,17 +3,18 @@ hiqdev/asset-packagist.hiqdev.com commits history
 
 ## Under development
 
-- Added list operations
-    - 1af8dc9 2016-05-05 + `packages.list` instead of `min_packages.sh` (sol@hiqdev.com)
-    - 37d40a7 2016-05-05 + list and update-list actions (sol@hiqdev.com)
-    - a6214a3 2016-05-05 + read and list functions (sol@hiqdev.com)
-    - 2460d3e 2016-05-05 + AssetPackage::splitFullName (sol@hiqdev.com)
 - Fixed minor issues for first release
+    - 133a210 2016-05-05 fixed dependencies constraints (sol@hiqdev.com)
     - e0c6316 2016-05-04 added `params-local.php` (sol@hiqdev.com)
     - 305b331 2016-05-04 fixed version constraints (sol@hiqdev.com)
     - fcfa683 2016-05-04 Merge pull request #1 from samdark/patch-1 (sol@hiqdev.com)
     - fa7bcae 2016-05-04 Better front page wording (sam@rmcreative.ru)
     - a90a482 2016-05-04 fixed version constraints (sol@hiqdev.com)
+- Added list operations
+    - 1af8dc9 2016-05-05 + `packages.list` instead of `min_packages.sh` (sol@hiqdev.com)
+    - 37d40a7 2016-05-05 + list and update-list actions (sol@hiqdev.com)
+    - a6214a3 2016-05-05 + read and list functions (sol@hiqdev.com)
+    - 2460d3e 2016-05-05 + AssetPackage::splitFullName (sol@hiqdev.com)
 - Added search
     - 8afec1f 2016-04-25 fixed tests (sol@hiqdev.com)
     - 01d5501 2016-04-25 + search. it all works now (sol@hiqdev.com)
