@@ -12,6 +12,7 @@
 namespace hiqdev\assetpackagist\console;
 
 use hiqdev\assetpackagist\models\AssetPackage;
+use hiqdev\assetpackagist\models\Storage;
 use Yii;
 
 class AssetPackageController extends \yii\console\Controller
@@ -21,6 +22,24 @@ class AssetPackageController extends \yii\console\Controller
         $package = new AssetPackage($type, $name);
         $package->update();
         echo "updated " . $package->getHash() . ' ' . $package->getFullName() . "\n";
+    }
+
+    public function actionUpdateList()
+    {
+        while ($line = fgets(STDIN)) {
+            list($full,) = preg_split('/\s+/', trim($line));
+            list($type, $name) = AssetPackage::splitFullName($full);
+            $this->actionUpdate($type, $name);
+        }
+    }
+
+    public function actionList()
+    {
+        $packages = Storage::getInstance()->listPackages();
+        ksort($packages);
+        foreach ($packages as $name => $data) {
+            echo "$name\n";
+        }
     }
 
     public function actionTest()
