@@ -53,6 +53,14 @@ class AssetPackage
         return $type . '-asset/' . $name;
     }
 
+    static public function splitFullName($full)
+    {
+        list($temp, $name) = explode('/', $full);
+        list($type, $temp) = explode('-', $temp);
+
+        return [$type, $name];
+    }
+
     public function getType()
     {
         return $this->_type;
