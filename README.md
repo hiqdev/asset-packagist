@@ -1,20 +1,30 @@
-asset-packagist.hiqdev.com
-==========================
+Asset Packagist
+===============
 
-[![Latest Stable Version](https://poser.pugx.org/hiqdev/asset-packagist.hiqdev.com/v/stable)](https://packagist.org/packages/hiqdev/asset-packagist.hiqdev.com)
-[![Total Downloads](https://poser.pugx.org/hiqdev/asset-packagist.hiqdev.com/downloads)](https://packagist.org/packages/hiqdev/asset-packagist.hiqdev.com)
-[![Build Status](https://img.shields.io/travis/hiqdev/asset-packagist.hiqdev.com.svg)](https://travis-ci.org/hiqdev/asset-packagist.hiqdev.com)
-[![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/hiqdev/asset-packagist.hiqdev.com.svg)](https://scrutinizer-ci.com/g/hiqdev/asset-packagist.hiqdev.com/)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/hiqdev/asset-packagist.hiqdev.com.svg)](https://scrutinizer-ci.com/g/hiqdev/asset-packagist.hiqdev.com/)
-[![Dependency Status](https://www.versioneye.com/php/hiqdev:asset-packagist.hiqdev.com/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:asset-packagist.hiqdev.com/dev-master)
+[![Latest Stable Version](https://poser.pugx.org/hiqdev/asset-packagist/v/stable)](https://packagist.org/packages/hiqdev/asset-packagist)
+[![Total Downloads](https://poser.pugx.org/hiqdev/asset-packagist/downloads)](https://packagist.org/packages/hiqdev/asset-packagist)
+[![Build Status](https://img.shields.io/travis/hiqdev/asset-packagist.svg)](https://travis-ci.org/hiqdev/asset-packagist)
+[![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/hiqdev/asset-packagist.svg)](https://scrutinizer-ci.com/g/hiqdev/asset-packagist/)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/hiqdev/asset-packagist.svg)](https://scrutinizer-ci.com/g/hiqdev/asset-packagist/)
+[![Dependency Status](https://www.versioneye.com/php/hiqdev:asset-packagist/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:asset-packagist/dev-master)
 
 ## Installation
 
-The preferred way to install this project is through [composer](http://getcomposer.org/download/).
+The preferred way to install this yii2-extension is through [composer](http://getcomposer.org/download/).
+
+Either run
 
 ```sh
-php composer.phar create-project "hiqdev/asset-packagist.hiqdev.com:*" directory2install
+php composer.phar require "hiqdev/asset-packagist"
 ```
+
+or add
+
+```json
+"hiqdev/asset-packagist": "*"
+```
+
+to the require section of your composer.json.
 
 ## License
 

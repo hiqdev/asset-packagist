@@ -1,8 +1,9 @@
-hiqdev/asset-packagist.hiqdev.com commits history
--------------------------------------------------
+hiqdev/asset-packagist commits history
+--------------------------------------
 
 ## Under development
 
+    - 08aeb23 2016-05-05 splitted out `.hidev/goals.yml` (sol@hiqdev.com)
 - Fixed minor issues for first release
     - 133a210 2016-05-05 fixed dependencies constraints (sol@hiqdev.com)
     - e0c6316 2016-05-04 added `params-local.php` (sol@hiqdev.com)

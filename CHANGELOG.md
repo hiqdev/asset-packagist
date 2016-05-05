@@ -1,5 +1,5 @@
-hiqdev/asset-packagist.hiqdev.com changelog
--------------------------------------------
+hiqdev/asset-packagist changelog
+--------------------------------
 
 ## Under development
 

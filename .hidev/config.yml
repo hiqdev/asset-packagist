@@ -1,4 +1,5 @@
 package:
+    type:           yii2-extension
     name:           asset-packagist
     namespace:      hiqdev\assetpackagist
 

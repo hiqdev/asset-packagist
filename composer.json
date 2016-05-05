@@ -1,9 +1,9 @@
 {
-    "name": "hiqdev/asset-packagist.hiqdev.com",
-    "type": "project",
-    "description": "asset-packagist.hiqdev.com",
+    "name": "hiqdev/asset-packagist",
+    "type": "yii2-extension",
+    "description": "Asset Packagist",
     "keywords": [],
-    "homepage": "http://asset-packagist.hiqdev.com/",
+    "homepage": "https://github.com/hiqdev/asset-packagist",
     "license": "BSD-3-Clause",
     "support": {
         "email": "support@hiqdev.com",
