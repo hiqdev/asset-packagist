@@ -1,43 +1,9 @@
 package:
-    name:           asset-packagist.hiqdev.com
+    name:           asset-packagist
     namespace:      hiqdev\assetpackagist
 
-hisite:
-    ssl:            true
-    sslPath:        crt/asset-packagist.hiqdev.com
+include:
+    - .hidev/goals.yml
 
 config: src/config/console.php
 
-asset-package:
-    class: hiqdev\assetpackagist\console\AssetPackageController
-
-install:
-    after:
-        - storage
-
-storage:
-    class:      directory
-    path:       '@storage'
-    chown:      www-data
-    chgrp:      www-data
-    recursive:  [chown, chgrp]
-    lock:
-        once:       true
-        template:   empty
-        chmod:      '0664'
-    lastid:
-        once:       true
-        template:   empty
-        chmod:      '0664'
-    packages.json:
-        once:       true
-        template:   empty
-        chmod:      '0664'
-    p:
-        chmod:      '0775'
-
-clean-storage:
-    class:      command
-    path:       '@storage'
-    sudo:       true
-    command:    rm -rf lock lastid packages.json p
