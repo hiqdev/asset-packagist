@@ -44,7 +44,9 @@ class AssetPackageController extends \yii\console\Controller
 
     public function actionTest()
     {
-        var_dump(Yii::getAlias('@web'));
+        $dir = Yii::getAlias('@storage');
+        $msg = file_exists($dir) ? 'exists' : 'DOES NOT EXIST';
+        echo  "$dir - $msg\n";
     }
 
 }
