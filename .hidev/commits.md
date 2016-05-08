@@ -4,6 +4,7 @@ hiqdev/asset-packagist commits history
 ## Under development
 
 - Changed: redone to `hiqdev/asset-packagist`
+    - a85830f 2016-05-08 changed to hisite-config (sol@hiqdev.com)
     - f6aa46d 2016-05-08 csfixed (sol@hiqdev.com)
     - 9f7d0b6 2016-05-08 + hisite-web extension config (sol@hiqdev.com)
     - cf2d54d 2016-05-07 fixed asset-packagist/test action to check storage dir existance (sol@hiqdev.com)
