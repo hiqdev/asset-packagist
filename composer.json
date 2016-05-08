@@ -55,6 +55,11 @@
             "hiqdev\\assetpackagist\\": "src"
         }
     },
+    "extra": {
+        "extension-plugin": {
+            "hisite-web": "src/config/hisite-web.php"
+        }
+    },
     "repositories": [
         {
             "type": "composer",
