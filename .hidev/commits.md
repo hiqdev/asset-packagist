@@ -4,6 +4,9 @@ hiqdev/asset-packagist commits history
 ## Under development
 
 - Changed: redone to `hiqdev/asset-packagist`
+    - f6aa46d 2016-05-08 csfixed (sol@hiqdev.com)
+    - 9f7d0b6 2016-05-08 + hisite-web extension config (sol@hiqdev.com)
+    - cf2d54d 2016-05-07 fixed asset-packagist/test action to check storage dir existance (sol@hiqdev.com)
     - e7be6b1 2016-05-05 redone to `hiqdev/asset-packagist` (sol@hiqdev.com)
     - 08aeb23 2016-05-05 splitted out `.hidev/goals.yml` (sol@hiqdev.com)
 - Fixed minor issues for first release
