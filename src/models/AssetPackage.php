@@ -1,10 +1,19 @@
 <?php
 
+/*
+ * Asset Packagist
+ *
+ * @link      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hiqdev\assetpackagist\models;
 
-use Exception;
 use Composer\Factory;
 use Composer\IO\NullIO;
+use Exception;
 use hiqdev\assetpackagist\registry\RegistryFactory;
 
 class AssetPackage
@@ -19,7 +28,7 @@ class AssetPackage
     protected $_composer;
     protected $_storage;
 
-    static protected $_commonComposer;
+    protected static $_commonComposer;
 
     public function __construct($type, $name)
     {
@@ -40,7 +49,7 @@ class AssetPackage
 
     public function checkName($name)
     {
-        return strlen($name)>1;
+        return strlen($name) > 1;
     }
 
     public function getFullName()
@@ -48,12 +57,12 @@ class AssetPackage
         return static::buildFullName($this->_type, $this->_name);
     }
 
-    static public function buildFullName($type, $name)
+    public static function buildFullName($type, $name)
     {
         return $type . '-asset/' . $name;
     }
 
-    static public function splitFullName($full)
+    public static function splitFullName($full)
     {
         list($temp, $name) = explode('/', $full);
         list($type, $temp) = explode('-', $temp);
@@ -76,7 +85,7 @@ class AssetPackage
         return $this->_hash;
     }
 
-    static public function getCommonComposer()
+    public static function getCommonComposer()
     {
         if (static::$_commonComposer === null) {
             static::$_commonComposer = Factory::create(new NullIO());
@@ -111,13 +120,13 @@ class AssetPackage
     }
 
     /**
-     * findOne
+     * findOne.
      *
      * @param string $type
      * @param string $name
      * @return static|null
      */
-    static public function findOne($type, $name)
+    public static function findOne($type, $name)
     {
         $package = new static($type, $name);
         $package->load();

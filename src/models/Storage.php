@@ -1,9 +1,17 @@
 <?php
 
+/*
+ * Asset Packagist
+ *
+ * @link      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hiqdev\assetpackagist\models;
 
 use hiqdev\assetpackagist\helpers\Locker;
-use Exception;
 use Yii;
 use yii\helpers\Json;
 
@@ -19,10 +27,10 @@ class Storage
         $this->_path = Yii::getAlias('@storage', false);
     }
 
-    static public function getInstance()
+    public static function getInstance()
     {
         if (static::$_instance === null) {
-            static::$_instance = new Storage();
+            static::$_instance = new self();
         }
 
         return static::$_instance;
@@ -53,7 +61,7 @@ class Storage
     {
         $path = $this->getLastIDPath();
 
-        return file_exists($path) ? (int)file_get_contents($path) : 1000000;
+        return file_exists($path) ? (int) file_get_contents($path) : 1000000;
     }
 
     protected function writeLastId($value)

@@ -1,11 +1,20 @@
 <?php
 
+/*
+ * Asset Packagist
+ *
+ * @link      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hiqdev\assetpackagist\helpers;
 
 class Locker
 {
-    static protected $_handles = [];
-    static protected $_instances = [];
+    protected static $_handles = [];
+    protected static $_instances = [];
 
     protected $_path;
     protected $_count = 0;
@@ -16,7 +25,7 @@ class Locker
         $this->_path = $path;
     }
 
-    static public function getInstance($path)
+    public static function getInstance($path)
     {
         return isset(static::$_instances[$path]) ? static::$_instances[$path] : new static($path);
     }
@@ -28,7 +37,7 @@ class Locker
                 $this->_handle = static::$_handles[$this->_path];
             } else {
                 if (!file_exists($this->_path)) {
-                    if (file_put_contents($this->_path, 'lock') === FALSE) {
+                    if (file_put_contents($this->_path, 'lock') === false) {
                         throw new Exception('failed create lock file');
                     }
                 }
@@ -56,7 +65,7 @@ class Locker
 
     public function release()
     {
-        if ($this->_count<1) {
+        if ($this->_count < 1) {
             throw new Exception('no lock to release');
         }
         if ($this->_count === 1) {
@@ -66,5 +75,4 @@ class Locker
         }
         --$this->_count;
     }
-
 }

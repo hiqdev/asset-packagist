@@ -1,10 +1,10 @@
 <?php
 
 /*
- * asset-packagist.hiqdev.com
+ * Asset Packagist
  *
- * @link      http://asset-packagist.hiqdev.com/
- * @package   asset-packagist.hiqdev.com
+ * @link      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
@@ -20,4 +20,3 @@ return array_merge(
     $params,
     file_exists($local) ? require $local : []
 );
-

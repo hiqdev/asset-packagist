@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($package->getFullName()) ?></h1>
 
     <p>
-        <?php $releases = (array)$package->getReleases() ?>
+        <?php $releases = (array) $package->getReleases() ?>
         <table>
         <?php foreach ($releases as $version => $release) : ?>
             <tr>

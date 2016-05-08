@@ -1,10 +1,10 @@
 <?php
 
 /*
- * asset-packagist.hiqdev.com
+ * Asset Packagist
  *
- * @link      http://asset-packagist.hiqdev.com/
- * @package   asset-packagist.hiqdev.com
+ * @link      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
@@ -21,13 +21,13 @@ class AssetPackageController extends \yii\console\Controller
     {
         $package = new AssetPackage($type, $name);
         $package->update();
-        echo "updated " . $package->getHash() . ' ' . $package->getFullName() . "\n";
+        echo 'updated ' . $package->getHash() . ' ' . $package->getFullName() . "\n";
     }
 
     public function actionUpdateList()
     {
         while ($line = fgets(STDIN)) {
-            list($full,) = preg_split('/\s+/', trim($line));
+            list($full) = preg_split('/\s+/', trim($line));
             list($type, $name) = AssetPackage::splitFullName($full);
             $this->actionUpdate($type, $name);
         }
@@ -48,5 +48,4 @@ class AssetPackageController extends \yii\console\Controller
         $msg = file_exists($dir) ? 'exists' : 'DOES NOT EXIST';
         echo  "$dir - $msg\n";
     }
-
 }

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * Asset Packagist
+ *
+ * @link      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hiqdev\assetpackagist\tests\unit\models;
 
 use hiqdev\assetpackagist\models\AssetPackage;
@@ -30,5 +39,4 @@ class AssetPackageTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame($this->type . '-asset/' . $this->name, $this->object->getFullName());
     }
-
 }
