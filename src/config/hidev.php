@@ -9,12 +9,15 @@
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
 
-return [
-    'aliases' => require __DIR__ . '/aliases.php',
-    'params'  => require __DIR__ . '/params.php',
+$config = [
     'components' => [
         'config' => [
             'include' => '@hiqdev/assetpackagist/config/goals.yml',
         ],
     ],
 ];
+
+return yii\helpers\ArrayHelper::merge(
+    require __DIR__ . '/common.php',
+    $config
+);

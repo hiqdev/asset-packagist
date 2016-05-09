@@ -9,10 +9,10 @@
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
 
-return [
+$config = [
     'id'            => 'asset-packagist',
     'name'          => 'Asset Packagist',
-    'basePath'      => __DIR__,
+    'basePath'      => dirname(__DIR__),
     'vendorPath'    => '<base-dir>/vendor',
     'runtimePath'   => '<base-dir>/runtime',
     'controllerNamespace' => 'hiqdev\assetpackagist\controllers',
@@ -35,7 +35,9 @@ return [
             'showScriptName'  => false,
         ],
     ],
-    'modules' => [],
-    'aliases' => require __DIR__ . '/aliases.php',
-    'params'  => require __DIR__ . '/params.php',
 ];
+
+return yii\helpers\ArrayHelper::merge(
+    require __DIR__ . '/common.php',
+    $config
+);
