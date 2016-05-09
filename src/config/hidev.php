@@ -10,7 +10,11 @@
  */
 
 return [
-    'aliases' => [
-        'storage'   => dirname(dirname(__DIR__)) . '/web',
+    'aliases' => require __DIR__ . '/aliases.php',
+    'params'  => require __DIR__ . '/params.php',
+    'components' => [
+        'config' => [
+            'include' => '@hiqdev/assetpackagist/config/goals.yml',
+        ],
     ],
 ];

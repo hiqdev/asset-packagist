@@ -17,11 +17,6 @@ return [
     'runtimePath'   => '<base-dir>/runtime',
     'controllerNamespace' => 'hiqdev\assetpackagist\controllers',
     'bootstrap' => ['log'],
-    'aliases' => [
-        '@storage' => '<base-dir>/web',
-        '@npm'     => '@vendor/npm-asset',
-        '@bower'   => '@vendor/bower-asset',
-    ],
     'components' => [
         'log' => [
             'traceLevel' => 0,
@@ -32,6 +27,15 @@ return [
                 ],
             ],
         ],
+        'cache' => [
+            'class' => 'yii\\caching\\FileCache',
+        ],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName'  => false,
+        ],
     ],
     'modules' => [],
+    'aliases' => require __DIR__ . '/aliases.php',
+    'params'  => require __DIR__ . '/params.php',
 ];

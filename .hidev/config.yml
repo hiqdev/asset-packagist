@@ -2,9 +2,3 @@ package:
     type:           yii2-extension
     name:           asset-packagist
     namespace:      hiqdev\assetpackagist
-
-include:
-    - .hidev/goals.yml
-
-config: src/config/console.php
-
