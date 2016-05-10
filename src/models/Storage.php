@@ -61,7 +61,7 @@ class Storage
     {
         $path = $this->getLastIDPath();
 
-        return file_exists($path) ? (int) file_get_contents($path) : 1000000;
+        return (file_exists($path) ? (int) file_get_contents($path) : 0) ?: 1000000;
     }
 
     protected function writeLastId($value)
