@@ -31,3 +31,11 @@ clean-storage:
     path:       '@storage'
     sudo:       true
     command:    rm -rf lock lastid packages.json p
+
+chmod-storage:
+    class:      command
+    path:       '@storage'
+    sudo:       true
+    commands:   |
+       chown -R www-data:www-data lastid packages.json p
+       chmod -R g+w,o-w lastid packages.json p
