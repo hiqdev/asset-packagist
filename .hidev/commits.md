@@ -3,6 +3,12 @@ hiqdev/asset-packagist commits history
 
 ## Under development
 
+- Changed: rearranged config files to new scheme
+    - c9665bb 2016-05-10 csfixed (sol@hiqdev.com)
+    - 6a38eb9 2016-05-10 still rearranging configs (sol@hiqdev.com)
+    - 54ede7d 2016-05-09 added `config/common.php` (sol@hiqdev.com)
+    - 46631a7 2016-05-09 redone configs to hidev and hisite (sol@hiqdev.com)
+    - d2e0f0f 2016-05-09 moved logos to AppAsset (sol@hiqdev.com)
 - Changed: redone to `hiqdev/asset-packagist`
     - a85830f 2016-05-08 changed to hisite-config (sol@hiqdev.com)
     - f6aa46d 2016-05-08 csfixed (sol@hiqdev.com)
