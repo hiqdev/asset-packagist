@@ -11,4 +11,4 @@
 
 error_reporting(E_ALL & ~E_NOTICE);
 
-require_once __DIR__ . '/../src/_bootstrap.php';
+require_once __DIR__ . '/../src/config/bootstrap.php';

@@ -9,6 +9,8 @@
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
 
+$common = require __DIR__ . '/common.php';
+
 $config = [
     'components' => [
         'config' => [
@@ -17,7 +19,4 @@ $config = [
     ],
 ];
 
-return yii\helpers\ArrayHelper::merge(
-    require __DIR__ . '/common.php',
-    $config
-);
+return yii\helpers\ArrayHelper::merge($common, $config);

@@ -10,7 +10,7 @@
  */
 
 if (!defined('HISITE_VENDOR_DIR')) {
-    foreach ([dirname(__DIR__) . '/vendor', dirname(dirname(dirname(__DIR__)))] as $dir) {
+    foreach ([dirname(dirname(__DIR__)) . '/vendor', dirname(dirname(dirname(dirname(__DIR__))))] as $dir) {
         if (file_exists($dir . '/autoload.php')) {
             define('HISITE_VENDOR_DIR', $dir);
             break;
