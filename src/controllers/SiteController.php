@@ -38,7 +38,10 @@ class SiteController extends \yii\web\Controller
         list($type, $temp) = explode('-', $temp);
         $package = new AssetPackage($type, $name);
         $binpath = Yii::getAlias('@vendor/bin/hidev');
-        system("$binpath asset-package/update $type $name");
+        system("$binpath asset-package/update $type $name", $exitcode);
+        if ($exitcode) {
+            throw new \Exception('failed execute command');
+        }
         $package->load();
 
         return $this->render('search', compact('package'));
