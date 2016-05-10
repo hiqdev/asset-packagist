@@ -12,7 +12,9 @@
 return [
     'components' => [
         'config' => [
-            'include' => '@hiqdev/assetpackagist/config/goals.yml',
+            'include' => [
+                '@hiqdev/assetpackagist/config/goals.yml',
+            ],
         ],
     ],
     'aliases' => require __DIR__ . '/aliases.php',
