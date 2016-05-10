@@ -4,6 +4,9 @@ hiqdev/asset-packagist commits history
 ## Under development
 
 - Changed: rearranged config files to new scheme
+    - c77aa60 2016-05-10 fixed typo (sol@hiqdev.com)
+    - 569947f 2016-05-10 + `chmod-storage` goal (sol@hiqdev.com)
+    - b4cf57b 2016-05-10 still rearranging configs (sol@hiqdev.com)
     - c9665bb 2016-05-10 csfixed (sol@hiqdev.com)
     - 6a38eb9 2016-05-10 still rearranging configs (sol@hiqdev.com)
     - 54ede7d 2016-05-09 added `config/common.php` (sol@hiqdev.com)
