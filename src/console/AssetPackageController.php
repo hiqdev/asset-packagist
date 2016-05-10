@@ -24,13 +24,22 @@ class AssetPackageController extends \yii\console\Controller
         echo 'updated ' . $package->getHash() . ' ' . $package->getFullName() . "\n";
     }
 
-    public function actionUpdateList()
+    public function actionUpdateList($file = STDIN)
     {
-        while ($line = fgets(STDIN)) {
+        $handler = is_resource($file) ? $file : fopen($file, 'r');
+        while ($line = fgets($handler)) {
             list($full) = preg_split('/\s+/', trim($line));
             list($type, $name) = AssetPackage::splitFullName($full);
             $this->actionUpdate($type, $name);
         }
+        if (!is_resource($file)) {
+            fclose($handler);
+        }
+    }
+
+    public function actionUpdateAll()
+    {
+        $this->actionUpdateList(Yii::getAlias('@hiqdev/assetpackagist/config/packages.list'));
     }
 
     public function actionList()
