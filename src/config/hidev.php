@@ -9,14 +9,12 @@
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
 
-$common = require __DIR__ . '/common.php';
-
-$config = [
+return [
     'components' => [
         'config' => [
             'include' => '@hiqdev/assetpackagist/config/goals.yml',
         ],
     ],
+    'aliases' => require __DIR__ . '/aliases.php',
+    'params' => require __DIR__ . '/params.php',
 ];
-
-return yii\helpers\ArrayHelper::merge($common, $config);
