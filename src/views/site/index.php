@@ -43,7 +43,7 @@ $this->title = Yii::$app->name;
                 <pre><code>"repositories": [
     {
         "type": "composer",
-        "url": "https://asset-packagist.hiqdev.com"
+        "url": "https://asset-packagist.org"
     }
 ]</code></pre>
             </div>
