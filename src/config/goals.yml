@@ -1,5 +1,7 @@
 asset-package:
     class: hiqdev\assetpackagist\console\AssetPackageController
+bower-package:
+    class: hiqdev\assetpackagist\console\BowerPackageController
 
 install:
     after:

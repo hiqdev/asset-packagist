@@ -14,6 +14,7 @@ namespace hiqdev\assetpackagist\console;
 use hiqdev\assetpackagist\models\AssetPackage;
 use hiqdev\assetpackagist\models\Storage;
 use Yii;
+use yii\helpers\Console;
 
 class AssetPackageController extends \yii\console\Controller
 {
