@@ -42,7 +42,8 @@
         "composer/composer": "1.*",
         "fxp/composer-asset-plugin": "1.*",
         "yiisoft/yii2": "2.*",
-        "yiisoft/yii2-debug": "2.*"
+        "yiisoft/yii2-debug": "2.*",
+        "guzzlehttp/guzzle": "6.*"
     },
     "require-dev": {
         "hiqdev/hidev": "dev-master",
@@ -64,7 +65,7 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "https://asset-packagist.hiqdev.com"
+            "url": "https://asset-packagist.org"
         }
     ]
 }
