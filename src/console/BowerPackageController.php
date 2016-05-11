@@ -5,6 +5,7 @@ namespace hiqdev\assetpackagist\console;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Console;
+use yii\helpers\FileHelper;
 use yii\helpers\Json;
 
 class BowerPackageController extends \yii\console\Controller
@@ -52,6 +53,7 @@ class BowerPackageController extends \yii\console\Controller
         } else {
             $result = (new \GuzzleHttp\Client())->request('GET', $url);
             $raw = $result->getBody();
+            FileHelper::createDirectory(dirname($componentsFilePath));
             file_put_contents($componentsFilePath, $raw);
         }
 
