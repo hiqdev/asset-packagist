@@ -11,6 +11,8 @@
 
 namespace hiqdev\assetpackagist\helpers;
 
+use Exception;
+
 class Locker
 {
     protected static $_handles = [];
