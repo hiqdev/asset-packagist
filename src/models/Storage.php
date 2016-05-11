@@ -27,10 +27,13 @@ class Storage
         $this->_path = Yii::getAlias('@storage', false);
     }
 
+    /**
+     * @return static
+     */
     public static function getInstance()
     {
         if (static::$_instance === null) {
-            static::$_instance = new self();
+            static::$_instance = new static;
         }
 
         return static::$_instance;
