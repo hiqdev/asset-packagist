@@ -11,9 +11,11 @@
 
 namespace hiqdev\assetpackagist\models;
 
+use Composer\Composer;
 use Composer\Factory;
 use Composer\IO\NullIO;
 use Exception;
+use Fxp\Composer\AssetPlugin\Repository\AssetVcsRepository;
 use hiqdev\assetpackagist\registry\RegistryFactory;
 
 class AssetPackage
@@ -24,10 +26,21 @@ class AssetPackage
     protected $_releases = [];
     protected $_saved;
 
+    /**
+     * @var NullIO
+     */
     protected $_io;
+    /**
+     * @var Composer
+     */
     protected $_composer;
+    /**
+     * @var Storage
+     */
     protected $_storage;
-
+    /**
+     * @var Composer
+     */
     protected static $_commonComposer;
 
     public function __construct($type, $name)
@@ -85,12 +98,13 @@ class AssetPackage
         return $this->_hash;
     }
 
+    /**
+     * @return Composer
+     */
     public static function getCommonComposer()
     {
         if (static::$_commonComposer === null) {
             static::$_commonComposer = Factory::create(new NullIO());
-            #$factory = new Factory();
-            #static::$_commonComposer = $factory->createComposer(new NullIO(), null, false, null, false);
         }
 
         return static::$_commonComposer;
@@ -101,6 +115,9 @@ class AssetPackage
         $this->_composer = $value;
     }
 
+    /**
+     * @return Composer
+     */
     public function getComposer()
     {
         if ($this->_composer === null) {
@@ -149,10 +166,14 @@ class AssetPackage
         $this->_hash = $this->getStorage()->writePackage($this);
     }
 
-    public function prepareReleases($repo)
+    /**
+     * @param AssetVcsRepository $repository
+     * @return array
+     */
+    public function prepareReleases($repository)
     {
         $releases = [];
-        foreach ($repo->getPackages() as $package) {
+        foreach ($repository->getPackages() as $package) {
             $version = $package->getVersion();
             $release = [
                 'uid'       => $this->prepareUid($version),

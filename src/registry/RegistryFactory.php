@@ -11,15 +11,29 @@
 
 namespace hiqdev\assetpackagist\registry;
 
+use Composer\Repository\RepositoryManager;
+use Fxp\Composer\AssetPlugin\Repository\AbstractAssetsRepository;
+
 class RegistryFactory
 {
+    /**
+     * @var array
+     */
     protected static $classes = [
         'bower' => BowerRegistry::class,
         'npm'   => NpmRegistry::class,
     ];
 
+    /**
+     * @var AbstractAssetsRepository[]
+     */
     public static $registries = [];
 
+    /**
+     * @param string $type
+     * @param RepositoryManager $rm
+     * @return AbstractAssetsRepository|BowerRegistry|NpmRegistry
+     */
     public static function getRegistry($type, $rm)
     {
         if (!isset(static::$registries[$type])) {
@@ -29,6 +43,11 @@ class RegistryFactory
         return static::$registries[$type];
     }
 
+    /**
+     * @param string $type
+     * @param RepositoryManager $rm
+     * @return mixed
+     */
     protected static function buildRegistry($type, $rm)
     {
         $config = [
