@@ -14,15 +14,20 @@ namespace hiqdev\assetpackagist\console;
 use hiqdev\assetpackagist\models\AssetPackage;
 use hiqdev\assetpackagist\models\Storage;
 use Yii;
+use yii\base\Exception;
 use yii\helpers\Console;
 
 class AssetPackageController extends \yii\console\Controller
 {
     public function actionUpdate($type, $name)
     {
-        $package = new AssetPackage($type, $name);
-        $package->update();
-        echo 'updated ' . $package->getHash() . ' ' . $package->getFullName() . "\n";
+        try {
+            $package = new AssetPackage($type, $name);
+            $package->update();
+            echo 'updated ' . $package->getHash() . ' ' . $package->getFullName() . "\n";
+        } catch (\Exception $e) {
+            echo Console::renderColoredString("%Rfailed%N $type/$name:%n {$e->getMessage()}\n");
+        }
     }
 
     public function actionUpdateList($file = STDIN)
