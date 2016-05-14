@@ -61,6 +61,8 @@ AppAsset::register($this);
     </div>
 </footer>
 
+<?= $this->render('_counters') ?>
+
 <?php $this->endBody() ?>
 </body>
 </html>
