@@ -24,6 +24,28 @@ Composer packages.
 Instructions on how to setup your own version of Asset Packagist
 will be available later.
 
+## Usage
+
+List required packages like the following:
+
+```php
+"require": {
+    "bower-asset/bootstrap": "^3.3",
+    "npm-asset/jquery": "^2.2"
+}
+```
+
+And add these lines:</p>
+
+```php
+"repositories": [
+    {
+        "type": "composer",
+        "url": "https://asset-packagist.org"
+    }
+]
+```
+
 ## License
 
 This project is released under the terms of the BSD-3-Clause [license](LICENSE).
