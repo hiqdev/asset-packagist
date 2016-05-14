@@ -3,11 +3,14 @@ hiqdev/asset-packagist commits history
 
 ## Under development
 
+- Added and improved texts and package description
+    - 7baf614 2016-05-14 added package description (sol@hiqdev.com)
     - cfb3ae4 2016-05-14 fixed dependencies (sol@hiqdev.com)
     - dd4f37d 2016-05-14 removed web dir (sol@hiqdev.com)
     - 71631fe 2016-05-14 added/improved texts (sol@hiqdev.com)
     - 63c7c89 2016-05-12 Added error handling for asset-package/update and update-list (d.naumenko.a@gmail.com)
     - c9bd8a4 2016-05-12 Updated PHPDocs, minor (d.naumenko.a@gmail.com)
+- Added Top-1000 Bower packages
     - 591f219 2016-05-12 Added try/catch to AssetPackageController::actionUpdate (d.naumenko.a@gmail.com)
     - e01d992 2016-05-11 Added creating of runtime directory in BowerPackageController (d.naumenko.a@gmail.com)
     - f66e733 2016-05-11 Added BowerPackageController and actionFetchTop (d.naumenko.a@gmail.com)
