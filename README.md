@@ -10,7 +10,7 @@ Asset Packagist
 
 ![Composer](https://raw.githubusercontent.com/hiqdev/asset-packagist/master/docs/asset-packagist.png)
 
-**Composer + Bower + NPM = friends forever!**
+## Composer + Bower + NPM = friends forever!
 
 This package is the core part of https://asset-packagist.org/ project.
 
