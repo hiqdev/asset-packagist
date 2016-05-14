@@ -25,15 +25,19 @@ composer.lock
 # phpunit generated files
 coverage.clover
 
-# Yii2 web app directories
-runtime/*
-web/assets/*
-
 # PHARs
 composer.phar
 php-cs-fixer.phar
 phpunit-skelgen.phar
 phpunit.phar
+
+# HiSite directories
+/runtime/*
+/web/assets/*
+
+# Yii2 web app directories
+runtime/*
+web/assets/*
 
 # Asset packages files
 web/lastid

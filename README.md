@@ -8,23 +8,15 @@ Asset Packagist
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/hiqdev/asset-packagist.svg)](https://scrutinizer-ci.com/g/hiqdev/asset-packagist/)
 [![Dependency Status](https://www.versioneye.com/php/hiqdev:asset-packagist/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:asset-packagist/dev-master)
 
+This is the core project of https://asset-packagist.org/ repository.
+
+Asset Packagist allows installation of Bower and NPM packages as native
+Composer packages. With **NO** plugins and **NO** Node.js required.
+
 ## Installation
 
-The preferred way to install this yii2-extension is through [composer](http://getcomposer.org/download/).
-
-Either run
-
-```sh
-php composer.phar require "hiqdev/asset-packagist"
-```
-
-or add
-
-```json
-"hiqdev/asset-packagist": "*"
-```
-
-to the require section of your composer.json.
+Instructions on how to setup your own version of Asset Packagist
+will be available later.
 
 ## License
 
@@ -32,3 +24,7 @@ This project is released under the terms of the BSD-3-Clause [license](LICENSE).
 Read more [here](http://choosealicense.com/licenses/bsd-3-clause).
 
 Copyright © 2016, HiQDev (http://hiqdev.com/)
+
+## Acknowledgments
+
+This project uses Francois Pluchino's <a href="https://github.com/francoispluchino/composer-asset-plugin">composer-asset-plugin</a> to convert Bower and NPM packages to composer format.

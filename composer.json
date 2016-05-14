@@ -2,7 +2,13 @@
     "name": "hiqdev/asset-packagist",
     "type": "yii2-extension",
     "description": "Asset Packagist",
-    "keywords": [],
+    "keywords": [
+        "composer",
+        "bower",
+        "npm",
+        "asset",
+        "packagist"
+    ],
     "homepage": "https://github.com/hiqdev/asset-packagist",
     "license": "BSD-3-Clause",
     "support": {

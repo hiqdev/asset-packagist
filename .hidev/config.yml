@@ -1,4 +1,11 @@
 package:
     type:           yii2-extension
     name:           asset-packagist
+    title:          Asset Packagist
+    keywords:       composer, bower, npm, asset, packagist
     namespace:      hiqdev\assetpackagist
+    description:    |
+        This is the core project of https://asset-packagist.org/ repository.
+
+        Asset Packagist allows installation of Bower and NPM packages as native
+        Composer packages. With **NO** plugins and **NO** Node.js required.

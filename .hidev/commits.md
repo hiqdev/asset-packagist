@@ -3,6 +3,22 @@ hiqdev/asset-packagist commits history
 
 ## Under development
 
+    - cfb3ae4 2016-05-14 fixed dependencies (sol@hiqdev.com)
+    - dd4f37d 2016-05-14 removed web dir (sol@hiqdev.com)
+    - 71631fe 2016-05-14 added/improved texts (sol@hiqdev.com)
+    - 63c7c89 2016-05-12 Added error handling for asset-package/update and update-list (d.naumenko.a@gmail.com)
+    - c9bd8a4 2016-05-12 Updated PHPDocs, minor (d.naumenko.a@gmail.com)
+    - 591f219 2016-05-12 Added try/catch to AssetPackageController::actionUpdate (d.naumenko.a@gmail.com)
+    - e01d992 2016-05-11 Added creating of runtime directory in BowerPackageController (d.naumenko.a@gmail.com)
+    - f66e733 2016-05-11 Added BowerPackageController and actionFetchTop (d.naumenko.a@gmail.com)
+    - 082935a 2016-05-11 Added TOP-100 Bower components to bower.list (d.naumenko.a@gmail.com)
+    - 2728344 2016-05-11 Updated composer.json - added guzzle dependency (d.naumenko.a@gmail.com)
+    - 26c30b0 2016-05-11 Fixed wrong namespaces in Locker; (d.naumenko.a@gmail.com)
+    - 4e28d86 2016-05-11 Updated Usage block on index.php (d.naumenko.a@gmail.com)
+    - 9499664 2016-05-10 + `asset-package/update-all` action (sol@hiqdev.com)
+    - b4d5c47 2016-05-10 fixed default lastId (sol@hiqdev.com)
+    - 4678f67 2016-05-10 removed obsolete PackagesController (sol@hiqdev.com)
+    - 54a8f54 2016-05-10 added check exitcode when running hidev update package (sol@hiqdev.com)
 - Changed: rearranged config files to new scheme
     - c77aa60 2016-05-10 fixed typo (sol@hiqdev.com)
     - 569947f 2016-05-10 + `chmod-storage` goal (sol@hiqdev.com)
