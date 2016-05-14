@@ -4,6 +4,7 @@ hiqdev/asset-packagist commits history
 ## Under development
 
 - Added and improved texts and package description
+    - 00ff6f1 2016-05-14 improved description: added logo (sol@hiqdev.com)
     - 7baf614 2016-05-14 added package description (sol@hiqdev.com)
     - cfb3ae4 2016-05-14 fixed dependencies (sol@hiqdev.com)
     - dd4f37d 2016-05-14 removed web dir (sol@hiqdev.com)
