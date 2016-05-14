@@ -38,7 +38,7 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'About',    'url' => ['/site/about']],
             ['label' => 'Contact',  'url' => ['/site/contact']],
-            ['label' => 'GitHub',   'url' => 'https://github.com/hiqdev/asset-packagist.hiqdev.com'],
+            ['label' => 'GitHub',   'url' => 'https://github.com/hiqdev/asset-packagist'],
         ],
     ]);
     NavBar::end();

@@ -28,6 +28,9 @@ $this->title = Yii::$app->name;
                 <p><b>NO</b> plugins and <b>NO</b> Node.js are required.</p>
                 </p>
 
+                <p>At the moment we've added 1000+ most popular Bower and 1000+ NPM packages.</p>
+                <p>Please check/add packages you want to use with the form at the top of the page.</p>
+
                 <p><a class="btn btn-default" href="/site/about">More info &raquo;</a></p>
             </div>
             <div class="col-lg-4">
@@ -57,7 +60,8 @@ $this->title = Yii::$app->name;
                 which introduces various problems. Travis and Scrutinizer integration
                 problems are especially annoying.
                 </p>
-                <p>Questions? <a class="btn btn-default" href="/site/contact">Contact me! &raquo;</a></p>
+                <p>Questions?</p>
+                <p><a class="btn btn-default" href="/site/contact">Contact us &raquo;</a></p>
             </div>
         </div>
 
