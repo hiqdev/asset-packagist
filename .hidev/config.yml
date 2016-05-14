@@ -5,7 +5,7 @@ package:
     keywords:       composer, bower, npm, asset, packagist
     namespace:      hiqdev\assetpackagist
     description:    |
-        ![Composer](https://raw.githubusercontent.com/hiqdev/asset-packagist/master/docs/logo/asset-packagist.png)
+        ![Composer](https://raw.githubusercontent.com/hiqdev/asset-packagist/master/docs/asset-packagist.png)
 
         **Composer + Bower + NPM = friends forever!**
 
