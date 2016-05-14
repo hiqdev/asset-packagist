@@ -8,10 +8,16 @@ Asset Packagist
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/hiqdev/asset-packagist.svg)](https://scrutinizer-ci.com/g/hiqdev/asset-packagist/)
 [![Dependency Status](https://www.versioneye.com/php/hiqdev:asset-packagist/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:asset-packagist/dev-master)
 
-This is the core project of https://asset-packagist.org/ repository.
+![Composer](https://raw.githubusercontent.com/hiqdev/asset-packagist/master/docs/logo/asset-packagist.png)
+
+**Composer + Bower + NPM = friends forever!**
+
+This package is the core part of https://asset-packagist.org/ project.
 
 Asset Packagist allows installation of Bower and NPM packages as native
-Composer packages. With **NO** plugins and **NO** Node.js required.
+Composer packages.
+
+**NO** plugins and **NO** Node.js are required.
 
 ## Installation
 
