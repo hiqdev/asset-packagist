@@ -4,6 +4,8 @@ hiqdev/asset-packagist commits history
 ## Under development
 
 - Added and improved texts and package description
+    - 97e289c 2016-05-14 added empty counters template to be themed in real site (sol@hiqdev.com)
+    - 9b6ed61 2016-05-14 added Usage description (sol@hiqdev.com)
     - 00ff6f1 2016-05-14 improved description: added logo (sol@hiqdev.com)
     - 7baf614 2016-05-14 added package description (sol@hiqdev.com)
     - cfb3ae4 2016-05-14 fixed dependencies (sol@hiqdev.com)
