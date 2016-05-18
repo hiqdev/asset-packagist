@@ -13,6 +13,7 @@ namespace hiqdev\assetpackagist\controllers;
 
 use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
+use yii\web\ServerErrorHttpException;
 
 class SiteController extends \yii\web\Controller
 {
@@ -33,17 +34,19 @@ class SiteController extends \yii\web\Controller
 
     public function actionSearch()
     {
-        $q = Yii::$app->request->get('query') ?: Yii::$app->request->post('query');
-        list($temp, $name) = explode('/', $q);
-        list($type, $temp) = explode('-', $temp);
-        $package = new AssetPackage($type, $name);
-        $binpath = Yii::getAlias('@vendor/bin/hidev');
-        system("$binpath asset-package/update $type $name", $exitcode);
-        if ($exitcode) {
-            throw new \Exception('failed execute command');
-        }
-        $package->load();
+        $query = Yii::$app->request->get('query') ?: Yii::$app->request->post('query');
 
-        return $this->render('search', compact('package'));
+        list($temp, $name) = explode('/', $query);
+        list($type,) = explode('-', $temp);
+
+        try {
+            $package = new AssetPackage($type, $name);
+            $package->update();
+            $package->load();
+        }  catch (\Exception $e) {
+            throw new ServerErrorHttpException($e->getMessage());
+        }
+
+        return $this->render('search', ['package' => $package, 'query' => $query]);
     }
 }

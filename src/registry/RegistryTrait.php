@@ -11,9 +11,12 @@
 
 namespace hiqdev\assetpackagist\registry;
 
+use Composer\Repository\RepositoryManager;
+
 /**
  * Registry trait.
  * All this to use protected functions from fxp.
+ * @property RepositoryManager $rm
  */
 trait RegistryTrait
 {

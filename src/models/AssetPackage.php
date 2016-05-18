@@ -17,6 +17,7 @@ use Composer\IO\NullIO;
 use Exception;
 use Fxp\Composer\AssetPlugin\Repository\AssetVcsRepository;
 use hiqdev\assetpackagist\registry\RegistryFactory;
+use Yii;
 
 class AssetPackage
 {
@@ -104,7 +105,12 @@ class AssetPackage
     public static function getCommonComposer()
     {
         if (static::$_commonComposer === null) {
-            static::$_commonComposer = Factory::create(new NullIO());
+            static::$_commonComposer = (new Factory)->createComposer(
+                new NullIO(),
+                Yii::getAlias('@composer/composer.json'),
+                false,
+                Yii::getAlias('@composer')
+            );
         }
 
         return static::$_commonComposer;
@@ -176,21 +182,21 @@ class AssetPackage
         foreach ($repository->getPackages() as $package) {
             $version = $package->getVersion();
             $release = [
-                'uid'       => $this->prepareUid($version),
-                'name'      => $this->getFullName(),
-                'version'   => $version,
+                'uid' => $this->prepareUid($version),
+                'name' => $this->getFullName(),
+                'version' => $version,
             ];
             if ($package->getDistUrl()) {
                 $release['dist'] = [
-                    'type'      => $package->getDistType(),
-                    'url'       => $package->getDistUrl(),
+                    'type' => $package->getDistType(),
+                    'url' => $package->getDistUrl(),
                     'reference' => $package->getDistReference(),
                 ];
             }
             if ($package->getSourceUrl()) {
                 $release['source'] = [
-                    'type'      => $package->getSourceType(),
-                    'url'       => $package->getSourceUrl(),
+                    'type' => $package->getSourceType(),
+                    'url' => $package->getSourceUrl(),
                     'reference' => $package->getSourceReference(),
                 ];
             }
