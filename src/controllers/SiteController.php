@@ -36,8 +36,7 @@ class SiteController extends \yii\web\Controller
     {
         $query = Yii::$app->request->get('query') ?: Yii::$app->request->post('query');
 
-        list($temp, $name) = explode('/', $query);
-        list($type,) = explode('-', $temp);
+        list($type, $name) = AssetPackage::splitFullName($query);
 
         try {
             $package = new AssetPackage($type, $name);
