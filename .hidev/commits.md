@@ -3,6 +3,12 @@ hiqdev/asset-packagist commits history
 
 ## Under development
 
+- Implemented package details page
+    - 5fad211 2016-05-19 Implemented package details page (d.naumenko.a@gmail.com)
+    - 2195919 2016-05-19 Update styles (d.naumenko.a@gmail.com)
+    - 00e23b9 2016-05-18 Fixed search form submit url (d.naumenko.a@gmail.com)
+    - f3f873f 2016-05-18 Implemented package update from the we application (d.naumenko.a@gmail.com)
+    - 7183235 2016-05-17 Added passing of searchQuery to view params (d.naumenko.a@gmail.com)
 - Added and improved texts and package description
     - 97e289c 2016-05-14 added empty counters template to be themed in real site (sol@hiqdev.com)
     - 9b6ed61 2016-05-14 added Usage description (sol@hiqdev.com)
