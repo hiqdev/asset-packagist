@@ -2,6 +2,7 @@
 
 namespace hiqdev\assetpackagist\console;
 
+use Fxp\Composer\AssetPlugin\Repository\BowerRepository;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Console;

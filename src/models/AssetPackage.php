@@ -16,16 +16,29 @@ use Composer\Factory;
 use Composer\IO\NullIO;
 use Exception;
 use Fxp\Composer\AssetPlugin\Repository\AssetVcsRepository;
+use hiqdev\assetpackagist\components\Storage;
+use hiqdev\assetpackagist\registry\BowerRegistry;
+use hiqdev\assetpackagist\registry\NpmRegistry;
 use hiqdev\assetpackagist\registry\RegistryFactory;
 use Yii;
+use yii\base\Object;
 
-class AssetPackage
+class AssetPackage extends Object
 {
     protected $_type;
     protected $_name;
     protected $_hash;
     protected $_releases = [];
     protected $_saved;
+    /**
+     * @var AssetVcsRepository|BowerRegistry|NpmRegistry
+     */
+    protected $_registry;
+
+    /**
+     * @var integer UNIX Epoch timestamp of the latest package update
+     */
+    protected $_updateTime;
 
     /**
      * @var NullIO
@@ -36,16 +49,14 @@ class AssetPackage
      */
     protected $_composer;
     /**
-     * @var Storage
-     */
-    protected $_storage;
-    /**
      * @var Composer
      */
     protected static $_commonComposer;
 
-    public function __construct($type, $name)
+    public function __construct($type, $name, $config = [])
     {
+        parent::__construct($config);
+
         if (!$this->checkType($type)) {
             throw new Exception('wrong type');
         }
@@ -54,6 +65,14 @@ class AssetPackage
         }
         $this->_type = $type;
         $this->_name = $name;
+    }
+
+    public function getRegistry() {
+        if ($this->_registry === null) {
+            $this->_registry = RegistryFactory::getRegistry($this->getType(), $this->getComposer()->getRepositoryManager());
+        }
+
+        return $this->_registry;
     }
 
     public function checkType($type)
@@ -79,7 +98,7 @@ class AssetPackage
     public static function splitFullName($full)
     {
         list($temp, $name) = explode('/', $full);
-        list($type, $temp) = explode('-', $temp);
+        list($type,) = explode('-', $temp);
 
         return [$type, $name];
     }
@@ -160,14 +179,16 @@ class AssetPackage
     public function load()
     {
         $data = $this->getStorage()->readPackage($this);
-        $this->_hash = $data['hash'];
-        $this->_releases = $data['releases'];
+        if ($data !== null) {
+            $this->_hash = $data['hash'];
+            $this->_releases = $data['releases'];
+            $this->_updateTime = $data['updateTime'];
+        }
     }
 
     public function update()
     {
-        $registry = RegistryFactory::getRegistry($this->getType(), $this->getComposer()->getRepositoryManager());
-        $repo = $registry->buildVcsRepository($this->getName());
+        $repo = $this->getRegistry()->buildVcsRepository($this->getName());
         $this->_releases = $this->prepareReleases($repo);
         $this->_hash = $this->getStorage()->writePackage($this);
     }
@@ -234,12 +255,38 @@ class AssetPackage
         return $this->_saved;
     }
 
+    /**
+     * @return Storage
+     */
     public function getStorage()
     {
-        if ($this->_storage === null) {
-            $this->_storage = Storage::getInstance();
-        }
+        return Yii::$app->get('packageStorage');
+    }
 
-        return $this->_storage;
+    /**
+     * Returns the latest update time (UNIX Epoch)
+     * @return int|null
+     */
+    public function getUpdateTime()
+    {
+        return $this->_updateTime;
+    }
+
+    /**
+     * Package can be updated not more often than once in 10 min
+     * @return bool
+     */
+    public function canBeUpdated()
+    {
+        return time() - $this->getUpdateTime() > 60*10; // 10 min
+    }
+
+    /**
+     * Whether tha package should be auth-updated (if it is older than 1 day)
+     * @return bool
+     */
+    public function canAutoUpdate()
+    {
+        return time() - $this->getUpdateTime() > 60*60*24; // 1 day
     }
 }

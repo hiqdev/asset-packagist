@@ -13,10 +13,22 @@ namespace hiqdev\assetpackagist\controllers;
 
 use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
-use yii\web\ServerErrorHttpException;
+use yii\filters\VerbFilter;
 
 class SiteController extends \yii\web\Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'update' => ['post']
+                ]
+            ]
+        ];
+    }
+
     public function actionIndex()
     {
         return $this->render('index');
@@ -32,20 +44,42 @@ class SiteController extends \yii\web\Controller
         return $this->render('contact');
     }
 
-    public function actionSearch()
+    public function actionSearch($query)
     {
-        $query = Yii::$app->request->get('query') ?: Yii::$app->request->post('query');
+        $package = $this->getAssetPackage($query);
+        $params = ['package' => $package, 'query' => $query, 'forceUpdate' => false];
 
-        list($type, $name) = AssetPackage::splitFullName($query);
-
-        try {
-            $package = new AssetPackage($type, $name);
-            $package->update();
-            $package->load();
-        }  catch (\Exception $e) {
-            throw new ServerErrorHttpException($e->getMessage());
+        if ($package->canAutoUpdate()) {
+            $params['forceUpdate'] = true;
         }
 
-        return $this->render('search', ['package' => $package, 'query' => $query]);
+        return $this->render('search', $params);
+    }
+
+    /**
+     * @param $query
+     * @return AssetPackage
+     */
+    private static function getAssetPackage($query)
+    {
+        list($type, $name) = AssetPackage::splitFullName($query);
+        $package = new AssetPackage($type, $name);
+        $package->load();
+        return $package;
+    }
+
+    public function actionUpdate()
+    {
+        $query = Yii::$app->request->post('query');
+
+        $package = $this->getAssetPackage($query);
+        if ($package->canBeUpdated()) {
+            $package->update();
+        } else {
+            Yii::$app->session->addFlash('update-impossible', true);
+        }
+        $package->load();
+
+        return $this->renderPartial('package-details', ['package' => $package]);
     }
 }

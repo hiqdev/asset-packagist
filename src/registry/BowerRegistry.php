@@ -14,4 +14,6 @@ namespace hiqdev\assetpackagist\registry;
 class BowerRegistry extends \Fxp\Composer\AssetPlugin\Repository\BowerRepository
 {
     use RegistryTrait;
+
+    public $siteUrl = 'http://bower.io';
 }

@@ -28,11 +28,20 @@ trait RegistryTrait
         return $this->fetchFile($packageUrl, $cacheName);
     }
 
+    /**
+     * @param $name
+     * @return \Composer\Repository\RepositoryInterface
+     */
     public function buildVcsRepository($name)
     {
         $data = $this->fetchPackageData($name);
         $conf = $this->createVcsRepositoryConfig($data, $name);
 
         return $this->rm->createRepository($conf['type'], $conf);
+    }
+
+    public function getPackageSearchUrl($name)
+    {
+        return $this->siteUrl . '/search/?q=' . $name;
     }
 }

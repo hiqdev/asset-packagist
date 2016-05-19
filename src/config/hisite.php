@@ -34,6 +34,9 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName'  => false,
         ],
+        'packageStorage' => [
+            'class' => \hiqdev\assetpackagist\components\Storage::class
+        ]
     ],
     'modules' => [],
     'aliases' => require __DIR__ . '/aliases.php',

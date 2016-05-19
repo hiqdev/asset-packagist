@@ -11,8 +11,8 @@
 
 namespace hiqdev\assetpackagist\console;
 
-use hiqdev\assetpackagist\models\AssetPackage;
-use hiqdev\assetpackagist\models\Storage;
+use hiqdev\assetpackagist\components\AssetPackage;
+use hiqdev\assetpackagist\components\Storage;
 use Yii;
 use yii\base\Exception;
 use yii\helpers\Console;

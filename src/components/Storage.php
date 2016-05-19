@@ -9,34 +9,22 @@
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\assetpackagist\models;
+namespace hiqdev\assetpackagist\components;
 
-use hiqdev\assetpackagist\helpers\Locker;
+use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
+use yii\base\Component;
 use yii\helpers\Json;
+use hiqdev\assetpackagist\helpers\Locker;
 
-class Storage
+class Storage extends Component
 {
-    protected static $_instance;
-
     protected $_path;
     protected $_locker;
 
-    protected function __construct()
+    public function init()
     {
         $this->_path = Yii::getAlias('@storage', false);
-    }
-
-    /**
-     * @return static
-     */
-    public static function getInstance()
-    {
-        if (static::$_instance === null) {
-            static::$_instance = new static;
-        }
-
-        return static::$_instance;
     }
 
     protected function getLocker()
@@ -102,6 +90,16 @@ class Storage
         return $hash;
     }
 
+    /**
+     * Reads the $package information from the storage
+     *
+     * @param AssetPackage $package
+     * @return array|null array of two elements:
+     *  0 - string sha256 hash of the package
+     *  1 - array[] releases
+     *
+     * Returns null, when package does not exist.
+     */
     public function readPackage(AssetPackage $package)
     {
         $name = $package->getFullName();
@@ -110,11 +108,12 @@ class Storage
             return [];
         }
         $json = file_get_contents($path);
+        $updateTime = filemtime($path);
         $hash = hash('sha256', $json);
         $data = Json::decode($json);
         $releases = isset($data['packages'][$name]) ? $data['packages'][$name] : [];
 
-        return compact('hash', 'releases');
+        return compact('hash', 'releases', 'updateTime');
     }
 
     public function buildPath()
