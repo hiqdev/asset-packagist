@@ -89,3 +89,20 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
+
+.package-details .versions.updating {
+    min-height: 200px;
+    text-align: center;
+}
+.package-details .too-fast-update {
+    margin-top: 1em;
+}
+
+.package-details .package-ok {
+    color: #468847;
+    background-color: #dff0d8;
+    border: 1px solid #d6e9c6;
+    display: inline-block;
+    padding: 0.7em 1.2em;
+    margin: 0 1em;
+}
