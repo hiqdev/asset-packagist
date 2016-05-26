@@ -63,6 +63,7 @@
     },
     "extra": {
         "config-plugin": {
+            "aliases": "src/config/aliases.php",
             "params": "src/config/params.php",
             "hidev": "src/config/hidev.php",
             "hisite": "src/config/hisite.php"
