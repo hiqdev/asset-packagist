@@ -39,5 +39,5 @@ chmod-storage:
     path:       '@storage'
     sudo:       true
     commands:   |
-       chown -R www-data:www-data lastid packages.json p
-       chmod -R g+w,o-w lastid packages.json p
+       chown -R www-data:hiqdev lock lastid packages.json p
+       chmod -R g+w,o-w lock lastid packages.json p
