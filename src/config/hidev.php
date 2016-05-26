@@ -17,6 +17,4 @@ return [
             ],
         ],
     ],
-    'aliases' => require __DIR__ . '/aliases.php',
-    'params' => require __DIR__ . '/params.php',
 ];

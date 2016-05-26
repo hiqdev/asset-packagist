@@ -30,6 +30,16 @@ return [
         'cache' => [
             'class' => 'yii\\caching\\FileCache',
         ],
+        'request' => [
+            'cookieValidationKey' => $params['cookieValidationKey'],
+        ],
+        'view' => [
+            'theme' => [
+                'pathMap' => [
+                    '@hiqdev/assetpackagist/views' => '@hisite/views',
+                ],
+            ],
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName'  => false,
@@ -39,6 +49,4 @@ return [
         ]
     ],
     'modules' => [],
-    'aliases' => require __DIR__ . '/aliases.php',
-    'params' => require __DIR__ . '/params.php',
 ];
