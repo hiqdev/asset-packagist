@@ -44,4 +44,9 @@ trait RegistryTrait
     {
         return $this->siteUrl . '/search/?q=' . $name;
     }
+
+    public function buildPackageUrl($name)
+    {
+        return $this->getPackageSearchUrl($name);
+    }
 }

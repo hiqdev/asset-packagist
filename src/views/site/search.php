@@ -25,7 +25,7 @@ $this->params['searchQuery'] = $query;
                 <?php
                 echo Html::a(
                     Yii::t('app', 'see on {registry}', ['registry' => Inflector::titleize($package->getType())]),
-                    $package->getRegistry()->getPackageSearchUrl($package->getName())
+                    $package->getRegistry()->buildPackageUrl($package->getName())
                 ) ?>
             </small>
         </h1>

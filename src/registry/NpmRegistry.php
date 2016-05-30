@@ -14,4 +14,11 @@ namespace hiqdev\assetpackagist\registry;
 class NpmRegistry extends \Fxp\Composer\AssetPlugin\Repository\NpmRepository
 {
     use RegistryTrait;
+
+    public $siteUrl = 'https://www.npmjs.com/';
+
+    public function buildPackageUrl($name)
+    {
+        return $this->siteUrl . 'package/' . $name;
+    }
 }
