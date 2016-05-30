@@ -46,11 +46,17 @@ class SiteController extends \yii\web\Controller
 
     public function actionSearch($query)
     {
-        $package = $this->getAssetPackage($query);
-        $params = ['package' => $package, 'query' => $query, 'forceUpdate' => false];
+        try {
+            $package = $this->getAssetPackage($query);
+            $params = ['package' => $package, 'query' => $query, 'forceUpdate' => false];
 
-        if ($package->canAutoUpdate()) {
-            $params['forceUpdate'] = true;
+            if ($package->canAutoUpdate()) {
+                $params['forceUpdate'] = true;
+            }
+        } catch (\Exception $e) {
+            $query = strtolower(preg_replace('/[^a-z0-9-]/i', '', $query));
+
+            return $this->render('notFound', compact('query'));
         }
 
         return $this->render('search', $params);
