@@ -1,8 +1,21 @@
 hiqdev/asset-packagist commits history
 --------------------------------------
 
-## Under development
+## 0.1.0 2016-05-31
 
+- Fixed minor issues for first release
+    - 4471376 2016-05-30 + notFound page (sol@hiqdev.com)
+    - 1f862c1 2016-05-30 + buildPackageUrl() (sol@hiqdev.com)
+    - 80fb19c 2016-05-26 fixing chmod-storage goal (sol@hiqdev.com)
+    - 6f6392a 2016-05-26 added aliases to composer-config-plugin (sol@hiqdev.com)
+    - ffd2ad5 2016-05-26 redoing to composer-config-plugin (sol@hiqdev.com)
+    - a1478ad 2016-05-26 redoing to `composer-config-plugin` (sol@hiqdev.com)
+    - 133a210 2016-05-05 fixed dependencies constraints (sol@hiqdev.com)
+    - e0c6316 2016-05-04 added `params-local.php` (sol@hiqdev.com)
+    - 305b331 2016-05-04 fixed version constraints (sol@hiqdev.com)
+    - fcfa683 2016-05-04 Merge pull request #1 from samdark/patch-1 (sol@hiqdev.com)
+    - fa7bcae 2016-05-04 Better front page wording (sam@rmcreative.ru)
+    - a90a482 2016-05-04 fixed version constraints (sol@hiqdev.com)
 - Implemented package details page
     - 5fad211 2016-05-19 Implemented package details page (d.naumenko.a@gmail.com)
     - 2195919 2016-05-19 Update styles (d.naumenko.a@gmail.com)
@@ -47,13 +60,6 @@ hiqdev/asset-packagist commits history
     - cf2d54d 2016-05-07 fixed asset-packagist/test action to check storage dir existance (sol@hiqdev.com)
     - e7be6b1 2016-05-05 redone to `hiqdev/asset-packagist` (sol@hiqdev.com)
     - 08aeb23 2016-05-05 splitted out `.hidev/goals.yml` (sol@hiqdev.com)
-- Fixed minor issues for first release
-    - 133a210 2016-05-05 fixed dependencies constraints (sol@hiqdev.com)
-    - e0c6316 2016-05-04 added `params-local.php` (sol@hiqdev.com)
-    - 305b331 2016-05-04 fixed version constraints (sol@hiqdev.com)
-    - fcfa683 2016-05-04 Merge pull request #1 from samdark/patch-1 (sol@hiqdev.com)
-    - fa7bcae 2016-05-04 Better front page wording (sam@rmcreative.ru)
-    - a90a482 2016-05-04 fixed version constraints (sol@hiqdev.com)
 - Added list operations
     - 1af8dc9 2016-05-05 + `packages.list` instead of `min_packages.sh` (sol@hiqdev.com)
     - 37d40a7 2016-05-05 + list and update-list actions (sol@hiqdev.com)
