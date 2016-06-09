@@ -44,6 +44,33 @@ $this->title = 'About';
 
     <p>All the JSON files are stored and served as static files on Asset Packagist side and composer effectively cashes those files on your side so everything works as quick as possible.</p>
 
+    <h1>Installing to a custom path</h1>
+
+    <p>Asset Packagist is NOT a plugin so it can't affect where the package will be installed.<br>
+    By default <code>bower-asset/bootstrap</code> package will be installed to <code>vendor/bower-asset/bootstrap</code> folder.</p>
+
+    <p>But you can achieve installing to custom path with <code><a href="https://github.com/oomphinc/composer-installers-extender">oomphinc/composer-installers-extender</a></code> plugin like this:</p>
+    <pre><code>
+    "require": {
+        "oomphinc/composer-installers-extender": "*",
+        "bower-asset/bootstrap": "^3.3",
+        "npm-asset/jquery": "^2.2"
+    },
+    "extra": {
+        "installer-types": ["library"],
+        "installer-paths": {
+            "public/assets/bower/{$name}/": ["bower-asset/bootstrap"],
+            "public/assets/npm/{$name}/": ["npm-asset/jquery"]
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+    </code></pre>
+
     <h1>Acknowledgements</h1>
 
     <p>This project uses Francois Pluchino's <a href="https://github.com/francoispluchino/composer-asset-plugin">composer-asset-plugin</a> to convert Bower and NPM packages to Composer format.</p>
