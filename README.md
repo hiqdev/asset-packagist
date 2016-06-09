@@ -46,6 +46,8 @@ And add these lines:</p>
 ]
 ```
 
+More information can be found on [about page](https://asset-packagist.org/site/about).
+
 ## License
 
 This project is released under the terms of the BSD-3-Clause [license](LICENSE).

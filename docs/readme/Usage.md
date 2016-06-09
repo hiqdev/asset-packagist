@@ -17,3 +17,5 @@ And add these lines:</p>
     }
 ]
 ```
+
+More information can be found on [about page](https://asset-packagist.org/site/about).
