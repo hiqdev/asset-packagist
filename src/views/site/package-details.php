@@ -17,6 +17,10 @@ use yii\helpers\Html;
         ]) ?>
     <?php } ?>
 
+    <br><br>
+    <b>Last updated:</b> <?= Yii::$app->formatter->asDateTime($package->getUpdateTime()) ?> (<?= Yii::$app->formatter->asRelativeTime($package->getUpdateTime()) ?>)
+    <br><br>
+
     <?php if (Yii::$app->session->hasFlash('update-impossible')) { ?>
         <div class="alert alert-warning too-fast-update" role="alert">
             <h4><?= Yii::t('app', 'Wow, you are very fast!'); ?></h4>
