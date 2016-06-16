@@ -11,6 +11,7 @@
 
 namespace hiqdev\assetpackagist\controllers;
 
+use Exception;
 use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
 use yii\filters\VerbFilter;
@@ -53,8 +54,8 @@ class SiteController extends \yii\web\Controller
             if ($package->canAutoUpdate()) {
                 $params['forceUpdate'] = true;
             }
-        } catch (\Exception $e) {
-            $query = strtolower(preg_replace('/[^a-z0-9-]/i', '', $query));
+        } catch (Exception $e) {
+            $query = preg_replace('/[^a-z0-9-]/i', '', $query);
 
             return $this->render('notFound', compact('query'));
         }

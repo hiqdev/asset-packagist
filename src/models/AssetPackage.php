@@ -53,6 +53,11 @@ class AssetPackage extends Object
      */
     protected static $_commonComposer;
 
+    public static function normalizeName($name)
+    {
+        return strtolower($name);
+    }
+
     public function __construct($type, $name, $config = [])
     {
         parent::__construct($config);
@@ -106,6 +111,11 @@ class AssetPackage extends Object
     public function getType()
     {
         return $this->_type;
+    }
+
+    public function getNormalName()
+    {
+        return static::buildFullName($this->_type, static::normalizeName($this->_name));
     }
 
     public function getName()
@@ -204,7 +214,7 @@ class AssetPackage extends Object
             $version = $package->getVersion();
             $release = [
                 'uid' => $this->prepareUid($version),
-                'name' => $this->getFullName(),
+                'name' => $this->getNormalName(),
                 'version' => $version,
             ];
             if ($package->getDistUrl()) {

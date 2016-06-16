@@ -67,7 +67,7 @@ class Storage extends Component
 
     public function writePackage(AssetPackage $package)
     {
-        $name = $package->getFullName();
+        $name = $package->getNormalName();
         $data = [
             'packages' => [
                 $name => $package->getReleases(),
@@ -102,7 +102,7 @@ class Storage extends Component
      */
     public function readPackage(AssetPackage $package)
     {
-        $name = $package->getFullName();
+        $name = $package->getNormalName();
         $path = $this->buildHashedPath($name);
         if (!file_exists($path)) {
             return [];
