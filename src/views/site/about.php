@@ -71,6 +71,23 @@ $this->title = 'About';
     ]
     </code></pre>
 
+    <h1>Yii2</h1>
+
+    <p>Yii2 expects Bower and NPM packages to be installed to <code>vendor/bower</code> and <code>vendor/npm</code> folders respectively.</p>
+
+    <p>So, to use asset-packagist for Yii2 projects it's necessary to reassign Bower and NPM aliases in your application config like this:</p>
+
+    <pre><code>
+    $config = [
+        ...
+        'aliases' =&gt; [
+            '@bower' =&gt; '@vendor/bower-asset',
+            '@npm'   =&gt; '@vendor/npm-asset',
+        ],
+        ...
+    ];
+    </code></pre>
+
     <h1>Acknowledgements</h1>
 
     <p>This project uses Francois Pluchino's <a href="https://github.com/francoispluchino/composer-asset-plugin">composer-asset-plugin</a> to convert Bower and NPM packages to Composer format.</p>
