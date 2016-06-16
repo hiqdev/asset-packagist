@@ -13,7 +13,6 @@ use yii\helpers\Json;
 use yii\helpers\Url;
 
 $this->title = 'Search';
-$this->params['breadcrumbs'][] = $this->title;
 $this->params['searchQuery'] = $query;
 
 ?>
