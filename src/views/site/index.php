@@ -28,7 +28,7 @@ $this->title = Yii::$app->name;
                 <p><b>NO</b> plugins and <b>NO</b> Node.js are required.</p>
                 </p>
 
-                <p>At the moment we've added 1000+ most popular Bower and 1000+ NPM packages.</p>
+                <p>At the moment we've added most popular Bower and NPM packages 1000+ each.</p>
                 <p>Please check/add packages you want to use with the form at the top of the page.</p>
 
                 <p><a class="btn btn-default" href="/site/about">More info &raquo;</a></p>
