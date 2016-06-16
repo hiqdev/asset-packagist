@@ -162,7 +162,6 @@ class Storage extends Component
     protected function writePackagesJson($hash)
     {
         $data = [
-            'search'            => '/search.json?q=%query%',
             'providers-url'     => '/p/%package%/%hash%.json',
             'provider-includes' => [
                 'p/provider-latest/%hash%.json' => [
