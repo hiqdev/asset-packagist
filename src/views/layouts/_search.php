@@ -12,7 +12,7 @@ use yii\web\View;
     <div class="container">
         <div class="col-xs-12 col-md-9" style="padding:0px 0 10px 0">
             <?= Html::beginForm('/site/search', 'GET', ['id' => 'search-form']) ?>
-            <?= Html::input('text', 'query', $this->params['searchQuery'], [
+            <?= Html::input('text', 'query', (isset($this->params['searchQuery'])?$this->params['searchQuery']:''), [
                 'id' => 'query',
                 'required' => true,
                 'autocomplete' => false,
