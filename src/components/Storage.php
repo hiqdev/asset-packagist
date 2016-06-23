@@ -21,6 +21,17 @@ class Storage extends Component
 {
     protected $_path;
     protected $_locker;
+    
+    protected static $_instance;
+
+    public static function getInstance()
+    {
+        if (static::$_instance === null) {
+            static::$_instance = new static();
+        }
+
+        return static::$_instance;
+    }
 
     public function init()
     {
@@ -105,7 +116,7 @@ class Storage extends Component
         $name = $package->getNormalName();
         $path = $this->buildHashedPath($name);
         if (!file_exists($path)) {
-            return [];
+            return null;
         }
         $json = file_get_contents($path);
         $updateTime = filemtime($path);
@@ -135,7 +146,7 @@ class Storage extends Component
         if (file_exists($latest_path)) {
             $data = Json::decode(file_get_contents($latest_path) ?: '[]');
         }
-        if (!is_array($data)) {
+        if (!isset($data)||!is_array($data)) {
             $data = [];
         }
         if (!isset($data['providers'])) {
