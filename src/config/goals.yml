@@ -5,14 +5,12 @@ bower-package:
 
 install:
     after:
-        - storage
+        - create-storage
+        - chmod-storage
 
-storage:
+create-storage:
     class:      directory
     path:       '@storage'
-    chown:      www-data
-    chgrp:      www-data
-    recursive:  [chown, chgrp]
     lock:
         once:       true
         template:   empty
@@ -39,5 +37,5 @@ chmod-storage:
     path:       '@storage'
     sudo:       true
     commands:   |
-       chown -R www-data:hiqdev lock lastid packages.json p
+       chown -R www-data lock lastid packages.json p
        chmod -R g+w,o-w lock lastid packages.json p
