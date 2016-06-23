@@ -68,7 +68,7 @@ class AssetPackageController extends \yii\console\Controller
 
     public function actionList()
     {
-        $packages = Storage::getInstance()->listPackages();
+        $packages = Yii::$app->get('packageStorage')->listPackages();
         ksort($packages);
         foreach ($packages as $name => $data) {
             echo "$name\n";
