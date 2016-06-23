@@ -1,17 +1,11 @@
 <?php
 
 /**
- * @var $this yii\web\View
+ * @var yii\web\View view object
  * @var string $query the search query that was submitted
- * @var \hiqdev\assetpackagist\models\AssetPackage $package
+ * @var hiqdev\assetpackagist\models\AssetPackage $package
  * @var bool $forceUpdate Whether the application must force package update
  */
-
-use yii\helpers\Html;
-use yii\helpers\Inflector;
-use yii\helpers\Json;
-use yii\helpers\Url;
-
 $this->title = 'Not found';
 $this->params['searchQuery'] = $query;
 

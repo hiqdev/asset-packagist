@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var $this yii\web\View
+ * @var yii\web\View
  * @var \hiqdev\assetpackagist\models\AssetPackage $package
  */
 use yii\helpers\Html;
@@ -11,25 +11,23 @@ use yii\helpers\Html;
 <?php $releases = $package->getReleases() ?>
 
 <div class="versions">
-    <?php if (!empty($releases)) { ?>
+    <?php if (!empty($releases)) : ?>
         <?= Html::tag('div', Yii::t('app', '✔ This package is OK to use!'), [
-            'class' => 'package-ok'
+            'class' => 'package-ok',
         ]) ?>
-    <?php } ?>
+    <?php endif ?>
 
     <br><br>
     <b>Last updated:</b> <?= Yii::$app->formatter->asDateTime($package->getUpdateTime()) ?> (<?= Yii::$app->formatter->asRelativeTime($package->getUpdateTime()) ?>)
     <br><br>
 
-    <?php if (Yii::$app->session->hasFlash('update-impossible')) { ?>
+    <?php if (Yii::$app->session->hasFlash('update-impossible')) : ?>
         <div class="alert alert-warning too-fast-update" role="alert">
-            <h4><?= Yii::t('app', 'Wow, you are very fast!'); ?></h4>
-            <p><?= Yii::t('app',
-                    'The package was updated recently. Could you wait another 10 minutes before fetching it again, please?') ?></p>
+            <h4><?= Yii::t('app', 'Wow, you are very fast!') ?></h4>
+            <p><?= Yii::t('app', 'The package was updated recently. Could you wait another 10 minutes before fetching it again, please?') ?></p>
         </div>
-        <?php
-        Yii::$app->session->removeFlash('update-impossible');
-    } ?>
+        <?php Yii::$app->session->removeFlash('update-impossible') ?>
+    <?php endif ?>
 
     <table class="table">
         <thead>
@@ -39,7 +37,7 @@ use yii\helpers\Html;
         </tr>
         </thead>
         <tbody>
-        <?php foreach ((array)$releases as $version => $release) : ?>
+        <?php foreach ((array) $releases as $version => $release) : ?>
             <tr>
                 <th><?= $version ?></th>
                 <td><code><?= $release['source']['reference'] ?: $release['dist']['reference'] ?></code></td>
@@ -57,7 +55,7 @@ use yii\helpers\Html;
                     ?>
                 </td>
             </tr>
-        <?php endforeach; ?>
+        <?php endforeach ?>
         </tbody>
     </table>
 </div>

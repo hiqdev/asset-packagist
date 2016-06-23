@@ -11,11 +11,11 @@
 
 namespace hiqdev\assetpackagist\components;
 
+use hiqdev\assetpackagist\helpers\Locker;
 use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
 use yii\base\Component;
 use yii\helpers\Json;
-use hiqdev\assetpackagist\helpers\Locker;
 
 class Storage extends Component
 {
@@ -91,7 +91,7 @@ class Storage extends Component
     }
 
     /**
-     * Reads the $package information from the storage
+     * Reads the $package information from the storage.
      *
      * @param AssetPackage $package
      * @return array|null array of two elements:

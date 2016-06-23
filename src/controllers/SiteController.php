@@ -24,9 +24,9 @@ class SiteController extends \yii\web\Controller
             'access' => [
                 'class' => VerbFilter::class,
                 'actions' => [
-                    'update' => ['post']
-                ]
-            ]
+                    'update' => ['post'],
+                ],
+            ],
         ];
     }
 

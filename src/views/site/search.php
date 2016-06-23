@@ -1,12 +1,11 @@
 <?php
 
 /**
- * @var $this yii\web\View
+ * @var yii\web\View
  * @var string $query the search query that was submitted
  * @var \hiqdev\assetpackagist\models\AssetPackage $package
  * @var bool $forceUpdate Whether the application must force package update
  */
-
 use yii\helpers\Html;
 use yii\helpers\Inflector;
 use yii\helpers\Json;
@@ -45,7 +44,7 @@ $options = Json::encode([
     'url' => Url::to('update'),
     'type' => 'post',
     'data' => [
-        'query' => $package->getFullName()
+        'query' => $package->getFullName(),
     ],
     'success' => new \yii\web\JsExpression("function (html) {
         versions.removeClass('updating').html(html);
@@ -54,7 +53,7 @@ $options = Json::encode([
     'beforeSend' => new \yii\web\JsExpression("function (event) {
         versions.addClass('updating').html($('<i class=\"fa fa-cog fa-spin fa-3x fa-fw\"></i>'));
         btn.button('loading');
-    }")
+    }"),
 ]);
 
 $this->registerJs(<<<JS

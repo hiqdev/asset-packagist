@@ -1,8 +1,16 @@
 <?php
 
+/*
+ * Asset Packagist
+ *
+ * @link      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hiqdev\assetpackagist\console;
 
-use Fxp\Composer\AssetPlugin\Repository\BowerRepository;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Console;
@@ -12,7 +20,7 @@ use yii\helpers\Json;
 class BowerPackageController extends \yii\console\Controller
 {
     /**
-     * Fetches TOP-$count components from Bower ans saves to `config/bower.list`
+     * Fetches TOP-$count components from Bower ans saves to `config/bower.list`.
      *
      * @param int $count
      * @param bool $skipCache
@@ -33,13 +41,13 @@ class BowerPackageController extends \yii\console\Controller
         $componentsListPath = Yii::getAlias('@hiqdev/assetpackagist/config/bower.list');
         file_put_contents($componentsListPath, implode("\n", $result));
 
-        echo Console::renderColoredString("Fetched %YBower%N components list. Found %G" . count($components) . "%N components.\n");
-        echo Console::renderColoredString("Only %bTOP-" . $count . "%N components were added to the packages list.\n");
-        echo Console::renderColoredString("See %G" . $componentsListPath . "%N\n");
+        echo Console::renderColoredString('Fetched %YBower%N components list. Found %G' . count($components) . "%N components.\n");
+        echo Console::renderColoredString('Only %bTOP-' . $count . "%N components were added to the packages list.\n");
+        echo Console::renderColoredString('See %G' . $componentsListPath . "%N\n");
     }
 
     /**
-     * Gets components array from bower API
+     * Gets components array from bower API.
      *
      * @param bool $skipCache whether to skip using local cache
      * @return array
@@ -49,7 +57,7 @@ class BowerPackageController extends \yii\console\Controller
         $url = 'http://bower-component-list.herokuapp.com';
         $componentsFilePath = Yii::getAlias('@runtime/bower-cache/components.list');
 
-        if (!$skipCache && is_file($componentsFilePath) && (time() - filemtime($componentsFilePath) < 60*60*6)) { // 6 hours
+        if (!$skipCache && is_file($componentsFilePath) && (time() - filemtime($componentsFilePath) < 60 * 60 * 6)) { // 6 hours
             $raw = file_get_contents($componentsFilePath);
         } else {
             $result = (new \GuzzleHttp\Client())->request('GET', $url);

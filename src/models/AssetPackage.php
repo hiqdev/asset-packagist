@@ -72,7 +72,8 @@ class AssetPackage extends Object
         $this->_name = $name;
     }
 
-    public function getRegistry() {
+    public function getRegistry()
+    {
         if ($this->_registry === null) {
             $this->_registry = RegistryFactory::getRegistry($this->getType(), $this->getComposer()->getRepositoryManager());
         }
@@ -103,7 +104,7 @@ class AssetPackage extends Object
     public static function splitFullName($full)
     {
         list($temp, $name) = explode('/', $full);
-        list($type,) = explode('-', $temp);
+        list($type) = explode('-', $temp);
 
         return [$type, $name];
     }
@@ -134,7 +135,7 @@ class AssetPackage extends Object
     public static function getCommonComposer()
     {
         if (static::$_commonComposer === null) {
-            static::$_commonComposer = (new Factory)->createComposer(
+            static::$_commonComposer = (new Factory())->createComposer(
                 new NullIO(),
                 Yii::getAlias('@composer/composer.json'),
                 false,
@@ -231,7 +232,7 @@ class AssetPackage extends Object
                     'reference' => $package->getSourceReference(),
                 ];
             }
-            if ( (isset($release['dist']) && $release['dist']) || (isset($release['source']) && $release['source']) ) {
+            if ((isset($release['dist']) && $release['dist']) || (isset($release['source']) && $release['source'])) {
                 $releases[$version] = $release;
             }
         }
@@ -274,7 +275,7 @@ class AssetPackage extends Object
     }
 
     /**
-     * Returns the latest update time (UNIX Epoch)
+     * Returns the latest update time (UNIX Epoch).
      * @return int|null
      */
     public function getUpdateTime()
@@ -283,20 +284,20 @@ class AssetPackage extends Object
     }
 
     /**
-     * Package can be updated not more often than once in 10 min
+     * Package can be updated not more often than once in 10 min.
      * @return bool
      */
     public function canBeUpdated()
     {
-        return time() - $this->getUpdateTime() > 60*10; // 10 min
+        return time() - $this->getUpdateTime() > 60 * 10; // 10 min
     }
 
     /**
-     * Whether tha package should be auth-updated (if it is older than 1 day)
+     * Whether tha package should be auth-updated (if it is older than 1 day).
      * @return bool
      */
     public function canAutoUpdate()
     {
-        return time() - $this->getUpdateTime() > 60*60*24; // 1 day
+        return time() - $this->getUpdateTime() > 60 * 60 * 24; // 1 day
     }
 }
