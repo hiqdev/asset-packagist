@@ -16,5 +16,8 @@ return [
                 '@hiqdev/assetpackagist/config/goals.yml',
             ],
         ],
+        'packageStorage' => [
+            'class' => \hiqdev\assetpackagist\components\Storage::class,
+        ],
     ],
 ];

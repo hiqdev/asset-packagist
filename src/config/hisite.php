@@ -45,8 +45,8 @@ return [
             'showScriptName'  => false,
         ],
         'packageStorage' => [
-            'class' => \hiqdev\assetpackagist\components\Storage::class
-        ]
+            'class' => \hiqdev\assetpackagist\components\Storage::class,
+        ],
     ],
     'modules' => [],
 ];
