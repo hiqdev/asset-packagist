@@ -231,7 +231,7 @@ class AssetPackage extends Object
                     'reference' => $package->getSourceReference(),
                 ];
             }
-            if ($release['dist'] || $release['source']) {
+            if ( (isset($release['dist']) && $release['dist']) || (isset($release['source']) && $release['source']) ) {
                 $releases[$version] = $release;
             }
         }
