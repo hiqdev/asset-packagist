@@ -88,7 +88,7 @@ class AssetPackage extends Object
 
     public function checkName($name)
     {
-        return strlen($name) > 1;
+        return strlen($name) > 0;
     }
 
     public function getFullName()
