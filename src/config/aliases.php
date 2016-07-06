@@ -10,8 +10,9 @@
  */
 
 return [
-    '@bower'   => '@vendor/bower-asset',
-    '@npm'     => '@vendor/npm-asset',
-    '@storage' => '<base-dir>/web',
-    '@runtime' => '<base-dir>/runtime',
+    '@bower'    => '@vendor/bower-asset',
+    '@npm'      => '@vendor/npm-asset',
+    '@storage'  => '<base-dir>/web',
+    '@runtime'  => '<base-dir>/runtime',
+    '@composer' => '<base-dir>',
 ];
