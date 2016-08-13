@@ -14,6 +14,7 @@ namespace hiqdev\assetpackagist\models;
 use Composer\Composer;
 use Composer\Factory;
 use Composer\IO\NullIO;
+use Composer\Package\Link;
 use Exception;
 use Fxp\Composer\AssetPlugin\Repository\AssetVcsRepository;
 use hiqdev\assetpackagist\components\Storage;
@@ -213,11 +214,15 @@ class AssetPackage extends Object
         $releases = [];
         foreach ($repository->getPackages() as $package) {
             $version = $package->getVersion();
+            $require = $this->prepareRequire($package->getRequires());
             $release = [
                 'uid' => $this->prepareUid($version),
                 'name' => $this->getNormalName(),
                 'version' => $version,
             ];
+            if ($require) {
+                $release['require'] = $require;
+            }
             if ($package->getDistUrl()) {
                 $release['dist'] = [
                     'type' => $package->getDistType(),
@@ -238,6 +243,21 @@ class AssetPackage extends Object
         }
 
         return $releases;
+    }
+
+    /**
+     * Prepares array of requires: name => constraint.
+     * @param Link[] array of package requires.
+     * @return array
+     */
+    public function prepareRequire(array $links)
+    {
+        $requires = [];
+        foreach ($links as $name => $link) {
+            $requires[$name] = $link->getPrettyConstraint();
+        }
+
+        return $requires;
     }
 
     public function prepareUid($version)
