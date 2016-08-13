@@ -1,7 +1,13 @@
-hiqdev/asset-packagist changelog
---------------------------------
+hiqdev/asset-packagist commits history
+--------------------------------------
 
-## 0.1.0 2016-05-31
+## [Under development]
+
+- Added providing `require` to support dependencies of bower/npm packages
+- Fixed different issues
+- Added more description
+
+## [0.1.0] - 2016-05-31
 
 - Fixed minor issues for first release
 - Implemented package details page
@@ -14,5 +20,4 @@ hiqdev/asset-packagist changelog
 - Chandged: redone with `Storage` and `Locker`
 - Added basics
 
-## Development started 2014-11-27
-
+## [Development started] - 2016-04-02
