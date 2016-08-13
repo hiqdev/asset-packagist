@@ -13,9 +13,9 @@
     "license": "BSD-3-Clause",
     "support": {
         "email": "support@hiqdev.com",
-        "source": "https://github.com/hiqdev/asset-packagist.hiqdev.com",
-        "issues": "https://github.com/hiqdev/asset-packagist.hiqdev.com/issues",
-        "wiki": "https://github.com/hiqdev/asset-packagist.hiqdev.com/wiki",
+        "source": "https://github.com/hiqdev/asset-packagist",
+        "issues": "https://github.com/hiqdev/asset-packagist/issues",
+        "wiki": "https://github.com/hiqdev/asset-packagist/wiki",
         "forum": "http://forum.hiqdev.com/"
     },
     "authors": [
@@ -54,7 +54,7 @@
     "require-dev": {
         "hiqdev/hidev": "dev-master",
         "hiqdev/hidev-php": "<2.0",
-        "hiqdev/hidev-vendor": "<2.0"
+        "hiqdev/hidev-hiqdev": "<2.0"
     },
     "autoload": {
         "psr-4": {
