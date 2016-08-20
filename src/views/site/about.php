@@ -3,6 +3,7 @@
 /* @var $this yii\web\View */
 
 $this->title = 'About';
+
 ?>
 <div class="site-about">
     <h1>How it works</h1>
@@ -88,5 +89,5 @@ $this->title = 'About';
 
     <h1>Acknowledgements</h1>
 
-    <p>This project uses Francois Pluchino's <a href="https://github.com/francoispluchino/composer-asset-plugin">composer-asset-plugin</a> to convert Bower and NPM packages to Composer format.</p>
+    <p>This project uses Francois Pluchino's <a href="https://github.com/fxpio/composer-asset-plugin">composer-asset-plugin</a> to convert Bower and NPM packages to Composer format.</p>
 </div>
