@@ -77,6 +77,7 @@ class SiteController extends \yii\web\Controller
 
     public function actionUpdate()
     {
+        session_write_close();
         $query = Yii::$app->request->post('query');
 
         $package = $this->getAssetPackage($query);
