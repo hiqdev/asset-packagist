@@ -7,6 +7,8 @@ use hiqdev\assetpackagist\assets\AppAsset;
 $logoUrl = AppAsset::register($this)->baseUrl . '/logo';
 
 $this->title = Yii::$app->name;
+$this->params['noTitle'] = true;
+
 ?>
 <div class="site-index">
     <div style="text-align:center;margin:30px 0px 20px">
