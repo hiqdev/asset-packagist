@@ -48,6 +48,7 @@
         "composer/composer": "^1.0",
         "fxp/composer-asset-plugin": "^1.1",
         "hiqdev/hisite-core": "<2.0 || dev-master",
+        "hiqdev/yii2-pnotify": "<2.0 || dev-master",
         "hiqdev/yii2-theme-original": "<2.0 || dev-master",
         "hiqdev/yii2-theme-dataserv": "<2.0 || dev-master",
         "hiqdev/yii2-theme-flat": "<2.0 || dev-master",
