@@ -22,6 +22,7 @@ return [
         'menuManager' => [
             'menus' => [
                 'main' => \hiqdev\assetpackagist\MainMenu::class,
+                'footer' => \hiqdev\assetpackagist\FooterMenu::class,
             ],
         ],
         'themeManager' => [
