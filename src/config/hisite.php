@@ -26,8 +26,8 @@ return [
             ],
         ],
         'themeManager' => [
-            'pathDirs' => [
-                'assetpackagist' => '@hiqdev/assetpackagist',
+            'viewPaths' => [
+                'assetpackagist' => '@hiqdev/assetpackagist/views',
             ],
         ],
     ],
