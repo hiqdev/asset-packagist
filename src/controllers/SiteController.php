@@ -85,6 +85,7 @@ class SiteController extends \yii\web\Controller
         list($type, $name) = AssetPackage::splitFullName($query);
         $package = new AssetPackage($type, $name);
         $package->load();
+
         return $package;
     }
 

@@ -29,9 +29,11 @@ class AssetPackageController extends \yii\console\Controller
             $package = new AssetPackage($type, $name);
             $package->update();
             echo 'updated ' . $package->getHash() . ' ' . $package->getFullName() . "\n";
+
             return true;
         } catch (\Exception $e) {
             echo Console::renderColoredString("%Rfailed%N $type/$name:%n {$e->getMessage()}\n");
+
             return false;
         }
     }

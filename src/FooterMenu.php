@@ -1,17 +1,15 @@
 <?php
 
 /*
- * Hisite core package
+ * Asset Packagist
  *
- * @link      https://github.com/hiqdev/hisite-core
- * @package   hisite-core
+ * @link      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\assetpackagist;
-
-use Yii;
 
 class FooterMenu extends MainMenu
 {

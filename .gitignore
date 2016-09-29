@@ -22,6 +22,10 @@ vendor
 # composer lock files
 composer.lock
 
+# HiSite directories
+/runtime/*
+/web/assets/*
+
 # phpunit generated files
 coverage.clover
 
@@ -31,10 +35,6 @@ composer.phar
 php-cs-fixer.phar
 phpunit-skelgen.phar
 phpunit.phar
-
-# HiSite directories
-/runtime/*
-/web/assets/*
 
 # Yii2 web app directories
 runtime/*
