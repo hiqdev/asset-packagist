@@ -9,14 +9,17 @@
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\assetpackagist;
+namespace hiqdev\assetpackagist\menus;
 
 use Yii;
 
+/**
+ * Main menu.
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
+ */
 class MainMenu extends \hiqdev\menumanager\Menu
 {
-    protected $_addTo = 'main';
-
     public function items()
     {
         return [

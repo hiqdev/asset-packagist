@@ -12,7 +12,6 @@
 return [
     'id'            => 'asset-packagist',
     'name'          => 'Asset Packagist',
-    'viewPath'      => '@hiqdev/assetpackagist/views',
     'controllerNamespace' => 'hiqdev\assetpackagist\controllers',
     'bootstrap' => ['log'],
     'components' => [
@@ -20,14 +19,14 @@ return [
             'class' => \hiqdev\assetpackagist\components\Storage::class,
         ],
         'menuManager' => [
-            'menus' => [
-                'main' => \hiqdev\assetpackagist\MainMenu::class,
-                'footer' => \hiqdev\assetpackagist\FooterMenu::class,
+            'items' => [
+                'main' => \hiqdev\assetpackagist\menus\MainMenu::class,
+                'footer' => \hiqdev\assetpackagist\menus\FooterMenu::class,
             ],
         ],
         'themeManager' => [
-            'viewPaths' => [
-                'assetpackagist' => '@hiqdev/assetpackagist/views',
+            'pathMap' => [
+                '$themedViewPaths' => ['@hiqdev/assetpackagist/views'],
             ],
         ],
     ],

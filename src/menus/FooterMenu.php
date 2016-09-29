@@ -9,9 +9,11 @@
  * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\assetpackagist;
+namespace hiqdev\assetpackagist\menus;
 
+/**
+ * For the moment just copy of MainMenu.
+ */
 class FooterMenu extends MainMenu
 {
-    protected $_addTo = 'footer';
 }
