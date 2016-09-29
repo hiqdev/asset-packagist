@@ -41,10 +41,8 @@ runtime/*
 web/assets/*
 
 # Asset packages files
-web/lastid
-web/lock
-web/p
-web/packages.json
+/web
 
 # local config
+src/config/defines.php
 src/config/params-local.php
