@@ -69,8 +69,14 @@
         "config-plugin": {
             "aliases": "src/config/aliases.php",
             "params": "src/config/params.php",
-            "hisite": "src/config/hisite.php",
-            "hidev": "src/config/hidev.php"
+            "hisite": [
+                "src/config/common.php",
+                "src/config/hisite.php"
+            ],
+            "hidev": [
+                "src/config/common.php",
+                "src/config/hidev.php"
+            ]
         }
     },
     "repositories": [
