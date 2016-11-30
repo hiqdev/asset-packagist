@@ -23,7 +23,7 @@ class PackageUpdateCommand extends AbstractPackageCommand
         } else {
             try {
                 $this->package->update();
-                $this->packageRepository->save($this->packages);
+                $this->packageRepository->save($this->package);
             } catch (\Exception $e) {
                 Yii::error('Failed to update package "' . $this->package->getFullName() . '": ' . $e->getMessage(), __CLASS__);
                 throw $e;
