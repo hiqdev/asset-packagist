@@ -32,10 +32,16 @@ class CollectDependenciesCommand extends AbstractPackageCommand
         }
 
         foreach (array_keys($requires) as $name) {
-            Yii::$app->queue->push('package', new PackageUpdateCommand(AssetPackage::fromFullName($name)));
-        }
+            $assetPackage = AssetPackage::fromFullName($name);
 
-        Yii::trace(Console::renderColoredString('Created update command for %y' . count($requires) . "%n packages\n"), __CLASS__);
+            if ($this->packageRepository->exists($assetPackage)) {
+                Yii::trace(Console::renderColoredString('Package %N' . $assetPackage->getFullName() . "%n already exists. Skipping.\n"), __CLASS__);
+                continue;
+            }
+
+            Yii::$app->queue->push('package', Yii::createObject(PackageUpdateCommand::class, [$assetPackage]));
+            Yii::trace(Console::renderColoredString('Created update command for %Y' . $assetPackage->getFullName() . "%n package\n"), __CLASS__);
+        }
 
         $this->afterRun();
     }

@@ -16,11 +16,16 @@ class PackageUpdateCommand extends AbstractPackageCommand
     {
         $this->beforeRun();
 
-        if ($this->package->canBeUpdated()) {
+        if (!$this->package->canBeUpdated()) {
+            if (!$this->packageRepository->exists($this->package)) {
+                $this->packageRepository->insert($this->package);
+            }
+        } else {
             $this->package->update();
+            $this->packageRepository->save($this->packages);
         }
 
-        Yii::$app->queue->push('package', new CollectDependenciesCommand($this->package));
+        Yii::$app->queue->push('package', Yii::createObject(CollectDependenciesCommand::class, [$this->package]));
 
         $this->afterRun();
     }

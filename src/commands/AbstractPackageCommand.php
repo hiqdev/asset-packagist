@@ -3,6 +3,8 @@
 namespace hiqdev\assetpackagist\commands;
 
 use hiqdev\assetpackagist\models\AssetPackage;
+use hiqdev\assetpackagist\repositories\PackageRepository;
+use Yii;
 use yii\base\Component;
 use zhuravljov\yii\queue\Job;
 
@@ -15,6 +17,11 @@ abstract class AbstractPackageCommand extends Component implements Job
      * @var AssetPackage
      */
     protected $package;
+
+    /**
+     * @var PackageRepository
+     */
+    protected $packageRepository;
 
     /**
      * Triggers event before run
@@ -35,13 +42,15 @@ abstract class AbstractPackageCommand extends Component implements Job
     /**
      * CollectDependenciesCommand constructor.
      * @param AssetPackage $package
+     * @param PackageRepository $packageRepository
      * @param array $config
      */
-    public function __construct(AssetPackage $package, $config = [])
+    public function __construct(AssetPackage $package, PackageRepository $packageRepository, $config = [])
     {
         parent::__construct($config);
 
         $this->package = $package;
+        $this->packageRepository = $packageRepository;
     }
 
     /**
@@ -52,6 +61,7 @@ abstract class AbstractPackageCommand extends Component implements Job
     public function __wakeup()
     {
         $this->package->load();
+        $this->packageRepository = Yii::createObject(PackageRepository::class);
     }
 
     /**

@@ -13,7 +13,7 @@ return [
     'id'            => 'asset-packagist',
     'name'          => 'Asset Packagist',
     'controllerNamespace' => 'hiqdev\assetpackagist\controllers',
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', \hiqdev\assetpackagist\Bootstrap::class],
     'components' => [
         'packageStorage' => [
             'class' => \hiqdev\assetpackagist\components\Storage::class,

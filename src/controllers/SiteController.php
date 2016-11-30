@@ -12,10 +12,9 @@
 namespace hiqdev\assetpackagist\controllers;
 
 use Exception;
-use hiqdev\assetpackagist\commands\CollectDependenciesCommand;
-use hiqdev\assetpackagist\commands\DependenciesUpdateCommand;
 use hiqdev\assetpackagist\commands\PackageUpdateCommand;
 use hiqdev\assetpackagist\models\AssetPackage;
+use hiqdev\assetpackagist\repositories\PackageRepository;
 use Yii;
 use yii\filters\VerbFilter;
 
@@ -98,9 +97,7 @@ class SiteController extends \yii\web\Controller
 
         $package = $this->getAssetPackage($query);
         if ($package->canBeUpdated()) {
-            $package->update();
-
-            Yii::$app->queue->push('package', new CollectDependenciesCommand($package));
+            Yii::createObject(PackageUpdateCommand::class, [$package])->run(); // TODO: think of command bus
         } else {
             Yii::$app->session->addFlash('update-impossible', true);
         }

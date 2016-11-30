@@ -10,6 +10,7 @@
  */
 
 return [
+    'bootstrap' => ['log', \hiqdev\assetpackagist\Bootstrap::class],
     'components' => [
         'config' => [
             'include' => [
