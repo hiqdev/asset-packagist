@@ -21,11 +21,17 @@ class PackageUpdateCommand extends AbstractPackageCommand
                 $this->packageRepository->insert($this->package);
             }
         } else {
-            $this->package->update();
-            $this->packageRepository->save($this->packages);
+            try {
+                $this->package->update();
+                $this->packageRepository->save($this->packages);
+            } catch (\Exception $e) {
+                Yii::error('Failed to update package "' . $this->package->getFullName() . '": ' . $e->getMessage(), __CLASS__);
+                throw $e;
+            }
+
+            Yii::$app->queue->push('package', Yii::createObject(CollectDependenciesCommand::class, [$this->package]));
         }
 
-        Yii::$app->queue->push('package', Yii::createObject(CollectDependenciesCommand::class, [$this->package]));
 
         $this->afterRun();
     }
