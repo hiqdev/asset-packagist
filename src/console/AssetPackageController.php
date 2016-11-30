@@ -11,7 +11,7 @@
 
 namespace hiqdev\assetpackagist\console;
 
-use hiqdev\assetpackagist\components\Storage;
+use hiqdev\assetpackagist\commands\CollectDependenciesCommand;
 use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
 use yii\helpers\Console;
@@ -29,6 +29,8 @@ class AssetPackageController extends \yii\console\Controller
             $package = new AssetPackage($type, $name);
             $package->update();
             echo 'updated ' . $package->getHash() . ' ' . $package->getFullName() . "\n";
+
+            Yii::$app->queue->push('package', new CollectDependenciesCommand($package));
 
             return true;
         } catch (\Exception $e) {

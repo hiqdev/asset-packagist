@@ -12,10 +12,10 @@ return [
         'queue' => [
             'class' => \zhuravljov\yii\queue\Queue::class,
             'driver' => [
-                'class' => \zhuravljov\yii\queue\sync\Driver::class,
-                'db' => 'db', // ID подключения
-                'tableName' => '{{%queue}}', // таблица
-                'mutex' => \yii\mutex\MysqlMutex::class, // мьютекс для синхронизации запросов
+                'class' => \zhuravljov\yii\queue\db\Driver::class,
+                'db' => 'db',
+                'tableName' => '{{%queue}}',
+                'mutex' => \yii\mutex\MysqlMutex::class,
             ],
         ],
     ]

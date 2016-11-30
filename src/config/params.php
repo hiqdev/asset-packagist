@@ -10,4 +10,5 @@
  */
 
 return [
+    'db.password' => '',
 ];

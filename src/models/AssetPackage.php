@@ -29,6 +29,9 @@ class AssetPackage extends Object
     protected $_type;
     protected $_name;
     protected $_hash;
+    /**
+     * @var array
+     */
     protected $_releases = [];
     protected $_saved;
     /**
@@ -108,6 +111,16 @@ class AssetPackage extends Object
         list($type) = explode('-', $temp);
 
         return [$type, $name];
+    }
+
+    /**
+     * @param string $full package name
+     * @return static
+     */
+    public static function fromFullName($full)
+    {
+        list($type, $name) = static::splitFullName($full);
+        return new static($type, $name);
     }
 
     public function getType()
@@ -212,6 +225,7 @@ class AssetPackage extends Object
     public function prepareReleases($repository)
     {
         $releases = [];
+
         foreach ($repository->getPackages() as $package) {
             $version = $package->getVersion();
             $require = $this->prepareRequire($package->getRequires());
@@ -254,6 +268,7 @@ class AssetPackage extends Object
     {
         $requires = [];
         foreach ($links as $name => $link) {
+            /** @var Link $link */
             $requires[$name] = $link->getPrettyConstraint();
         }
 
@@ -267,11 +282,18 @@ class AssetPackage extends Object
         return isset($known['uid']) ? $known['uid'] : $this->getStorage()->getNextID();
     }
 
+    /**
+     * @return array
+     */
     public function getReleases()
     {
         return $this->_releases;
     }
 
+    /**
+     * @param $version
+     * @return array
+     */
     public function getRelease($version)
     {
         return isset($this->_releases[$version]) ? $this->_releases[$version] : [];
@@ -319,5 +341,13 @@ class AssetPackage extends Object
     public function canAutoUpdate()
     {
         return time() - $this->getUpdateTime() > 60 * 60 * 24; // 1 day
+    }
+
+    /**
+     * @return array
+     */
+    public function __sleep()
+    {
+        return ['_type', '_name', '_hash'];
     }
 }

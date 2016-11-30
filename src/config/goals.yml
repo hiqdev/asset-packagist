@@ -2,11 +2,14 @@ asset-package:
     class: hiqdev\assetpackagist\console\AssetPackageController
 bower-package:
     class: hiqdev\assetpackagist\console\BowerPackageController
+queue:
+    class: hiqdev\assetpackagist\console\QueueController
 
 install:
     after:
         - create-storage
         - chmod-storage
+        - migrate/up
 
 create-storage:
     class:      directory

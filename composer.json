@@ -53,7 +53,8 @@
         "hiqdev/yii2-theme-agency": "<2.0 || dev-master",
         "hiqdev/yii2-theme-flat": "<2.0 || dev-master",
         "yiisoft/yii2-debug": "^2.0",
-        "guzzlehttp/guzzle": "^6.0"
+        "guzzlehttp/guzzle": "^6.0",
+        "zhuravljov/yii2-queue": "<1.0 || dev-master"
     },
     "require-dev": {
         "hiqdev/hidev": "dev-master",

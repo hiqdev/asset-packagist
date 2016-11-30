@@ -12,6 +12,9 @@
 namespace hiqdev\assetpackagist\controllers;
 
 use Exception;
+use hiqdev\assetpackagist\commands\CollectDependenciesCommand;
+use hiqdev\assetpackagist\commands\DependenciesUpdateCommand;
+use hiqdev\assetpackagist\commands\PackageUpdateCommand;
 use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
 use yii\filters\VerbFilter;
@@ -82,8 +85,7 @@ class SiteController extends \yii\web\Controller
      */
     private static function getAssetPackage($query)
     {
-        list($type, $name) = AssetPackage::splitFullName($query);
-        $package = new AssetPackage($type, $name);
+        $package = AssetPackage::fromFullName($query);
         $package->load();
 
         return $package;
@@ -97,6 +99,8 @@ class SiteController extends \yii\web\Controller
         $package = $this->getAssetPackage($query);
         if ($package->canBeUpdated()) {
             $package->update();
+
+            Yii::$app->queue->push('package', new CollectDependenciesCommand($package));
         } else {
             Yii::$app->session->addFlash('update-impossible', true);
         }
