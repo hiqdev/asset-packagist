@@ -2,9 +2,11 @@
 
 namespace hiqdev\assetpackagist\console;
 
+use hiqdev\assetpackagist\commands\PackageUpdateCommand;
 use hiqdev\assetpackagist\components\StorageInterface;
 use hiqdev\assetpackagist\models\AssetPackage;
 use hiqdev\assetpackagist\repositories\PackageRepository;
+use Yii;
 use yii\console\Controller;
 use yii\helpers\Console;
 
@@ -57,6 +59,24 @@ class MaintenanceController extends Controller
             $this->packageRepository->save($package);
 
             $this->stdout(Console::renderColoredString($message . "\n"));
+        }
+    }
+
+    /**
+     * Updates expired packages
+     */
+    public function actionUpdateExpired()
+    {
+        $packages = $this->packageRepository->getExpired();
+
+        foreach ($packages as $package) {
+            $package->load();
+            Yii::$app->queue->push('package', Yii::createObject(PackageUpdateCommand::class, [$package]));
+
+            $message = "Package %N" . $package->getFullName() . '%n';
+            $message .= " was updated " . Yii::$app->formatter->asRelativeTime($package->getUpdateTime());
+            $message .= ". %GAdded to queue for update%n\n";
+            $this->stdout(Console::renderColoredString($message));
         }
     }
 }
