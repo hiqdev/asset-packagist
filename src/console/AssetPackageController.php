@@ -13,7 +13,6 @@ namespace hiqdev\assetpackagist\console;
 
 use hiqdev\assetpackagist\commands\PackageUpdateCommand;
 use hiqdev\assetpackagist\models\AssetPackage;
-use hiqdev\assetpackagist\repositories\PackageRepository;
 use Yii;
 use yii\helpers\Console;
 

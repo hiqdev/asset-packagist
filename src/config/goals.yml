@@ -4,6 +4,8 @@ bower-package:
     class: hiqdev\assetpackagist\console\BowerPackageController
 queue:
     class: hiqdev\assetpackagist\console\QueueController
+maintenance:
+    class: hiqdev\assetpackagist\console\MaintenanceController
 
 install:
     after:

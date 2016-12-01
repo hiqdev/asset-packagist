@@ -12,6 +12,10 @@ use zhuravljov\yii\queue\ErrorEvent;
 use zhuravljov\yii\queue\JobEvent;
 use zhuravljov\yii\queue\Queue;
 
+/**
+ * Manages service Queue
+ * @package hiqdev\assetpackagist\console
+ */
 class QueueController extends Controller
 {
     public function init()
@@ -19,17 +23,27 @@ class QueueController extends Controller
         $this->attachEventHandlers();
     }
 
+    /**
+     * Runs the queue in $channel
+     * @param string $channel Channel name
+     */
     public function actionRun($channel)
     {
         Yii::$app->queue->run($channel);
     }
 
-    public function actionTest()
+    /**
+     * Test action to ensure that ErrorHandler flushes stack immediately
+     */
+    public function actionTestErrorHandler()
     {
         Yii::info(Console::renderColoredString('Lorem ipsum for time %y' . time() . '%n ' . "\n"), \hiqdev\assetpackagist\commands\CollectDependenciesCommand::class);
         sleep(1);
     }
 
+    /**
+     * Attaches handlers on Queue events
+     */
     private function attachEventHandlers()
     {
         $out = function ($string) {

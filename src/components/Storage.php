@@ -17,11 +17,14 @@ use Yii;
 use yii\base\Component;
 use yii\helpers\Json;
 
-class Storage extends Component
+class Storage extends Component implements StorageInterface
 {
     protected $_path;
     protected $_locker;
 
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         $this->_path = Yii::getAlias('@storage', false);
@@ -30,18 +33,21 @@ class Storage extends Component
     protected function getLocker()
     {
         if ($this->_locker === null) {
-            $this->_locker = Locker::getInstance($this->buildPath('lock'));
+            $this->_locker = Locker::getInstance($this->buildPath('lock')); // TODO: get rid of singleton
         }
 
         return $this->_locker;
     }
 
-    public function getNextID()
+    /**
+     * @inheritdoc
+     */
+    public function getNextId()
     {
         $this->getLocker()->lock();
         {
-            $nextID = $this->readLastID() + 1;
-            $this->writeLastID($nextID);
+            $nextID = $this->readLastId() + 1;
+            $this->writeLastId($nextID);
         }
         $this->getLocker()->release();
 
@@ -50,21 +56,24 @@ class Storage extends Component
 
     protected function readLastId()
     {
-        $path = $this->getLastIDPath();
+        $path = $this->getLastIdPath();
 
         return (file_exists($path) ? (int) file_get_contents($path) : 0) ?: 1000000;
     }
 
     protected function writeLastId($value)
     {
-        file_put_contents($this->getLastIDPath(), $value);
+        file_put_contents($this->getLastIdPath(), $value);
     }
 
-    protected function getLastIDPath()
+    protected function getLastIdPath()
     {
         return $this->buildPath('lastid');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function writePackage(AssetPackage $package)
     {
         $name = $package->getNormalName();
@@ -79,7 +88,7 @@ class Storage extends Component
         if (!file_exists($path)) {
             $this->getLocker()->lock();
             {
-                static::mkdir(dirname($path));
+                $this->mkdir(dirname($path));
                 file_put_contents($path, $json);
                 file_put_contents($this->buildHashedPath($name), $json);
                 $this->writeProviderLatest($name, $hash);
@@ -91,14 +100,7 @@ class Storage extends Component
     }
 
     /**
-     * Reads the $package information from the storage.
-     *
-     * @param AssetPackage $package
-     * @return array|null array of two elements:
-     *  0 - string sha256 hash of the package
-     *  1 - array[] releases
-     *
-     * Returns null, when package does not exist.
+     * @inheritdoc
      */
     public function readPackage(AssetPackage $package)
     {
@@ -116,7 +118,7 @@ class Storage extends Component
         return compact('hash', 'releases', 'updateTime');
     }
 
-    public function buildPath()
+    protected function buildPath()
     {
         $args = func_get_args();
         array_unshift($args, $this->_path);
@@ -124,7 +126,7 @@ class Storage extends Component
         return implode(DIRECTORY_SEPARATOR, $args);
     }
 
-    public function buildHashedPath($name, $hash = 'latest')
+    protected function buildHashedPath($name, $hash = 'latest')
     {
         return $this->buildPath('p', $name, $hash . '.json');
     }
@@ -148,7 +150,7 @@ class Storage extends Component
         if (!file_exists($path)) {
             $this->getLocker()->lock();
             {
-                static::mkdir(dirname($path));
+                $this->mkdir(dirname($path));
                 file_put_contents($path, $json);
                 file_put_contents($latest_path, $json);
                 $this->writePackagesJson($hash);
@@ -176,7 +178,7 @@ class Storage extends Component
         $this->getLocker()->release();
     }
 
-    public static function mkdir($dir)
+    protected function mkdir($dir)
     {
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);
@@ -202,6 +204,9 @@ class Storage extends Component
         return $data['providers'];
     }
 
+    /**
+     * @inheritdoc
+     */
     public function listPackages()
     {
         $packages = [];

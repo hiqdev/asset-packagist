@@ -215,7 +215,8 @@ class AssetPackage extends Object
     {
         $repo = $this->getRegistry()->buildVcsRepository($this->getName());
         $this->_releases = $this->prepareReleases($repo);
-        $this->_hash = $this->getStorage()->writePackage($this);
+        $this->getStorage()->writePackage($this);
+        $this->load();
     }
 
     /**
@@ -279,7 +280,7 @@ class AssetPackage extends Object
     {
         $known = $this->getSaved()->getRelease($version);
 
-        return isset($known['uid']) ? $known['uid'] : $this->getStorage()->getNextID();
+        return isset($known['uid']) ? $known['uid'] : $this->getStorage()->getNextId();
     }
 
     /**
