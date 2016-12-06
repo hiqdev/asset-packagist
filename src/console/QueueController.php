@@ -29,7 +29,7 @@ class QueueController extends Controller
      */
     public function actionRun($channel)
     {
-        Yii::$app->queue->run($channel);
+        Yii::$app->queue->driver->run($channel);
     }
 
     /**
