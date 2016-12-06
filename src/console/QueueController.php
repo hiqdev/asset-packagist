@@ -24,12 +24,11 @@ class QueueController extends Controller
     }
 
     /**
-     * Runs the queue in $channel
-     * @param string $channel Channel name
+     * Runs the queue
      */
-    public function actionRun($channel)
+    public function actionRun()
     {
-        Yii::$app->queue->driver->run($channel);
+        Yii::$app->queue->driver->run();
     }
 
     /**
@@ -52,17 +51,17 @@ class QueueController extends Controller
 
         Event::on(Queue::class, Queue::EVENT_BEFORE_WORK, function ($event) use ($out) {
             /** @var JobEvent $event */
-            $out("%Y[{$event->channel}]%n %GNew job%n '" . get_class($event->job) . "'\n");
+            $out("%GNew job%n '" . get_class($event->job) . "'\n");
         });
 
         Event::on(Queue::class, Queue::EVENT_AFTER_WORK, function ($event) use ($out) {
             /** @var JobEvent $event */
-            $out("%Y[{$event->channel}]%n %GJob%n '" . get_class($event->job) . "' %Gis completed%n\n");
+            $out("%GJob%n '" . get_class($event->job) . "' %Gis completed%n\n");
         });
 
         Event::on(Queue::class, Queue::EVENT_AFTER_ERROR, function ($event) use ($out) {
             /** @var ErrorEvent $event */
-            $out("%Y[{$event->channel}]%n %RJob '" . get_class($event->job) . "' finished with error:%n '" . $event->error . "'\n");
+            $out("%RJob '" . get_class($event->job) . "' finished with error:%n '" . $event->error . "'\n");
         });
 
         Event::on(AbstractPackageCommand::class, AbstractPackageCommand::EVENT_BEFORE_RUN, function ($event) use ($out) {

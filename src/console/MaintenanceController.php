@@ -71,7 +71,7 @@ class MaintenanceController extends Controller
 
         foreach ($packages as $package) {
             $package->load();
-            Yii::$app->queue->push('package', Yii::createObject(PackageUpdateCommand::class, [$package]));
+            Yii::$app->queue->push(Yii::createObject(PackageUpdateCommand::class, [$package]));
 
             $message = "Package %N" . $package->getFullName() . '%n';
             $message .= " was updated " . Yii::$app->formatter->asRelativeTime($package->getUpdateTime());

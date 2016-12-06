@@ -15,6 +15,7 @@ return [
                 'class' => \zhuravljov\yii\queue\db\Driver::class,
                 'db' => 'db',
                 'tableName' => '{{%queue}}',
+                'channel' => 'package',
                 'mutex' => \yii\mutex\MysqlMutex::class,
             ],
         ],
