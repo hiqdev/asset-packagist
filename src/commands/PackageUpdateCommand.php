@@ -29,7 +29,7 @@ class PackageUpdateCommand extends AbstractPackageCommand
                 throw $e;
             }
 
-            Yii::$app->queue->push('package', Yii::createObject(CollectDependenciesCommand::class, [$this->package]));
+            Yii::$app->queue->push(Yii::createObject(CollectDependenciesCommand::class, [$this->package]));
         }
 
 

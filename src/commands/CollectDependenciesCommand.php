@@ -39,7 +39,7 @@ class CollectDependenciesCommand extends AbstractPackageCommand
                 continue;
             }
 
-            Yii::$app->queue->push('package', Yii::createObject(PackageUpdateCommand::class, [$assetPackage]));
+            Yii::$app->queue->push(Yii::createObject(PackageUpdateCommand::class, [$assetPackage]));
             Yii::trace(Console::renderColoredString('Created update command for %Y' . $assetPackage->getFullName() . "%n package\n"), __CLASS__);
         }
 
