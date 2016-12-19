@@ -11,6 +11,7 @@
 
 namespace hiqdev\assetpackagist\components;
 
+use hiqdev\assetpackagist\exceptions\AssetFileStorageException;
 use hiqdev\assetpackagist\helpers\Locker;
 use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
@@ -63,7 +64,9 @@ class Storage extends Component implements StorageInterface
 
     protected function writeLastId($value)
     {
-        file_put_contents($this->getLastIdPath(), $value);
+        if (file_put_contents($this->getLastIdPath(), $value) === false) {
+            throw new AssetFileStorageException('Filed to write lastId to the storage');
+        }
     }
 
     protected function getLastIdPath()
@@ -85,15 +88,25 @@ class Storage extends Component implements StorageInterface
         $json = Json::encode($data);
         $hash = hash('sha256', $json);
         $path = $this->buildHashedPath($name, $hash);
+        $latestPath = $this->buildHashedPath($name);
         if (!file_exists($path)) {
             $this->getLocker()->lock();
-            {
-                $this->mkdir(dirname($path));
-                file_put_contents($path, $json);
-                file_put_contents($this->buildHashedPath($name), $json);
+            try {
+                if ($this->mkdir(dirname($path)) === false) {
+                    throw new AssetFileStorageException('Failed to create a directory for asset-package', $package);
+                }
+                if (file_put_contents($path, $json) === false) {
+                    throw new AssetFileStorageException('Failed to write package', $package);
+                }
+                if (file_put_contents($latestPath, $json) === false) {
+                    throw new AssetFileStorageException('Failed to write file "latest.json" for asset-packge', $package);
+                }
                 $this->writeProviderLatest($name, $hash);
+            } finally {
+                $this->getLocker()->release();
             }
-            $this->getLocker()->release();
+        } else {
+            touch($latestPath);
         }
 
         return $hash;
@@ -133,9 +146,9 @@ class Storage extends Component implements StorageInterface
 
     protected function writeProviderLatest($name, $hash)
     {
-        $latest_path = $this->buildHashedPath('provider-latest');
-        if (file_exists($latest_path)) {
-            $data = Json::decode(file_get_contents($latest_path) ?: '[]');
+        $latestPath = $this->buildHashedPath('provider-latest');
+        if (file_exists($latestPath)) {
+            $data = Json::decode(file_get_contents($latestPath) ?: '[]');
         }
         if (!isset($data) || !is_array($data)) {
             $data = [];
@@ -147,15 +160,26 @@ class Storage extends Component implements StorageInterface
         $json = Json::encode($data);
         $hash = hash('sha256', $json);
         $path = $this->buildHashedPath('provider-latest', $hash);
+
         if (!file_exists($path)) {
             $this->getLocker()->lock();
-            {
-                $this->mkdir(dirname($path));
-                file_put_contents($path, $json);
-                file_put_contents($latest_path, $json);
+
+            try {
+                if ($this->mkdir(dirname($path)) === false) {
+                    throw new AssetFileStorageException('Failed to create a directory for provider-latest storage');
+                }
+                if (file_put_contents($path, $json) === false) {
+                    throw new AssetFileStorageException('Failed to write package to provider-latest storage for package "' . $name . '"');
+                }
+                if (file_put_contents($latestPath, $json) === false) {
+                    throw new AssetFileStorageException('Failed to write file "latest.json" to provider-latest storage for package "' . $name . '"');
+                }
                 $this->writePackagesJson($hash);
+            } finally {
+                $this->getLocker()->release();
             }
-            $this->getLocker()->release();
+        } else {
+            touch($latestPath);
         }
 
         return $hash;
@@ -172,17 +196,27 @@ class Storage extends Component implements StorageInterface
             ],
         ];
         $this->getLocker()->lock();
-        {
-            file_put_contents($this->buildPath('packages.json'), Json::encode($data));
+        try {
+            if (file_put_contents($this->buildPath('packages.json'), Json::encode($data)) === false) {
+                throw new AssetFileStorageException('Failed to write main packages.json');
+            }
+        } finally {
+            $this->getLocker()->release();
         }
-        $this->getLocker()->release();
     }
 
+    /**
+     * Creates directory $dir and sets chmod 777
+     * @param string $dir
+     * @return bool whether the directory was created successfully
+     */
     protected function mkdir($dir)
     {
         if (!file_exists($dir)) {
-            mkdir($dir, 0777, true);
+            return mkdir($dir, 0777, true);
         }
+
+        return true;
     }
 
     public function readJson($path)
