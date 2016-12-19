@@ -17,6 +17,7 @@ return [
                 'tableName' => '{{%queue}}',
                 'channel' => 'package',
                 'mutex' => \yii\mutex\MysqlMutex::class,
+                'deleteReleased' => true,
             ],
         ],
     ]
