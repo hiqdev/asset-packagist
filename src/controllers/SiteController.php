@@ -79,12 +79,13 @@ class SiteController extends \yii\web\Controller
     }
 
     /**
-     * @param $query
+     * @param string $query
      * @return AssetPackage
      */
     private static function getAssetPackage($query)
     {
-        $package = AssetPackage::fromFullName($query);
+        $filtredQuery = trim($query);
+        $package = AssetPackage::fromFullName($filtredQuery);
         $package->load();
 
         return $package;
