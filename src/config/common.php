@@ -10,15 +10,12 @@ return [
             'charset' => 'utf8'
         ],
         'queue' => [
-            'class' => \zhuravljov\yii\queue\Queue::class,
-            'driver' => [
-                'class' => \zhuravljov\yii\queue\db\Driver::class,
-                'db' => 'db',
-                'tableName' => '{{%queue}}',
-                'channel' => 'package',
-                'mutex' => \yii\mutex\MysqlMutex::class,
-                'deleteReleased' => true,
-            ],
+            'class' => \zhuravljov\yii\queue\db\Queue::class,
+            'db' => 'db',
+            'tableName' => '{{%queue}}',
+            'channel' => 'package',
+            'mutex' => \yii\mutex\MysqlMutex::class,
+            'deleteReleased' => true,
         ],
     ]
 ];
