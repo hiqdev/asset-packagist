@@ -26,6 +26,7 @@ $this->title = 'About';
       "uid": 1000600,
       "name": "bower-asset/moment",
       "version": "2.13.0.0",
+      "type": "bower-asset",
       "dist": {
         "type": "zip",
         "url": "https://api.github.com/repos/moment/moment/zipball/d6651c21c6131fbb5db891b60971357739015688",
@@ -48,18 +49,17 @@ $this->title = 'About';
     <p>Asset Packagist is NOT a plugin so it can't affect where the package will be installed.<br>
     By default <code>bower-asset/bootstrap</code> package will be installed to <code>vendor/bower-asset/bootstrap</code> folder.</p>
 
-    <p>But you can achieve installing to custom path with <code><a href="https://github.com/oomphinc/composer-installers-extender">oomphinc/composer-installers-extender</a></code> plugin like this:</p>
+    <p>But you can achieve installing to custom path with <code><a href="https://github.com/composer/installers">composer/installers</a></code> plugin like this:</p>
     <pre><code>
     "require": {
-        "oomphinc/composer-installers-extender": "*",
+        "composer/installers": "~1.0",
         "bower-asset/bootstrap": "^3.3",
         "npm-asset/jquery": "^2.2"
     },
     "extra": {
-        "installer-types": ["library"],
         "installer-paths": {
-            "public/assets/bower/{$name}/": ["bower-asset/bootstrap"],
-            "public/assets/npm/{$name}/": ["npm-asset/jquery"]
+            "public/assets/bower/{$name}/": ["type:bower-asset"],
+            "public/assets/npm/{$name}/": ["type:npm-asset"]
         }
     },
     "repositories": [
