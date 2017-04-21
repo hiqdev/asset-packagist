@@ -10,6 +10,8 @@
  */
 
 return [
+    'favicon.ico'   => '@hiqdev/assetpackagist/assets/images/favicon.ico',
+
     'db.name'       => 'asset_packagist',
     'db.username'   => 'asset-packagist',
     'db.password'   => '',
