@@ -50,7 +50,6 @@
         "fxp/composer-asset-plugin": "^1.1",
         "hiqdev/hisite": "<2.0 || dev-master",
         "hiqdev/yii2-pnotify": "<2.0 || dev-master",
-        "hiqdev/yii2-theme-original": "<2.0 || dev-master",
         "guzzlehttp/guzzle": "^6.0",
         "zhuravljov/yii2-queue": "<2.0 || dev-master"
     },
