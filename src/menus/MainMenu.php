@@ -18,7 +18,7 @@ use Yii;
  *
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class MainMenu extends \hiqdev\menumanager\Menu
+class MainMenu extends \hiqdev\yii2\menus\Menu
 {
     public function items()
     {
