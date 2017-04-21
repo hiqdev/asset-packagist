@@ -34,7 +34,7 @@ return [
                 return Yii::$app->get('db');
             },
             \hiqdev\assetpackagist\repositories\PackageRepository::class => function ($container) {
-                return (new \hiqdev\assetpackagist\repositories\PackageRepository($container->get('db')));
+                return new \hiqdev\assetpackagist\repositories\PackageRepository($container->get('db'));
             },
             \hiqdev\assetpackagist\components\StorageInterface::class => function () {
                 return Yii::$app->get('packageStorage');
