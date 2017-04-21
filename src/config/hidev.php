@@ -10,7 +10,6 @@
  */
 
 return [
-    'bootstrap' => ['log', \hiqdev\assetpackagist\Bootstrap::class],
     'components' => [
         'config' => [
             'include' => [
@@ -23,9 +22,6 @@ return [
                 ],
                 'migrationPath' => null,
             ],
-        ],
-        'packageStorage' => [
-            'class' => \hiqdev\assetpackagist\components\Storage::class,
         ],
         'log' => [
             'flushInterval' => 1,

@@ -10,23 +10,21 @@
  */
 
 return [
-    'id'            => 'asset-packagist',
-    'name'          => 'Asset Packagist',
     'controllerNamespace' => 'hiqdev\assetpackagist\controllers',
-    'bootstrap' => ['log', \hiqdev\assetpackagist\Bootstrap::class],
     'components' => [
-        'packageStorage' => [
-            'class' => \hiqdev\assetpackagist\components\Storage::class,
-        ],
-        'menuManager' => [
-            'items' => [
-                'main' => \hiqdev\assetpackagist\menus\MainMenu::class,
-                'footer' => \hiqdev\assetpackagist\menus\FooterMenu::class,
-            ],
-        ],
         'themeManager' => [
             'pathMap' => [
                 '$themedViewPaths' => ['@hiqdev/assetpackagist/views'],
+            ],
+        ],
+    ],
+    'container' => [
+        'singletons' => [
+            \hiqdev\thememanager\menus\AbstractMainMenu::class => [
+                'class' => \hiqdev\assetpackagist\menus\MainMenu::class,
+            ],
+            \hiqdev\thememanager\menus\AbstractFooterMenu::class => [
+                'class' => \hiqdev\assetpackagist\menus\FooterMenu::class,
             ],
         ],
     ],

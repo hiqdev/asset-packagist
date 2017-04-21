@@ -10,5 +10,7 @@
  */
 
 return [
-    'db.password' => '',
+    'db.name'       => 'asset_packagist',
+    'db.username'   => 'asset-packagist',
+    'db.password'   => '',
 ];

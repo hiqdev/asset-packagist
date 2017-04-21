@@ -1,11 +1,18 @@
 <?php
 
 return [
+    'id'    => 'asset-packagist',
+    'name'  => 'Asset Packagist',
+    'aliases' => [
+        '@storage'  => '<<<base-dir>>>/web',
+        '@runtime'  => '<<<base-dir>>>/runtime',
+        '@composer' => '<<<base-dir>>>',
+    ],
     'components' => [
         'db' => [
             'class' => \yii\db\Connection::class,
-            'dsn' => 'mysql:host=localhost;dbname=asset_packagist',
-            'username' => 'asset-packagist',
+            'dsn' => 'mysql:host=localhost;dbname=' . $params['db.name'],
+            'username' => $params['db.username'],
             'password' => $params['db.password'],
             'charset' => 'utf8'
         ],
@@ -17,5 +24,24 @@ return [
             'mutex' => \yii\mutex\MysqlMutex::class,
             'deleteReleased' => true,
         ],
-    ]
+        'packageStorage' => [
+            'class' => \hiqdev\assetpackagist\components\Storage::class,
+        ],
+    ],
+    'container' => [
+        'singletons' => [
+            'db' => function () {
+                return Yii::$app->get('db');
+            },
+            \hiqdev\assetpackagist\repositories\PackageRepository::class => function () {
+                return Yii::createObject(
+                    \hiqdev\assetpackagist\repositories\PackageRepository::class,
+                    [Yii::$app->get('db')]
+                );
+            },
+            \hiqdev\assetpackagist\components\StorageInterface::class => function () {
+                return Yii::$app->get('packageStorage');
+            },
+        ],
+    ],
 ];
