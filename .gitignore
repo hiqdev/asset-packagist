@@ -1,6 +1,7 @@
 # hidev internals
 .hidev/composer.json
 .hidev/composer.lock
+.hidev/config-local.yml
 .hidev/vendor
 
 # IDE & OS files
@@ -13,8 +14,9 @@
 Thumbs.db
 nbproject
 
-# php-cs-fixer cache
-.php_cs.cache
+# WebApp directories
+/runtime/*
+/web/assets/*
 
 # vendor dirs
 vendor
@@ -22,9 +24,8 @@ vendor
 # composer lock files
 composer.lock
 
-# HiSite directories
-/runtime/*
-/web/assets/*
+# php-cs-fixer cache
+.php_cs.cache
 
 # phpunit generated files
 coverage.clover
@@ -35,14 +36,3 @@ composer.phar
 php-cs-fixer.phar
 phpunit-skelgen.phar
 phpunit.phar
-
-# Yii2 web app directories
-runtime/*
-web/assets/*
-
-# Asset packages files
-/web
-
-# local config
-src/config/defines.php
-src/config/params-local.php

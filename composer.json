@@ -28,28 +28,28 @@
         {
             "name": "Dmitry Naumenko",
             "role": "Lead backend developer",
-            "email": "silverfire@hiqdev.com",
+            "email": "d.naumenko.a@gmail.com",
             "homepage": "http://silverfire.me/"
         },
         {
             "name": "Andrey Klochok",
             "role": "Lead frontend developer",
-            "email": "tafid@hiqdev.com",
+            "email": "andreyklochok@gmail.com",
             "homepage": "http://hiqdev.com/"
         },
         {
             "name": "Yuriy Myronchuk",
             "role": "QA Lead",
-            "email": "bladeroot@hiqdev.com",
+            "email": "bladeroot@gmail.com",
             "homepage": "http://hiqdev.com/"
         }
     ],
     "require": {
-        "yiisoft/yii2-debug": "^2.0",
         "composer/composer": "^1.0",
         "fxp/composer-asset-plugin": "^1.1",
         "hiqdev/hisite": "<2.0 || dev-master",
         "hiqdev/yii2-pnotify": "<2.0 || dev-master",
+        "yiisoft/yii2-debug": "^2.0",
         "guzzlehttp/guzzle": "^6.0",
         "zhuravljov/yii2-queue": "<2.0 || dev-master"
     },

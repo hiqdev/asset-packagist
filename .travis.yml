@@ -1,15 +1,15 @@
 language: php
 php:
-    - 5.5
     - 5.6
     - 7
+    - 7.1
     - hhvm
+sudo: false
+dist: trusty
 matrix:
     allow_failures:
         -
             php: hhvm
-        -
-            php: 5.5
 cache:
     directories:
         - $HOME/.composer/cache
@@ -19,7 +19,6 @@ before_install:
     - 'composer install --no-interaction'
     - './vendor/bin/hidev --version'
     - './vendor/bin/hidev travis/before_install'
-sudo: false
 install:
     - './vendor/bin/hidev travis/install'
 script:
