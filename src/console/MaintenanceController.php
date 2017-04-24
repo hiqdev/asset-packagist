@@ -67,7 +67,7 @@ class MaintenanceController extends Controller
      */
     public function actionUpdateExpired()
     {
-        $packages = $this->packageRepository->getExpired();
+        $packages = $this->packageRepository->getExpiredForUpdate();
 
         foreach ($packages as $package) {
             $package->load();

@@ -55,10 +55,22 @@ class PackageRepository
     {
         return $this->db->createCommand()->update('package', [
             'last_update' => $package->getUpdateTime()
-        ], [
+        ], $this->getWhereCondition($package))->execute();
+    }
+
+    public function markAvoided(AssetPackage $package)
+    {
+        $this->db->createCommand()->update('package', [
+            'is_avoided' => true
+        ], $this->getWhereCondition($package))->execute();
+    }
+
+    protected function getWhereCondition(AssetPackage $package)
+    {
+        return [
             'type' => $package->getType(),
             'name' => $package->getName(),
-        ])->execute();
+        ];
     }
 
     /**
@@ -76,12 +88,13 @@ class PackageRepository
     /**
      * @return \hiqdev\assetpackagist\models\AssetPackage[]
      */
-    public function getExpired()
+    public function getExpiredForUpdate()
     {
         $rows = (new Query())
             ->from('package')
             ->where(['<', 'last_update', time() - 60 * 60 * 24 * 7]) // Older than 7 days
             ->andWhere(['not', ['last_update' => null]])
+            ->andWhere(['is_avoided' => null])
             ->all();
 
         return $this->hydrate($rows);
