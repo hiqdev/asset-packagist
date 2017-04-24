@@ -11,8 +11,12 @@
 
 namespace hiqdev\assetpackagist\registry;
 
+use Composer\IO\NullIO;
 use Composer\Repository\RepositoryManager;
+use Fxp\Composer\AssetPlugin\Config\Config;
 use Fxp\Composer\AssetPlugin\Repository\AbstractAssetsRepository;
+use Fxp\Composer\AssetPlugin\Repository\AssetRepositoryManager;
+use Fxp\Composer\AssetPlugin\Repository\VcsPackageFilter;
 
 class RegistryFactory
 {
@@ -50,12 +54,21 @@ class RegistryFactory
      */
     protected static function buildRegistry($type, $rm)
     {
+        $class = static::$classes[$type];
+        $rm->setRepositoryClass($type, $class);
+
         $config = [
-            'repository-manager' => $rm,
+            'asset-repository-manager' => self::createAssetRepositoryManager($rm),
             'asset-options'      => [],
         ];
-        $rm->setRepositoryClass($type, static::$classes[$type]);
 
         return $rm->createRepository($type, $config);
+    }
+
+    public static function createAssetRepositoryManager($repositoryManager)
+    {
+        $filter = (new \ReflectionClass(VcsPackageFilter::class))->newInstanceWithoutConstructor();
+
+        return new AssetRepositoryManager(new NullIO(), $repositoryManager, new Config([]), $filter);
     }
 }

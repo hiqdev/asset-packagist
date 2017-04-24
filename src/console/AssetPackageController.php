@@ -76,11 +76,4 @@ class AssetPackageController extends \yii\console\Controller
             echo "$name\n";
         }
     }
-
-    public function actionTest()
-    {
-        $dir = Yii::getAlias('@storage');
-        $msg = file_exists($dir) ? 'exists' : 'DOES NOT EXIST';
-        echo  "$dir - $msg\n";
-    }
 }

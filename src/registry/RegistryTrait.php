@@ -36,8 +36,9 @@ trait RegistryTrait
     {
         $data = $this->fetchPackageData($name);
         $conf = $this->createVcsRepositoryConfig($data, $name);
+        $conf['asset-repository-manager'] = RegistryFactory::createAssetRepositoryManager($this->repositoryManager);
 
-        return $this->rm->createRepository($conf['type'], $conf);
+        return $this->repositoryManager->createRepository($conf['type'], $conf);
     }
 
     public function getPackageSearchUrl($name)

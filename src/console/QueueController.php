@@ -3,7 +3,6 @@
 namespace hiqdev\assetpackagist\console;
 
 use hiqdev\assetpackagist\commands\AbstractPackageCommand;
-use hiqdev\assetpackagist\repositories\PackageRepository;
 use Yii;
 use yii\base\Event;
 use yii\console\Controller;
