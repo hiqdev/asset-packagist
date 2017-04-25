@@ -49,17 +49,17 @@ $this->title = 'About';
     <p>Asset Packagist is NOT a plugin so it can't affect where the package will be installed.<br>
     By default <code>bower-asset/bootstrap</code> package will be installed to <code>vendor/bower-asset/bootstrap</code> folder.</p>
 
-    <p>But you can achieve installing to custom path with <code><a href="https://github.com/composer/installers">composer/installers</a></code> plugin like this:</p>
+    <p>But you can achieve installing to custom path with <code><a href="https://github.com/oomphinc/composer-installers-extender">oomphinc/composer-installers-extender</a></code> plugin like this:</p>
     <pre><code>
     "require": {
-        "composer/installers": "~1.0",
+        "oomphinc/composer-installers-extender": "^1.1",
         "bower-asset/bootstrap": "^3.3",
         "npm-asset/jquery": "^2.2"
     },
     "extra": {
+        "installer-types": ["bower-asset", "npm-asset"],
         "installer-paths": {
-            "public/assets/bower/{$name}/": ["type:bower-asset"],
-            "public/assets/npm/{$name}/": ["type:npm-asset"]
+            "public/assets/{$vendor}/{$name}/": ["type:bower-asset", "type:npm-asset"],
         }
     },
     "repositories": [
