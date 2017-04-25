@@ -234,7 +234,7 @@ class AssetPackage extends Object
                 'uid' => $this->prepareUid($version),
                 'name' => $this->getNormalName(),
                 'version' => $version,
-                'type' => $this->getType() . '-asset,
+                'type' => $this->getType() . '-asset',
             ];
             if ($require) {
                 $release['require'] = $require;
