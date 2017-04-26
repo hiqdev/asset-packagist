@@ -10,8 +10,6 @@ use yii\helpers\Html;
 
 <?php
 $releases = $package->getReleases();
-ksort($releases);
-$releases = array_reverse($releases);
 ?>
 
 <div class="versions">

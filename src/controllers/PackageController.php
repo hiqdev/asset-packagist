@@ -38,12 +38,26 @@ class PackageController extends Controller
             Yii::createObject(PackageUpdateCommand::class, [$package])->run();
         } catch (UpdateRateLimitException $exception) {
             Yii::$app->session->addFlash('rate-limited', true);
-        } catch (\Composer\Downloader\TransportException $exception) {
-            if (stripos($exception->getMessage(), 'not found')) {
+        } catch (\Composer\Downloader\TransportException $e) {
+            if (stripos($e->getMessage(), 'not found')) {
+                Yii::warning('Failed to update ' . $package->getFullName() . ': ' . $e->getMessage(), __METHOD__);
+
                 return $this->renderPartial('not-found', ['package' => $package]);
             }
 
-            return $this->renderPartial('transport-error');
+            throw $e;
+        } catch (\Composer\Repository\InvalidRepositoryException $e) {
+            Yii::warning('Failed to update ' . $package->getFullName() . ': ' . $e->getMessage(), __METHOD__);
+
+            return $this->renderPartial('fetch-error', ['package' => $package, 'exception' => $e]);
+        } catch (Exception $e) {
+            Yii::error([
+                'UNKNOWN error during ' . $package->getFullName() . ' update',
+                get_class($e),
+                $e->getMessage(),
+            ], __METHOD__);
+
+            return $this->renderPartial('fetch-error', ['package' => $package, 'exception' => $e]);
         }
 
         $package->load();
