@@ -213,7 +213,7 @@ class Storage extends Component implements StorageInterface
     protected function mkdir($dir)
     {
         if (!file_exists($dir)) {
-            return mkdir($dir, 0777, true);
+            return @mkdir($dir, 0777, true);
         }
 
         return true;

@@ -15,7 +15,6 @@ $this->title = 'Search';
 $this->params['searchQuery'] = $query;
 
 ?>
-
     <div class="package-details">
         <h1>
             <?= Html::encode($package->getFullName()) ?>
@@ -36,7 +35,7 @@ $this->params['searchQuery'] = $query;
             'data-loading-text' => Yii::t('app', 'Fetching for you...'),
         ]) ?>
 
-        <?= $this->render('package-details', ['package' => $package]); ?>
+        <?= $this->render('details', ['package' => $package]); ?>
     </div>
 
 <?php

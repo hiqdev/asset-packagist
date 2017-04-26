@@ -21,12 +21,12 @@ use yii\helpers\Html;
     <b>Last updated:</b> <?= Yii::$app->formatter->asDateTime($package->getUpdateTime()) ?> (<?= Yii::$app->formatter->asRelativeTime($package->getUpdateTime()) ?>)
     <br><br>
 
-    <?php if (Yii::$app->session->hasFlash('update-impossible')) : ?>
+    <?php if (Yii::$app->session->hasFlash('rate-limited')) : ?>
         <div class="alert alert-warning too-fast-update" role="alert">
             <h4><?= Yii::t('app', 'Wow, you are very fast!') ?></h4>
             <p><?= Yii::t('app', 'The package was updated recently. Could you wait another 10 minutes before fetching it again, please?') ?></p>
         </div>
-        <?php Yii::$app->session->removeFlash('update-impossible') ?>
+        <?php Yii::$app->session->removeFlash('rate-limited') ?>
     <?php endif ?>
 
     <table class="table">

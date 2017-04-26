@@ -11,13 +11,6 @@
 
 namespace hiqdev\assetpackagist\controllers;
 
-use Exception;
-use hiqdev\assetpackagist\commands\PackageUpdateCommand;
-use hiqdev\assetpackagist\models\AssetPackage;
-use hiqdev\assetpackagist\repositories\PackageRepository;
-use Yii;
-use yii\filters\VerbFilter;
-
 class SiteController extends \yii\web\Controller
 {
     public function actions()
@@ -29,18 +22,6 @@ class SiteController extends \yii\web\Controller
             'captcha' => [
                 'class' => \yii\captcha\CaptchaAction::class,
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
-    }
-
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'update' => ['post'],
-                ],
             ],
         ];
     }
@@ -58,52 +39,5 @@ class SiteController extends \yii\web\Controller
     public function actionContact()
     {
         return $this->render('contact');
-    }
-
-    public function actionSearch($query)
-    {
-        try {
-            $package = $this->getAssetPackage($query);
-            $params = ['package' => $package, 'query' => $query, 'forceUpdate' => false];
-
-            if ($package->canAutoUpdate()) {
-                $params['forceUpdate'] = true;
-            }
-        } catch (Exception $e) {
-            $query = preg_replace('/[^a-z0-9-]/i', '', $query);
-
-            return $this->render('notFound', compact('query'));
-        }
-
-        return $this->render('search', $params);
-    }
-
-    /**
-     * @param string $query
-     * @return AssetPackage
-     */
-    private static function getAssetPackage($query)
-    {
-        $filtredQuery = trim($query);
-        $package = AssetPackage::fromFullName($filtredQuery);
-        $package->load();
-
-        return $package;
-    }
-
-    public function actionUpdate()
-    {
-        session_write_close();
-        $query = Yii::$app->request->post('query');
-
-        $package = $this->getAssetPackage($query);
-        if ($package->canBeUpdated()) {
-            Yii::createObject(PackageUpdateCommand::class, [$package])->run(); // TODO: think of command bus
-        } else {
-            Yii::$app->session->addFlash('update-impossible', true);
-        }
-        $package->load();
-
-        return $this->renderPartial('package-details', ['package' => $package]);
     }
 }

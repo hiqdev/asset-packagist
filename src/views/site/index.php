@@ -1,6 +1,7 @@
 <?php
 
 use hiqdev\assetpackagist\assets\AppAsset;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 
@@ -28,12 +29,11 @@ $this->params['noTitle'] = true;
 
                 <p>This repository allows installation of Bower and NPM packages as native Composer packages.</p>
                 <p><b>NO</b> plugins and <b>NO</b> Node.js are required.</p>
-                </p>
 
                 <p>At the moment we've added most popular Bower and NPM packages 1000+ each.</p>
                 <p>Please check/add packages you want to use with the form at the top of the page.</p>
 
-                <p><a class="btn btn-default" href="/site/about">More info &raquo;</a></p>
+                <p><?= Html::a('More info &raquo;', '/site/about', ['class' => 'btn btn-default']) ?>
             </div>
             <div class="col-lg-4">
                 <h2>Usage</h2>
@@ -58,12 +58,12 @@ $this->params['noTitle'] = true;
                 <p>Got tired of <code><a href="https://github.com/francoispluchino/composer-asset-plugin">fxp/composer-asset-plugin</a></code>.
                 </p>
                 <p>It's a good project with nice idea and good implementation.
-                But it has issues. It is slow and requires global installation
-                which introduces various problems. Travis and Scrutinizer integration
-                problems are especially annoying.
+                    But it has issues. It is slow and requires global installation
+                    which introduces various problems. Travis and Scrutinizer integration
+                    problems are especially annoying.
                 </p>
                 <p>Questions?</p>
-                <p><a class="btn btn-default" href="/site/contact">Contact us &raquo;</a></p>
+                <p><?= Html::a('More info &raquo;', '/site/contact', ['class' => 'btn btn-default']) ?>
             </div>
         </div>
 
