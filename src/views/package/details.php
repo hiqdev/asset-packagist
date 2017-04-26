@@ -8,7 +8,11 @@ use yii\helpers\Html;
 
 ?>
 
-<?php $releases = $package->getReleases() ?>
+<?php
+$releases = $package->getReleases();
+ksort($releases);
+$releases = array_reverse($releases);
+?>
 
 <div class="versions">
     <?php if (!empty($releases)) : ?>
@@ -40,7 +44,9 @@ use yii\helpers\Html;
         <?php foreach ((array) $releases as $version => $release) : ?>
             <tr>
                 <th><?= $version ?></th>
-                <td><code><?= $release['source']['reference'] ?: $release['dist']['reference'] ?></code></td>
+                <td>
+                    <code><?= $release['source']['reference'] ?: $release['dist']['reference'] ?: 'n/a' ?></code>
+                </td>
                 <td>
                     <?php
                     $links = [];
