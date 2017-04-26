@@ -228,12 +228,13 @@ class AssetPackage extends Object
         $releases = [];
 
         foreach ($repository->getPackages() as $package) {
-            $version = $package->getVersion();
+            $version = $package->getPrettyVersion();
             $require = $this->prepareRequire($package->getRequires());
             $release = [
                 'uid' => $this->prepareUid($version),
                 'name' => $this->getNormalName(),
                 'version' => $version,
+                'version_normalized' => $package->getVersion(),
                 'type' => $this->getType() . '-asset',
             ];
             if ($require) {
