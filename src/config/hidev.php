@@ -10,6 +10,7 @@
  */
 
 return [
+    'bootstrap' => ['log'],
     'components' => [
         'config' => [
             'include' => [
