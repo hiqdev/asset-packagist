@@ -94,7 +94,7 @@ class PackageRepository
             ->from('package')
             ->where(['<', 'last_update', time() - 60 * 60 * 24 * 7]) // Older than 7 days
             ->andWhere(['not', ['last_update' => null]])
-            ->andWhere(['is_avoided' => null])
+            ->andWhere(['is_avoided' => 0])
             ->all();
 
         return $this->hydrate($rows);
