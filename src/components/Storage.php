@@ -119,6 +119,7 @@ class Storage extends Component implements StorageInterface
     {
         $name = $package->getNormalName();
         $path = $this->buildHashedPath($name);
+        clearstatcache(false, $path);
         if (!file_exists($path)) {
             return null;
         }
