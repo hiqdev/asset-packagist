@@ -13,11 +13,29 @@ namespace hiqdev\assetpackagist\console;
 
 use hiqdev\assetpackagist\commands\PackageUpdateCommand;
 use hiqdev\assetpackagist\models\AssetPackage;
+use hiqdev\assetpackagist\repositories\PackageRepository;
 use Yii;
 use yii\helpers\Console;
 
 class AssetPackageController extends \yii\console\Controller
 {
+     /**
+     * @var PackageRepository
+     */
+    protected $packageRepository;
+
+    /**
+     * MaintenanceController constructor.
+     * @param PackageRepository $packageRepository
+     * @inheritdoc
+     */
+    public function __construct($id, $module, PackageRepository $packageRepository, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+
+        $this->packageRepository = $packageRepository;
+    }
+
     /**
      * @param string $type the package type. Can be either `bower` or `npm`
      * @param string $name the package name
@@ -73,6 +91,14 @@ class AssetPackageController extends \yii\console\Controller
     public function actionUpdateAll()
     {
         $this->actionUpdateList(Yii::getAlias('@hiqdev/assetpackagist/config/packages.list'));
+    }
+
+    public function actionAvoid($type, $name)
+    {
+        $package = new AssetPackage($type, $name);
+        $this->packageRepository->markAvoided($package);
+
+        echo Console::renderColoredString("Package %N$type/$name%n is %Ravoided%n now\n");
     }
 
     public function actionList()

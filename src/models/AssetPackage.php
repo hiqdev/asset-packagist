@@ -62,6 +62,13 @@ class AssetPackage extends Object
         return strtolower($name);
     }
 
+    /**
+     * AssetPackage constructor.
+     * @param string $type
+     * @param string $name
+     * @param array $config
+     * @throws Exception
+     */
     public function __construct($type, $name, $config = [])
     {
         parent::__construct($config);
