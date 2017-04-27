@@ -1,11 +1,19 @@
 <?php
+/**
+ * Asset Packagist.
+ *
+ * @see      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\assetpackagist\migrations;
 
 use yii\db\Migration;
 
 /**
- * Migration for queue message storage
+ * Migration for queue message storage.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -20,7 +28,7 @@ class m161130_163000_package extends Migration
             'type' => $this->string()->notNull(),
             'name' => $this->string()->notNull(),
             'last_update' => $this->integer(),
-            'PRIMARY KEY (type, name)'
+            'PRIMARY KEY (type, name)',
         ], $this->tableOptions);
     }
 

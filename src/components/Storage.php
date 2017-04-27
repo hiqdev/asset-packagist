@@ -1,12 +1,11 @@
 <?php
-
-/*
- * Asset Packagist
+/**
+ * Asset Packagist.
  *
- * @link      https://github.com/hiqdev/asset-packagist
+ * @see      https://github.com/hiqdev/asset-packagist
  * @package   asset-packagist
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\assetpackagist\components;
@@ -24,7 +23,7 @@ class Storage extends Component implements StorageInterface
     protected $_locker;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function init()
     {
@@ -41,7 +40,7 @@ class Storage extends Component implements StorageInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNextId()
     {
@@ -75,7 +74,7 @@ class Storage extends Component implements StorageInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function writePackage(AssetPackage $package)
     {
@@ -113,7 +112,7 @@ class Storage extends Component implements StorageInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function readPackage(AssetPackage $package)
     {
@@ -209,7 +208,7 @@ class Storage extends Component implements StorageInterface
     }
 
     /**
-     * Creates directory $dir and sets chmod 777
+     * Creates directory $dir and sets chmod 777.
      * @param string $dir
      * @return bool whether the directory was created successfully
      */
@@ -242,7 +241,7 @@ class Storage extends Component implements StorageInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function listPackages()
     {

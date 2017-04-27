@@ -1,12 +1,11 @@
 <?php
-
-/*
- * Asset Packagist
+/**
+ * Asset Packagist.
  *
- * @link      https://github.com/hiqdev/asset-packagist
+ * @see      https://github.com/hiqdev/asset-packagist
  * @package   asset-packagist
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
  */
 
 return [
@@ -31,7 +30,7 @@ return [
                     'class' => \hiqdev\assetpackagist\log\StdoutTarget::class,
                     'categories' => ['hiqdev\assetpackagist\commands\*'],
                     'exportInterval' => 1,
-                    'logVars' => []
+                    'logVars' => [],
                 ],
             ],
         ],

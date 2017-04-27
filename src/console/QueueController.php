@@ -1,4 +1,12 @@
 <?php
+/**
+ * Asset Packagist.
+ *
+ * @see      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\assetpackagist\console;
 
@@ -12,8 +20,7 @@ use zhuravljov\yii\queue\JobEvent;
 use zhuravljov\yii\queue\Queue;
 
 /**
- * Manages service Queue
- * @package hiqdev\assetpackagist\console
+ * Manages service Queue.
  */
 class QueueController extends Controller
 {
@@ -23,7 +30,7 @@ class QueueController extends Controller
     }
 
     /**
-     * Runs the queue
+     * Runs the queue.
      */
     public function actionRun()
     {
@@ -31,7 +38,7 @@ class QueueController extends Controller
     }
 
     /**
-     * Test action to ensure that ErrorHandler flushes stack immediately
+     * Test action to ensure that ErrorHandler flushes stack immediately.
      */
     public function actionTestErrorHandler()
     {
@@ -40,7 +47,7 @@ class QueueController extends Controller
     }
 
     /**
-     * Attaches handlers on Queue events
+     * Attaches handlers on Queue events.
      */
     private function attachEventHandlers()
     {
@@ -66,8 +73,7 @@ class QueueController extends Controller
         Event::on(AbstractPackageCommand::class, AbstractPackageCommand::EVENT_BEFORE_RUN, function ($event) use ($out) {
             /** @var AbstractPackageCommand $command */
             $command = $event->sender;
-            $out("%g[" . get_class($command) . "]%n Working on package %N" . $command->getPackage()->getFullName() . "%n\n");
+            $out('%g[' . get_class($command) . ']%n Working on package %N' . $command->getPackage()->getFullName() . "%n\n");
         });
     }
 }
-

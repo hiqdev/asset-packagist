@@ -1,4 +1,12 @@
 <?php
+/**
+ * Asset Packagist.
+ *
+ * @see      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\assetpackagist\commands;
 
@@ -24,7 +32,7 @@ abstract class AbstractPackageCommand extends Component implements Job
     protected $packageRepository;
 
     /**
-     * Triggers event before run
+     * Triggers event before run.
      */
     public function beforeRun()
     {
@@ -32,7 +40,7 @@ abstract class AbstractPackageCommand extends Component implements Job
     }
 
     /**
-     * Triggers event after run
+     * Triggers event after run.
      */
     public function afterRun()
     {
@@ -54,7 +62,7 @@ abstract class AbstractPackageCommand extends Component implements Job
     }
 
     /**
-     * Reloads package on wake up to ensure it is up to date
+     * Reloads package on wake up to ensure it is up to date.
      *
      * @void
      */

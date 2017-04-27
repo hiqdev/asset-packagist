@@ -1,16 +1,24 @@
 <?php
+/**
+ * Asset Packagist.
+ *
+ * @see      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\assetpackagist\controllers;
 
-use hiqdev\assetpackagist\exceptions\CorruptedPackageException;
-use hiqdev\assetpackagist\exceptions\PackageNotExistsException;
-use yii\web\Controller;
 use Exception;
 use hiqdev\assetpackagist\commands\PackageUpdateCommand;
+use hiqdev\assetpackagist\exceptions\CorruptedPackageException;
+use hiqdev\assetpackagist\exceptions\PackageNotExistsException;
 use hiqdev\assetpackagist\exceptions\UpdateRateLimitException;
 use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
 use yii\filters\VerbFilter;
+use yii\web\Controller;
 
 class PackageController extends Controller
 {
@@ -50,8 +58,6 @@ class PackageController extends Controller
                 get_class($e),
                 $e->getMessage(),
             ], __METHOD__);
-
-
 
             return $this->renderPartial('fetch-error', ['package' => $package]);
         }

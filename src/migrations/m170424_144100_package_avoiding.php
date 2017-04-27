@@ -1,11 +1,19 @@
 <?php
+/**
+ * Asset Packagist.
+ *
+ * @see      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\assetpackagist\migrations;
 
 use yii\db\Migration;
 
 /**
- * Migration for packages avoiding
+ * Migration for packages avoiding.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */

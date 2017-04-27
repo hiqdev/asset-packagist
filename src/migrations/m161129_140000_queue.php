@@ -1,11 +1,19 @@
 <?php
+/**
+ * Asset Packagist.
+ *
+ * @see      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\assetpackagist\migrations;
 
 use yii\db\Migration;
 
 /**
- * Migration for queue message storage
+ * Migration for queue message storage.
  *
  * @author Roman Zhuravlev <zhuravljov@gmail.com>
  */

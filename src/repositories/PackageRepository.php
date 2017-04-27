@@ -1,4 +1,12 @@
 <?php
+/**
+ * Asset Packagist.
+ *
+ * @see      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\assetpackagist\repositories;
 
@@ -39,7 +47,8 @@ class PackageRepository
      * @param AssetPackage $package
      * @return int
      */
-    public function insert(AssetPackage $package) {
+    public function insert(AssetPackage $package)
+    {
         return $this->db->createCommand()->insert('package', [
             'type' => $package->getType(),
             'name' => $package->getName(),
@@ -54,14 +63,14 @@ class PackageRepository
     public function update(AssetPackage $package)
     {
         return $this->db->createCommand()->update('package', [
-            'last_update' => $package->getUpdateTime()
+            'last_update' => $package->getUpdateTime(),
         ], $this->getWhereCondition($package))->execute();
     }
 
     public function markAvoided(AssetPackage $package)
     {
         $this->db->createCommand()->update('package', [
-            'is_avoided' => true
+            'is_avoided' => true,
         ], $this->getWhereCondition($package))->execute();
     }
 

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Asset Packagist.
+ *
+ * @see      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\assetpackagist\commands;
 
@@ -10,8 +18,6 @@ use Yii;
 /**
  * Class PackageUpdateCommand runs package update command and creates tasks to
  * fetch its dependencies.
- *
- * @package hiqdev\assetpackagist\commands
  */
 class PackageUpdateCommand extends AbstractPackageCommand
 {
@@ -36,7 +42,6 @@ class PackageUpdateCommand extends AbstractPackageCommand
 
             Yii::$app->queue->push(Yii::createObject(CollectDependenciesCommand::class, [$this->package]));
         }
-
 
         $this->afterRun();
     }
@@ -69,6 +74,4 @@ class PackageUpdateCommand extends AbstractPackageCommand
 
         return false;
     }
-
-
 }

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Asset Packagist.
+ *
+ * @see      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\assetpackagist\commands;
 
@@ -9,8 +17,6 @@ use yii\helpers\Console;
 /**
  * Class CollectDependenciesCommand collects dependencies for a certain package
  * and publishes tasks to update them.
- *
- * @package hiqdev\assetpackagist\commands
  */
 class CollectDependenciesCommand extends AbstractPackageCommand
 {

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Asset Packagist.
+ *
+ * @see      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\assetpackagist\exceptions;
 
@@ -12,7 +20,7 @@ class AssetFileStorageException extends \Exception
      */
     private $package;
 
-    public function __construct($message = "", AssetPackage $package = null, $code = 0, Exception $previous = null)
+    public function __construct($message = '', AssetPackage $package = null, $code = 0, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
 

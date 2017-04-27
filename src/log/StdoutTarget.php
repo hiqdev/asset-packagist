@@ -1,4 +1,12 @@
 <?php
+/**
+ * Asset Packagist.
+ *
+ * @see      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\assetpackagist\log;
 
@@ -20,7 +28,7 @@ class StdoutTarget extends Target
             if (!is_string($text)) {
                 // exceptions may not be serializable if in the call stack somewhere is a Closure
                 if ($text instanceof \Throwable || $text instanceof \Exception) {
-                    $text = (string)$text;
+                    $text = (string) $text;
                 } else {
                     $text = VarDumper::export($text);
                 }
@@ -28,7 +36,7 @@ class StdoutTarget extends Target
 
             $string = "[$level][$category] $text";
 
-            if ($level == Logger::LEVEL_ERROR) {
+            if ($level === Logger::LEVEL_ERROR) {
                 Console::stderr($string);
             } else {
                 Console::stdout($string);

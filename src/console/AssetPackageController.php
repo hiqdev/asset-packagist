@@ -1,12 +1,11 @@
 <?php
-
-/*
- * Asset Packagist
+/**
+ * Asset Packagist.
  *
- * @link      https://github.com/hiqdev/asset-packagist
+ * @see      https://github.com/hiqdev/asset-packagist
  * @package   asset-packagist
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\assetpackagist\console;
@@ -19,7 +18,7 @@ use yii\helpers\Console;
 
 class AssetPackageController extends \yii\console\Controller
 {
-     /**
+    /**
      * @var PackageRepository
      */
     protected $packageRepository;
@@ -27,7 +26,7 @@ class AssetPackageController extends \yii\console\Controller
     /**
      * MaintenanceController constructor.
      * @param PackageRepository $packageRepository
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function __construct($id, $module, PackageRepository $packageRepository, $config = [])
     {

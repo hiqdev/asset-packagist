@@ -1,4 +1,12 @@
 <?php
+/**
+ * Asset Packagist.
+ *
+ * @see      https://github.com/hiqdev/asset-packagist
+ * @package   asset-packagist
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\assetpackagist\console;
 
@@ -11,8 +19,7 @@ use yii\console\Controller;
 use yii\helpers\Console;
 
 /**
- * Provides maintenance actions for the asset-packagist service
- * @package hiqdev\assetpackagist\console
+ * Provides maintenance actions for the asset-packagist service.
  */
 class MaintenanceController extends Controller
 {
@@ -30,7 +37,7 @@ class MaintenanceController extends Controller
      * MaintenanceController constructor.
      * @param StorageInterface $packageStorage
      * @param PackageRepository $packageRepository
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function __construct($id, $module, StorageInterface $packageStorage, PackageRepository $packageRepository, $config = [])
     {
@@ -41,7 +48,7 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * Synchronizes file system packages to the database
+     * Synchronizes file system packages to the database.
      */
     public function actionSyncToDb()
     {
@@ -63,7 +70,7 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * Updates expired packages
+     * Updates expired packages.
      */
     public function actionUpdateExpired()
     {
@@ -73,8 +80,8 @@ class MaintenanceController extends Controller
             $package->load();
             Yii::$app->queue->push(Yii::createObject(PackageUpdateCommand::class, [$package]));
 
-            $message = "Package %N" . $package->getFullName() . '%n';
-            $message .= " was updated " . Yii::$app->formatter->asRelativeTime($package->getUpdateTime());
+            $message = 'Package %N' . $package->getFullName() . '%n';
+            $message .= ' was updated ' . Yii::$app->formatter->asRelativeTime($package->getUpdateTime());
             $message .= ". %GAdded to queue for update%n\n";
             $this->stdout(Console::renderColoredString($message));
         }
