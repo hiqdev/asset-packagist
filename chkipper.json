@@ -1,3 +1,33 @@
 {
-    "name": "hiqdev/asset-packagist"
+    "name": "hiqdev/asset-packagist",
+    "authors": {
+        "hiqsol": {
+            "name": "Andrii Vasyliev",
+            "role": "Project lead",
+            "email": "sol@hiqdev.com",
+            "github": "https://github.com/hiqsol",
+            "homepage": "http://hipanel.com/"
+        },
+        "SilverFire": {
+            "name": "Dmitry Naumenko",
+            "role": "Lead backend developer",
+            "email": "d.naumenko.a@gmail.com",
+            "github": "https://github.com/SilverFire",
+            "homepage": "http://silverfire.me/"
+        },
+        "tafid": {
+            "name": "Andrey Klochok",
+            "role": "Lead frontend developer",
+            "email": "andreyklochok@gmail.com",
+            "github": "https://github.com/tafid",
+            "homepage": "http://hiqdev.com/"
+        },
+        "BladeRoot": {
+            "name": "Yuriy Myronchuk",
+            "role": "QA Lead",
+            "email": "bladeroot@gmail.com",
+            "github": "https://github.com/BladeRoot",
+            "homepage": "http://hiqdev.com/"
+        }
+    }
 }
