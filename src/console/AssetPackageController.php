@@ -63,6 +63,13 @@ class AssetPackageController extends \yii\console\Controller
         echo "\n";
     }
 
+    public function actionAddUpdateCommand($type, $name)
+    {
+        $package = new AssetPackage($type, $name);
+        Yii::$app->queue->push(Yii::createObject(PackageUpdateCommand::class, [$package]));
+        echo Console::renderColoredString("%GAdded%N $type/$name%n\n");
+    }
+
     public function actionUpdateAll()
     {
         $this->actionUpdateList(Yii::getAlias('@hiqdev/assetpackagist/config/packages.list'));
