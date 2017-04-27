@@ -2,6 +2,9 @@
 
 namespace hiqdev\assetpackagist\commands;
 
+use hiqdev\assetpackagist\exceptions\CorruptedPackageException;
+use hiqdev\assetpackagist\exceptions\PackageNotExistsException;
+use hiqdev\assetpackagist\exceptions\PermanentProblemExceptionInterface;
 use Yii;
 
 /**
@@ -26,6 +29,8 @@ class PackageUpdateCommand extends AbstractPackageCommand
                 $this->packageRepository->save($this->package);
             } catch (\Exception $e) {
                 Yii::error('Failed to update package "' . $this->package->getFullName() . '": ' . $e->getMessage(), __CLASS__);
+                $this->transformException($e);
+
                 throw $e;
             }
 
@@ -35,4 +40,35 @@ class PackageUpdateCommand extends AbstractPackageCommand
 
         $this->afterRun();
     }
+
+    private function transformException(\Exception $e)
+    {
+        $avoidMarkers = [
+            'file could not be downloaded (HTTP/1.1 404 Not Found)' => PackageNotExistsException::class,
+            'npm asset package must be present for create a VCS Repository' => CorruptedPackageException::class,
+            'Could not parse version constraint' => CorruptedPackageException::class,
+        ];
+
+        foreach ($avoidMarkers as $marker => $exceptionClass) {
+            if (!stripos($e->getMessage(), $marker)) {
+                continue;
+            }
+
+            $newException = new $exceptionClass($e->getMessage(), 0, $e);
+
+            if (
+                $newException instanceof PermanentProblemExceptionInterface
+                && $this->packageRepository->exists($this->package)
+            ) {
+                Yii::warning('Package ' . $this->package->getFullName() . ' is marked as avoided', __CLASS__);
+                $this->packageRepository->markAvoided($this->package);
+            }
+
+            throw $newException;
+        }
+
+        return false;
+    }
+
+
 }

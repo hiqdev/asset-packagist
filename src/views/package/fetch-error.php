@@ -14,7 +14,9 @@ $this->title = 'Package update failed';
 <hr/>
 <h3><?= $this->title ?></h3>
 
-<blockquote><?= $exception->getMessage() ?></blockquote>
+<?php if (isset($exception)) : ?>
+    <blockquote><?= $exception->getMessage() ?></blockquote>
+<?php endif ?>
 
 <?php
 
@@ -26,6 +28,6 @@ if ($package->getType() === 'npm') {
 
 ?>
 
-<h4>Could you ensure this package exists on <?= $link ?> ?</h4>
+<h4>Could you ensure this package exists on <?= $link ?>?</h4>
 <p>Think asset-packagist is guilty? <?= Html::a('Report on GitHub', 'https://github.com/hiqdev/asset-packagist/issues/new') ?>
 </p>

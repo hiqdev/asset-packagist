@@ -2,6 +2,8 @@
 
 namespace hiqdev\assetpackagist\controllers;
 
+use hiqdev\assetpackagist\exceptions\CorruptedPackageException;
+use hiqdev\assetpackagist\exceptions\PackageNotExistsException;
 use yii\web\Controller;
 use Exception;
 use hiqdev\assetpackagist\commands\PackageUpdateCommand;
@@ -38,17 +40,9 @@ class PackageController extends Controller
             Yii::createObject(PackageUpdateCommand::class, [$package])->run();
         } catch (UpdateRateLimitException $exception) {
             Yii::$app->session->addFlash('rate-limited', true);
-        } catch (\Composer\Downloader\TransportException $e) {
-            if (stripos($e->getMessage(), 'not found')) {
-                Yii::warning('Failed to update ' . $package->getFullName() . ': ' . $e->getMessage(), __METHOD__);
-
-                return $this->renderPartial('not-found', ['package' => $package]);
-            }
-
-            throw $e;
-        } catch (\Composer\Repository\InvalidRepositoryException $e) {
-            Yii::warning('Failed to update ' . $package->getFullName() . ': ' . $e->getMessage(), __METHOD__);
-
+        } catch (PackageNotExistsException $e) {
+            return $this->renderPartial('not-found', ['package' => $package]);
+        } catch (CorruptedPackageException $e) {
             return $this->renderPartial('fetch-error', ['package' => $package, 'exception' => $e]);
         } catch (Exception $e) {
             Yii::error([
@@ -57,9 +51,10 @@ class PackageController extends Controller
                 $e->getMessage(),
             ], __METHOD__);
 
-            return $this->renderPartial('fetch-error', ['package' => $package, 'exception' => $e]);
-        }
 
+
+            return $this->renderPartial('fetch-error', ['package' => $package]);
+        }
         $package->load();
 
         return $this->renderPartial('details', ['package' => $package]);
