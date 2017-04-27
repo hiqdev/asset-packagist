@@ -196,10 +196,12 @@ class Storage extends Component implements StorageInterface
             ],
         ];
         $this->getLocker()->lock();
+        $filename = $this->buildPath('packages.json');
         try {
-            if (file_put_contents($this->buildPath('packages.json'), Json::encode($data)) === false) {
+            if (file_put_contents($filename, Json::encode($data)) === false) {
                 throw new AssetFileStorageException('Failed to write main packages.json');
             }
+            touch($filename);
         } finally {
             $this->getLocker()->release();
         }
