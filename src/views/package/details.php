@@ -4,12 +4,36 @@
  * @var yii\web\View
  * @var \hiqdev\assetpackagist\models\AssetPackage $package
  */
+use Composer\Semver\Comparator;
+use Composer\Semver\VersionParser;
 use yii\helpers\Html;
 
 ?>
 
 <?php
 $releases = $package->getReleases();
+
+uasort($releases, function($a, $b){
+    if ($a['version'] === $b['version']) {
+        return 0;
+    }
+    
+    $stability_a = VersionParser::parseStability($a['version']);
+    $stability_b = VersionParser::parseStability($b['version']);
+    
+    //DEV versions to LAST
+    if($stability_a === 'dev' && $stability_b !== 'dev'){
+        return 1;
+    }elseif($stability_a !== 'dev' && $stability_b === 'dev'){
+        return -1;
+    }
+
+    if (Comparator::lessThan($a['version'], $b['version'])) {
+        return 1;
+    }
+
+    return -1;
+});
 ?>
 
 <div class="versions">
