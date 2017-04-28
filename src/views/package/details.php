@@ -55,11 +55,9 @@ $stability_colors = [
     <b>Last updated:</b> <?= Yii::$app->formatter->asDateTime($package->getUpdateTime()) ?> (<?= Yii::$app->formatter->asRelativeTime($package->getUpdateTime()) ?>)
     <br>
     <b>Legend:</b>
-    <?php
-        foreach ($stability_colors as $stability => $color) {
-            echo Html::tag('span', $stability, ['class' => 'label label-' . $color]) . ' ';
-        }
-    ?>
+    <?php foreach ($stability_colors as $stability => $color) : ?>
+        <?= Html::tag('span', $stability, ['class' => 'label label-' . $color]) . ' ' ?>
+    <?php endforeach ?>
     <br><br>
 
     <?php if (Yii::$app->session->hasFlash('rate-limited')) : ?>
