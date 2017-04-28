@@ -5,7 +5,8 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 
-$logoUrl = AppAsset::register($this)->baseUrl . '/logo';
+$bundle = AppAsset::register($this);
+$logoUrl = $bundle->baseUrl . '/logo';
 
 $this->title = Yii::$app->name;
 $this->params['noTitle'] = true;
