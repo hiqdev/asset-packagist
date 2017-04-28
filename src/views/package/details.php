@@ -18,8 +18,8 @@ uasort($releases, function($a, $b) {
         return 0;
     }
     
-    $stability_a = VersionParser::parseStability($a['version']);
-    $stability_b = VersionParser::parseStability($b['version']);
+    $stability_a = VersionParser::parseStability($a['version_normalized']);
+    $stability_b = VersionParser::parseStability($b['version_normalized']);
     
     // DEV versions to LAST
     if ($stability_a === 'dev' && $stability_b !== 'dev') {
@@ -28,12 +28,20 @@ uasort($releases, function($a, $b) {
         return -1;
     }
 
-    if (Comparator::lessThan($a['version'], $b['version'])) {
+    if (Comparator::lessThan($a['version_normalized'], $b['version_normalized'])) {
         return 1;
     }
 
     return -1;
 });
+
+$stability_colors = [
+    'stable' => 'success',
+    'RC' => 'primary',
+    'beta' => 'info',
+    'alpha' => 'warning',
+    'dev' => 'default',
+];
 ?>
 
 <div class="versions">
@@ -45,6 +53,11 @@ uasort($releases, function($a, $b) {
 
     <br><br>
     <b>Last updated:</b> <?= Yii::$app->formatter->asDateTime($package->getUpdateTime()) ?> (<?= Yii::$app->formatter->asRelativeTime($package->getUpdateTime()) ?>)
+    <br>
+    <b>Legend:</b>
+    <?php foreach ($stability_colors as $stability => $color) : ?>
+        <?= Html::tag('span', $stability, ['class' => 'label label-' . $color]) . ' ' ?>
+    <?php endforeach ?>
     <br><br>
 
     <?php if (Yii::$app->session->hasFlash('rate-limited')) : ?>
@@ -65,7 +78,12 @@ uasort($releases, function($a, $b) {
         <tbody>
         <?php foreach ((array) $releases as $version => $release) : ?>
             <tr>
-                <th><?= $version ?></th>
+                <th>
+                    <?php 
+                        $stability = VersionParser::parseStability($release['version_normalized']);
+                        echo Html::tag('span', $version, ['class' => 'label label-' . $stability_colors[$stability]]);
+                    ?>
+                </th>
                 <td>
                     <code><?= $release['source']['reference'] ?: $release['dist']['reference'] ?: 'n/a' ?></code>
                 </td>
