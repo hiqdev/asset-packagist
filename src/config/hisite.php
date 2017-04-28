@@ -16,6 +16,11 @@ return [
                 '$themedViewPaths' => ['@hiqdev/assetpackagist/views'],
             ],
         ],
+        'assetManager' => [
+            'bundles' => [
+                \hiqdev\assetpackagist\assets\AppAsset::class
+            ],
+        ],
     ],
     'container' => [
         'singletons' => [
