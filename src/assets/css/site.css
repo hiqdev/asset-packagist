@@ -15,3 +15,6 @@
     margin: 0 1em;
 }
 
+body > .wrap > .container {
+    margin-top: 50px;
+}
