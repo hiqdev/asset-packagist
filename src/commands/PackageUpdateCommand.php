@@ -21,7 +21,7 @@ use Yii;
  */
 class PackageUpdateCommand extends AbstractPackageCommand
 {
-    public function run()
+    public function execute($queue)
     {
         $this->beforeRun();
 
@@ -40,7 +40,7 @@ class PackageUpdateCommand extends AbstractPackageCommand
                 throw $e;
             }
 
-            Yii::$app->queue->push(Yii::createObject(CollectDependenciesCommand::class, [$this->package]));
+            $queue->push(Yii::createObject(CollectDependenciesCommand::class, [$this->package]));
         }
 
         $this->afterRun();

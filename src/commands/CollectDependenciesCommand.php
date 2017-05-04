@@ -20,7 +20,7 @@ use yii\helpers\Console;
  */
 class CollectDependenciesCommand extends AbstractPackageCommand
 {
-    public function run()
+    public function execute($queue)
     {
         $this->beforeRun();
 
@@ -45,7 +45,7 @@ class CollectDependenciesCommand extends AbstractPackageCommand
                 continue;
             }
 
-            Yii::$app->queue->push(Yii::createObject(PackageUpdateCommand::class, [$assetPackage]));
+            $queue->push(Yii::createObject(PackageUpdateCommand::class, [$assetPackage]));
             Yii::trace(Console::renderColoredString('Created update command for %Y' . $assetPackage->getFullName() . "%n package\n"), __CLASS__);
         }
 

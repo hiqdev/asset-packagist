@@ -55,17 +55,17 @@ class QueueController extends Controller
             $this->stdout(Console::renderColoredString($string));
         };
 
-        Event::on(Queue::class, Queue::EVENT_BEFORE_WORK, function ($event) use ($out) {
+        Event::on(Queue::class, Queue::EVENT_BEFORE_EXEC, function ($event) use ($out) {
             /** @var JobEvent $event */
             $out("%GNew job%n '" . get_class($event->job) . "'\n");
         });
 
-        Event::on(Queue::class, Queue::EVENT_AFTER_WORK, function ($event) use ($out) {
+        Event::on(Queue::class, Queue::EVENT_AFTER_EXEC, function ($event) use ($out) {
             /** @var JobEvent $event */
             $out("%GJob%n '" . get_class($event->job) . "' %Gis completed%n\n");
         });
 
-        Event::on(Queue::class, Queue::EVENT_AFTER_ERROR, function ($event) use ($out) {
+        Event::on(Queue::class, Queue::EVENT_AFTER_EXEC_ERROR, function ($event) use ($out) {
             /** @var ErrorEvent $event */
             $out("%RJob '" . get_class($event->job) . "' finished with error:%n '" . $event->error . "'\n");
         });
