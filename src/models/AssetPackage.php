@@ -234,6 +234,10 @@ class AssetPackage extends Object
         $releases = [];
 
         foreach ($repository->getPackages() as $package) {
+            if ($package instanceof \Composer\Package\AliasPackage) {
+                continue;
+            }
+
             $version = $package->getPrettyVersion();
             $require = $this->prepareRequire($package->getRequires());
             $release = [
