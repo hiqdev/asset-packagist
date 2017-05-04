@@ -10,18 +10,18 @@
 
 return [
     'bootstrap' => ['log'],
+    'controllerMap' => [
+        'migrate' => [
+            'class' => \yii\console\controllers\MigrateController::class,
+            'migrationNamespaces' => [
+                'hiqdev\assetpackagist\migrations',
+            ],
+            'migrationPath' => null,
+        ],
+    ],
     'components' => [
-        'config' => [
-            'include' => [
-                '@hiqdev/assetpackagist/config/goals.yml',
-            ],
-            'migrate' => [
-                'class' => \yii\console\controllers\MigrateController::class,
-                'migrationNamespaces' => [
-                    'hiqdev\assetpackagist\migrations',
-                ],
-                'migrationPath' => null,
-            ],
+        'include' => [
+            __DIR__ . '/goals.yml',
         ],
         'log' => [
             'flushInterval' => 1,
