@@ -233,7 +233,7 @@ class AssetPackage extends Object
     {
         $releases = [];
 
-        /* @var $package \Fxp\Composer\AssetPlugin\Package\AbstractLazyCompletePackage */
+        /** @var $package \Fxp\Composer\AssetPlugin\Package\AbstractLazyCompletePackage */
         foreach ($repository->getPackages() as $package) {
             $version = $package->getPrettyVersion();
             $require = $this->prepareRequire($package->getRequires());
