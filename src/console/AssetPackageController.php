@@ -44,7 +44,7 @@ class AssetPackageController extends \yii\console\Controller
     {
         try {
             $package = new AssetPackage($type, $name);
-            Yii::createObject(PackageUpdateCommand::class, [$package])->run();
+            Yii::createObject(PackageUpdateCommand::class, [$package])->execute(Yii::$app->queue);
             echo 'updated ' . $package->getHash() . ' ' . $package->getFullName() . "\n";
 
             return true;

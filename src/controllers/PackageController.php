@@ -45,7 +45,7 @@ class PackageController extends Controller
                 throw new UpdateRateLimitException();
             }
 
-            Yii::createObject(PackageUpdateCommand::class, [$package])->run();
+            Yii::createObject(PackageUpdateCommand::class, [$package])->execute(Yii::$app->queue);
         } catch (UpdateRateLimitException $exception) {
             Yii::$app->session->addFlash('rate-limited', true);
         } catch (PackageNotExistsException $e) {
