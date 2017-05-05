@@ -9,42 +9,9 @@
  */
 
 return [
-    'bootstrap' => ['log'],
-    'controllerMap' => [
-        'asset-package' => [
-            'class' => \hiqdev\assetpackagist\console\AssetPackageController::class,
-        ],
-        'bower-package' => [
-            'class' => \hiqdev\assetpackagist\console\BowerPackageController::class,
-        ],
-        'queue' => [
-            'class' => \hiqdev\assetpackagist\console\QueueController::class,
-        ],
-        'maintenance' => [
-            'class' => \hiqdev\assetpackagist\console\MaintenanceController::class,
-        ],
-        'migrate' => [
-            'class' => \yii\console\controllers\MigrateController::class,
-            'migrationNamespaces' => [
-                'hiqdev\assetpackagist\migrations',
-            ],
-            'migrationPath' => null,
-        ],
-    ],
     'components' => [
         'include' => [
             __DIR__ . '/goals.yml',
-        ],
-        'log' => [
-            'flushInterval' => 1,
-            'targets' => [
-                [
-                    'class' => \hiqdev\assetpackagist\log\StdoutTarget::class,
-                    'categories' => ['hiqdev\assetpackagist\commands\*'],
-                    'exportInterval' => 1,
-                    'logVars' => [],
-                ],
-            ],
         ],
     ],
 ];
