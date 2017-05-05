@@ -11,6 +11,18 @@
 return [
     'bootstrap' => ['log'],
     'controllerMap' => [
+        'asset-package' => [
+            'class' => \hiqdev\assetpackagist\console\AssetPackageController::class,
+        ],
+        'bower-package' => [
+            'class' => \hiqdev\assetpackagist\console\BowerPackageController::class,
+        ],
+        'queue' => [
+            'class' => \hiqdev\assetpackagist\console\QueueController::class,
+        ],
+        'maintenance' => [
+            'class' => \hiqdev\assetpackagist\console\MaintenanceController::class,
+        ],
         'migrate' => [
             'class' => \yii\console\controllers\MigrateController::class,
             'migrationNamespaces' => [
