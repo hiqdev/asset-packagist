@@ -2,7 +2,7 @@
 /**
  * Asset Packagist.
  *
- * @see      https://github.com/hiqdev/asset-packagist
+ * @link      https://github.com/hiqdev/asset-packagist
  * @package   asset-packagist
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
@@ -19,7 +19,7 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
-        'https://use.fontawesome.com/483397b330.js'
+        'https://use.fontawesome.com/483397b330.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

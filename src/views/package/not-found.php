@@ -1,10 +1,9 @@
 <?php
 
 /**
- * @var \yii\web\View $this
+ * @var \yii\web\View
  * @var \hiqdev\assetpackagist\models\AssetPackage $package
  */
-
 use yii\helpers\Html;
 
 $this->title = 'Oops... Package was not found';

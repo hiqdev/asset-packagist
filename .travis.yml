@@ -4,7 +4,6 @@ php:
     - 7
     - 7.1
     - hhvm
-sudo: false
 dist: trusty
 matrix:
     allow_failures:
@@ -18,10 +17,11 @@ before_install:
     - 'composer --version'
     - 'composer install --no-interaction'
     - './vendor/bin/hidev --version'
-    - './vendor/bin/hidev travis/before_install'
+    - './vendor/bin/hidev travis/before-install'
+sudo: false
 install:
     - './vendor/bin/hidev travis/install'
 script:
     - './vendor/bin/hidev travis/script'
 after_script:
-    - './vendor/bin/hidev travis/after_script'
+    - './vendor/bin/hidev travis/after-script'

@@ -2,7 +2,9 @@
 .hidev/composer.json
 .hidev/composer.lock
 .hidev/config-local.yml
+.hidev/runtime
 .hidev/vendor
+hidev-local.yml
 
 # IDE & OS files
 .*.swp
@@ -36,3 +38,6 @@ composer.phar
 php-cs-fixer.phar
 phpunit-skelgen.phar
 phpunit.phar
+
+# Binaries
+ocular.phar

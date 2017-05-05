@@ -3,7 +3,6 @@ package:
     name:           asset-packagist
     title:          Asset Packagist
     keywords:       composer, bower, npm, asset, packagist
-    namespace:      hiqdev\assetpackagist
     description:    |
         ![Composer](https://raw.githubusercontent.com/hiqdev/asset-packagist/master/docs/asset-packagist.png)
 

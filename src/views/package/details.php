@@ -13,14 +13,14 @@ use yii\helpers\Html;
 <?php
 $releases = $package->getReleases();
 
-uasort($releases, function($a, $b) {
+uasort($releases, function ($a, $b) {
     if ($a['version'] === $b['version']) {
         return 0;
     }
-    
+
     $stability_a = VersionParser::parseStability($a['version_normalized']);
     $stability_b = VersionParser::parseStability($b['version_normalized']);
-    
+
     // DEV versions to LAST
     if ($stability_a === 'dev' && $stability_b !== 'dev') {
         return 1;

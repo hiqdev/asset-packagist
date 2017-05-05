@@ -8,7 +8,7 @@ use yii\helpers\Html;
 
 $bundle = AppAsset::register($this);
 
-$this->registerCss("
+$this->registerCss('
 /* Important styles, do not remove */
 @media (min-width: 768px) {
     #query {
@@ -20,7 +20,7 @@ $this->registerCss("
         width: 450px;
     }
 }
-");
+');
 
 ?>
 <?php NavBar::begin([

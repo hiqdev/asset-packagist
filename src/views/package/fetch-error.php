@@ -1,11 +1,10 @@
 <?php
 
 /**
- * @var \yii\web\View $this
+ * @var \yii\web\View
  * @var \hiqdev\assetpackagist\models\AssetPackage $package
  * @var \Composer\Repository\InvalidRepositoryException $exception
  */
-
 use yii\helpers\Html;
 
 $this->title = 'Package update failed';
