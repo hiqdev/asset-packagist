@@ -10,12 +10,12 @@
 
 namespace hiqdev\assetpackagist\registry;
 
-use Composer\IO\NullIO;
 use Composer\Repository\RepositoryManager;
 use Fxp\Composer\AssetPlugin\Config\Config;
 use Fxp\Composer\AssetPlugin\Repository\AbstractAssetsRepository;
 use Fxp\Composer\AssetPlugin\Repository\AssetRepositoryManager;
 use Fxp\Composer\AssetPlugin\Repository\VcsPackageFilter;
+use hiqdev\assetpackagist\log\YiiLogIO;
 
 class RegistryFactory
 {
@@ -68,6 +68,6 @@ class RegistryFactory
     {
         $filter = (new \ReflectionClass(VcsPackageFilter::class))->newInstanceWithoutConstructor();
 
-        return new AssetRepositoryManager(new NullIO(), $repositoryManager, new Config([]), $filter);
+        return new AssetRepositoryManager(new YiiLogIO(), $repositoryManager, new Config([]), $filter);
     }
 }
