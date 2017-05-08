@@ -40,7 +40,7 @@ $this->params['searchQuery'] = $query;
 
 <?php
 $options = Json::encode([
-    'url' => Url::to('update'),
+    'url' => Url::to(['update']),
     'type' => 'post',
     'data' => [
         'query' => $package->getFullName(),

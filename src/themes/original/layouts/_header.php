@@ -35,7 +35,7 @@ $this->registerCss('
     'options' => ['class' => 'navbar-nav navbar-right'],
 ]) ?>
 
-<?= Html::beginForm('/package/search', 'GET', ['id' => 'search-form', 'class' => 'navbar-form navbar-right', 'autocomplete' => 'off']) ?>
+<?= Html::beginForm(['/package/search'], 'GET', ['id' => 'search-form', 'class' => 'navbar-form navbar-right', 'autocomplete' => 'off']) ?>
     <div class="form-group has-feedback">
         <?= Html::input('text', 'query', (isset($this->params['searchQuery']) ? $this->params['searchQuery'] : ''), [
             'id' => 'query',
