@@ -1,4 +1,4 @@
-install:
+deploy:
     after:
         - create-storage
         - chmod-storage
