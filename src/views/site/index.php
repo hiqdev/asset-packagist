@@ -37,7 +37,7 @@ $this->params['noTitle'] = true;
                     use the search line at the top of the page to check specific package health.
                 </p>
 
-                <p><?= Html::a('More info &raquo;', '/site/about', ['class' => 'btn btn-default']) ?>
+                <p><?= Html::a('More info &raquo;', ['/site/about'], ['class' => 'btn btn-default']) ?>
             </div>
             <div class="col-lg-4">
                 <h2>Usage</h2>
@@ -69,7 +69,7 @@ $this->params['noTitle'] = true;
                 </p>
 
                 <p>Questions?</p>
-                <p><?= Html::a('More info &raquo;', '/site/contact', ['class' => 'btn btn-default']) ?>
+                <p><?= Html::a('More info &raquo;', ['/site/contact'], ['class' => 'btn btn-default']) ?>
             </div>
         </div>
 
