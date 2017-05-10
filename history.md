@@ -1,19 +1,68 @@
-hiqdev/asset-packagist commits history
---------------------------------------
+# hiqdev/asset-packagist
 
 ## [Under development]
 
-- Added DB layer to store packages and their properties
-    - [d1130a1] 2016-11-30 Added packages table. Added duplication prevention. [@SilverFire]
-- Implemented package management using queues
+- Updated documentation
+    - [5b5f435] 2017-05-10 docs [@hiqsol]
+    - [2dd8b25] 2016-06-16 added Yii2 section to about page [@hiqsol]
+    - [a607125] 2016-06-09 added Installing to a custom path manual [@hiqsol]
+    - [e3cb136] 2016-06-03 added how it works on about page [@hiqsol]
+    - [ec7bbcd] 2017-04-27 Enhanced wording [@SilverFire]
+    - [d4fee59] 2017-04-25 Update documentation to use oomphinc/composer-installers-extender [@SilverFire]
+    - [87e2662] 2017-04-25 Fixed syntax error in AssetPackage [@SilverFire]
+    - [5a70619] 2017-04-24 Merge pull request #30 from edgardmessias/patch-1 [@SilverFire]
+    - [de93971] 2017-04-20 Updated example in about page [@edgardmessias]
+- Fixed use of `hidev`
+    - [eabafbb] 2017-05-10 fixed storage actions in goals [@hiqsol]
+    - [d8b5b87] 2017-05-10 added require hidev (to substitute yii) [@hiqsol]
+    - [4c94e8f] 2017-05-08 fixed tests [@hiqsol]
+    - [122874e] 2017-05-08 csfixed [@hiqsol]
+    - [5390524] 2017-05-05 fixed config for controllers [@hiqsol]
+    - [d89b68c] 2017-05-04 fixed hidev config for hidev 0.6 [@hiqsol]
+    - [b850cba] 2017-05-05 renamed configs `web`, `console` <- hisite, hidev [@hiqsol]
+- Added passing composer log into Yii
+    - [257b2f5] 2017-05-10 csfixed [@hiqsol]
+    - [b1a7d9c] 2017-05-10 Merge pull request #44 from `edgardmessias/composer_log` [@hiqsol]
+    - [0aa27f6] 2017-05-08 Added composer log into Yii [@edgardmessias]
+- Implemented package management using queues with [zhuravljov/yii2-queue]
+    - [ace352d] 2017-05-05 Merge pull request #42 from edgardmessias/fix-queue [@SilverFire]
+    - [7c5d01d] 2017-05-05 Fixed [zhuravljov/yii2-queue] API changes [@edgardmessias]
+    - [b07d11b] 2017-05-04 Updated to follow [zhuravljov/yii2-queue] API changes [@SilverFire]
+    - [a72bade] 2017-05-05 csfixed [@hiqsol]
+    - [7a3380c] 2017-05-05 Merge pull request #41 from edgardmessias/patch-6 [@hiqsol]
+    - [b781661] 2017-05-04 Ignored AliasPackage (Close #40) [@edgardmessias]
     - [7fb4ac1] 2017-03-30 Merge pull request #29 from zhuravljov/master [@SilverFire]
-    - [9e4c259] 2017-03-30 Last changes for zhuravljov/yii2-queue [zhuravljov@gmail.com]
+    - [9e4c259] 2017-03-30 Last changes for [zhuravljov/yii2-queue] [@zhuravljov]
     - [c0bfeb1] 2016-12-19 Do not save succesfully finished jobs in Queue [@SilverFire]
-    - [9eb09aa] 2016-12-07 Updated to follow changes zhuravljov/yii2-queue [zhuravljov@gmail.com]
-    - [cb803cb] 2016-12-06 Updated QueueController to follow changes in zhuravljov/yii2-queue [@SilverFire]
+    - [9eb09aa] 2016-12-07 Updated to follow changes [zhuravljov/yii2-queue] [@zhuravljov]
+    - [cb803cb] 2016-12-06 Updated QueueController to follow changes in [zhuravljov/yii2-queue] [@SilverFire]
     - [5ff526c] 2016-12-01 Added maintenance/update-expired action [@SilverFire]
     - [9515fd0] 2016-12-01 Refactored Storage - added StorageInterface, changes visibiliy of some method [@SilverFire]
     - [bc20b98] 2016-11-30 Fixed typo [@SilverFire]
+- Improved look, added color by stability in package details page
+    - [6438a47] 2017-05-04 Revert "Fixed styles" [@SilverFire]
+    - [b599663] 2017-05-04 Fixed styles [@SilverFire]
+    - [404f689] 2017-04-28 Code style adjustment [@SilverFire]
+    - [c226cff] 2017-04-28 Moved `_after_header` to Flat theme layout [@tafid]
+    - [7f43b83] 2017-04-28 Changed css styles [@tafid]
+    - [1ed2835] 2017-04-28 Added AppAsset bundle to config [@tafid]
+    - [5b0a29f] 2017-04-28 Added FontAwesome like defer [@tafid]
+    - [f5f7713] 2017-04-28 Added layouts for Original theme [@tafid]
+    - [9a8db4a] 2017-04-28 Added layouts for Flat theme [@tafid]
+    - [1aa2d23] 2017-04-28 Merge pull request #35 from edgardmessias/patch-5 [@SilverFire]
+    - [edcc58c] 2017-04-28 Added color by stability [@edgardmessias]
+- Added order for packages releases
+    - [f87848c] 2017-04-27 Merge pull request #32 from edgardmessias/patch-3 [@SilverFire]
+    - [0ea6a4a] 2017-04-27 Code style fixed [@SilverFire]
+    - [1ae0b89] 2017-04-27 Added order for packages releases [@edgardmessias]
+- Added `version_normalized`
+    - [76f75df] 2017-04-27 Merge pull request #31 from edgardmessias/patch-2 [@SilverFire]
+    - [383e494] 2017-04-27 Updated changelog [@SilverFire]
+    - [85a5314] 2017-04-26 Added `version_normalized` [@edgardmessias]
+- Added providing `require` to support dependencies of bower/npm packages
+    - [03c8992] 2016-08-13 added providing `require` to AssetPackage #14 [@hiqsol]
+- Added DB layer to store packages and their properties
+    - [d1130a1] 2016-11-30 Added packages table. Added duplication prevention. [@SilverFire]
 - Added dependencies auto resolving for new packages
     - [22ab667] 2016-11-30 Added Package dependencies resolving [@SilverFire]
     - [5a29a01] 2016-11-29 Added common config [@SilverFire]
@@ -31,20 +80,11 @@ hiqdev/asset-packagist commits history
     - [7d20e30] 2017-04-26 Enhanced error handling [@SilverFire]
     - [bdc0fb1] 2017-04-26 Enhanced package info displaying [@SilverFire]
     - [1c947e1] 2017-04-26 Bootstarap log module [@SilverFire]
-- Updated documentation
-    - [2dd8b25] 2016-06-16 added Yii2 section to about page [@hiqsol]
-    - [a607125] 2016-06-09 added Installing to a custom path manual [@hiqsol]
-    - [e3cb136] 2016-06-03 added how it works on about page [@hiqsol]
-    - [ec7bbcd] 2017-04-27 Enhanced wording [@SilverFire]
-    - [d4fee59] 2017-04-25 Update documentation to use oomphinc/composer-installers-extender [@SilverFire]
-    - [87e2662] 2017-04-25 Fixed syntax error in AssetPackage [@SilverFire]
-    - [5a70619] 2017-04-24 Merge pull request #30 from edgardmessias/patch-1 [@SilverFire]
-    - [de93971] 2017-04-20 Updated example in about page [edgardmessias@gmail.com]
-- Fixed sources to follow `fxp/composer-asset-plugin` API changes
+- Fixed sources to follow [fxpio/composer-asset-plugin] API changes
     - [59e4260] 2017-04-24 Fixed to follow FXP/composer-asset-plugin API changes [@SilverFire]
-- Added providing `require` to support dependencies of bower/npm packages
-    - [03c8992] 2016-08-13 added providing `require` to AssetPackage #14 [@hiqsol]
-- Fixed different issues
+- Fixed minor issues
+    - [c95600b] 2017-05-08 Merge pull request #43 from `edgardmessias/fix_urls` [@SilverFire]
+    - [2c47200] 2017-05-08 Fixed urls for use in urlManager [@edgardmessias]
     - [399d379] 2017-03-02 Merge pull request #27 from githubjeka/patch-1 [@hiqsol]
     - [0afdfd2] 2017-03-02 improved query param [et.coder@gmail.com]
     - [1a3454c] 2017-01-12 add github issue template [@hiqsol]
@@ -58,7 +98,7 @@ hiqdev/asset-packagist commits history
     - [90d9aee] 2017-04-21 added default `favicon.ico` (empty for the moment) [@hiqsol]
     - [5918e90] 2017-04-21 fixed namespace [@hiqsol]
     - [73f4c57] 2017-04-21 updated config, removed Bootstrap [@hiqsol]
-    - [d212aec] 2017-04-20 Added package type [edgardmessias@gmail.com]
+    - [d212aec] 2017-04-20 Added package type [@edgardmessias]
     - [c8357d5] 2016-07-06 fixed `AssetPackage::checkName()` [@hiqsol]
     - [25011fc] 2016-07-06 added `@composer` alias [@hiqsol]
     - [8ee6ad3] 2016-06-23 merged [@hiqsol]
@@ -89,7 +129,7 @@ hiqdev/asset-packagist commits history
     - [6452275] 2016-08-22 added noTitle param for flat theme [@hiqsol]
     - [cf3855f] 2016-08-22 added menu, simplified config [@hiqsol]
     - [62c099e] 2016-08-21 + require hisite-core and themes [@hiqsol]
-    - [442259c] 2016-08-20 + session_write_close in site/update [@hiqsol]
+    - [442259c] 2016-08-20 + `session_write_close` in site/update [@hiqsol]
     - [55e1777] 2016-08-13 redone bumping to use `chkipper` [@hiqsol]
 
 ## [0.1.0] - 2016-05-31
@@ -193,6 +233,8 @@ hiqdev/asset-packagist commits history
 
 ## [Development started] - 2016-04-02
 
+[zhuravljov/yii2-queue]: https://github.com/zhuravljov/yii2-queue
+[fxpio/composer-asset-plugin]: https://github.com/fxpio/composer-asset-plugin
 [@hiqsol]: https://github.com/hiqsol
 [sol@hiqdev.com]: https://github.com/hiqsol
 [@SilverFire]: https://github.com/SilverFire
@@ -201,6 +243,10 @@ hiqdev/asset-packagist commits history
 [andreyklochok@gmail.com]: https://github.com/tafid
 [@BladeRoot]: https://github.com/BladeRoot
 [bladeroot@gmail.com]: https://github.com/BladeRoot
+[@edgardmessias]: https://github.com/edgardmessias
+[edgardmessias@gmail.com]: https://github.com/edgardmessias
+[@zhuravljov]: https://github.com/zhuravljov
+[zhuravljov@gmail.com]: https://github.com/zhuravljov
 [4471376]: https://github.com/hiqdev/asset-packagist/commit/4471376
 [1f862c1]: https://github.com/hiqdev/asset-packagist/commit/1f862c1
 [80fb19c]: https://github.com/hiqdev/asset-packagist/commit/80fb19c
@@ -369,3 +415,39 @@ hiqdev/asset-packagist commits history
 [55e1777]: https://github.com/hiqdev/asset-packagist/commit/55e1777
 [Under development]: https://github.com/hiqdev/asset-packagist/compare/0.1.0...HEAD
 [0.1.0]: https://github.com/hiqdev/asset-packagist/releases/tag/0.1.0
+[257b2f5]: https://github.com/hiqdev/asset-packagist/commit/257b2f5
+[5b5f435]: https://github.com/hiqdev/asset-packagist/commit/5b5f435
+[b1a7d9c]: https://github.com/hiqdev/asset-packagist/commit/b1a7d9c
+[d8b5b87]: https://github.com/hiqdev/asset-packagist/commit/d8b5b87
+[eabafbb]: https://github.com/hiqdev/asset-packagist/commit/eabafbb
+[c95600b]: https://github.com/hiqdev/asset-packagist/commit/c95600b
+[0aa27f6]: https://github.com/hiqdev/asset-packagist/commit/0aa27f6
+[2c47200]: https://github.com/hiqdev/asset-packagist/commit/2c47200
+[4c94e8f]: https://github.com/hiqdev/asset-packagist/commit/4c94e8f
+[122874e]: https://github.com/hiqdev/asset-packagist/commit/122874e
+[b850cba]: https://github.com/hiqdev/asset-packagist/commit/b850cba
+[ace352d]: https://github.com/hiqdev/asset-packagist/commit/ace352d
+[7c5d01d]: https://github.com/hiqdev/asset-packagist/commit/7c5d01d
+[5390524]: https://github.com/hiqdev/asset-packagist/commit/5390524
+[a72bade]: https://github.com/hiqdev/asset-packagist/commit/a72bade
+[7a3380c]: https://github.com/hiqdev/asset-packagist/commit/7a3380c
+[d89b68c]: https://github.com/hiqdev/asset-packagist/commit/d89b68c
+[b781661]: https://github.com/hiqdev/asset-packagist/commit/b781661
+[6438a47]: https://github.com/hiqdev/asset-packagist/commit/6438a47
+[b599663]: https://github.com/hiqdev/asset-packagist/commit/b599663
+[b07d11b]: https://github.com/hiqdev/asset-packagist/commit/b07d11b
+[1aa2d23]: https://github.com/hiqdev/asset-packagist/commit/1aa2d23
+[404f689]: https://github.com/hiqdev/asset-packagist/commit/404f689
+[c226cff]: https://github.com/hiqdev/asset-packagist/commit/c226cff
+[7f43b83]: https://github.com/hiqdev/asset-packagist/commit/7f43b83
+[1ed2835]: https://github.com/hiqdev/asset-packagist/commit/1ed2835
+[5b0a29f]: https://github.com/hiqdev/asset-packagist/commit/5b0a29f
+[f5f7713]: https://github.com/hiqdev/asset-packagist/commit/f5f7713
+[9a8db4a]: https://github.com/hiqdev/asset-packagist/commit/9a8db4a
+[edcc58c]: https://github.com/hiqdev/asset-packagist/commit/edcc58c
+[f87848c]: https://github.com/hiqdev/asset-packagist/commit/f87848c
+[0ea6a4a]: https://github.com/hiqdev/asset-packagist/commit/0ea6a4a
+[1ae0b89]: https://github.com/hiqdev/asset-packagist/commit/1ae0b89
+[76f75df]: https://github.com/hiqdev/asset-packagist/commit/76f75df
+[383e494]: https://github.com/hiqdev/asset-packagist/commit/383e494
+[85a5314]: https://github.com/hiqdev/asset-packagist/commit/85a5314

@@ -1,16 +1,20 @@
-hiqdev/asset-packagist commits history
---------------------------------------
+# hiqdev/asset-packagist
 
 ## [Under development]
 
+- Updated documentation ([@hiqsol], [@SilverFire], [@edgardmessias])
+- Fixed use of `hidev` ([@hiqsol])
+- Added passing composer log into Yii ([@hiqsol], [@edgardmessias])
+- Implemented package management using queues with [zhuravljov/yii2-queue] ([@SilverFire], [@edgardmessias], [@hiqsol], [@zhuravljov])
+- Improved look, added color by stability in package details page ([@SilverFire], [@tafid], [@edgardmessias])
+- Added order for packages releases ([@SilverFire], [@edgardmessias])
+- Added `version_normalized` ([@SilverFire], [@edgardmessias])
+- Added providing `require` to support dependencies of bower/npm packages ([@hiqsol])
 - Added DB layer to store packages and their properties ([@SilverFire])
-- Implemented package management using queues ([@SilverFire], [zhuravljov@gmail.com])
 - Added dependencies auto resolving for new packages ([@SilverFire])
 - Added automatic package avoiding for corrupted packages, enhanced error handling ([@SilverFire])
-- Updated documentation ([@hiqsol], [@SilverFire], [edgardmessias@gmail.com])
-- Fixed sources to follow `fxp/composer-asset-plugin` API changes ([@SilverFire])
-- Added providing `require` to support dependencies of bower/npm packages ([@hiqsol])
-- Fixed different issues ([@hiqsol], [et.coder@gmail.com], [@SilverFire], [edgardmessias@gmail.com], [jo@surikat.pro])
+- Fixed sources to follow [fxpio/composer-asset-plugin] API changes ([@SilverFire])
+- Fixed minor issues ([@SilverFire], [@edgardmessias], [@hiqsol], [et.coder@gmail.com], [jo@surikat.pro])
 
 ## [0.1.0] - 2016-05-31
 
@@ -27,6 +31,8 @@ hiqdev/asset-packagist commits history
 
 ## [Development started] - 2016-04-02
 
+[zhuravljov/yii2-queue]: https://github.com/zhuravljov/yii2-queue
+[fxpio/composer-asset-plugin]: https://github.com/fxpio/composer-asset-plugin
 [@hiqsol]: https://github.com/hiqsol
 [sol@hiqdev.com]: https://github.com/hiqsol
 [@SilverFire]: https://github.com/SilverFire
@@ -35,5 +41,9 @@ hiqdev/asset-packagist commits history
 [andreyklochok@gmail.com]: https://github.com/tafid
 [@BladeRoot]: https://github.com/BladeRoot
 [bladeroot@gmail.com]: https://github.com/BladeRoot
+[@edgardmessias]: https://github.com/edgardmessias
+[edgardmessias@gmail.com]: https://github.com/edgardmessias
+[@zhuravljov]: https://github.com/zhuravljov
+[zhuravljov@gmail.com]: https://github.com/zhuravljov
 [Under development]: https://github.com/hiqdev/asset-packagist/compare/0.1.0...HEAD
 [0.1.0]: https://github.com/hiqdev/asset-packagist/releases/tag/0.1.0
