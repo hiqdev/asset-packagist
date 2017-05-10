@@ -12,11 +12,11 @@ namespace hiqdev\assetpackagist\models;
 
 use Composer\Composer;
 use Composer\Factory;
-use Composer\IO\NullIO;
 use Composer\Package\Link;
 use Exception;
 use Fxp\Composer\AssetPlugin\Repository\AssetVcsRepository;
 use hiqdev\assetpackagist\components\Storage;
+use hiqdev\assetpackagist\log\YiiLogIO;
 use hiqdev\assetpackagist\registry\BowerRegistry;
 use hiqdev\assetpackagist\registry\NpmRegistry;
 use hiqdev\assetpackagist\registry\RegistryFactory;
@@ -44,7 +44,7 @@ class AssetPackage extends Object
     protected $_updateTime;
 
     /**
-     * @var NullIO
+     * @var YiiLogIO
      */
     protected $_io;
     /**
@@ -156,7 +156,7 @@ class AssetPackage extends Object
     {
         if (static::$_commonComposer === null) {
             static::$_commonComposer = (new Factory())->createComposer(
-                new NullIO(),
+                new YiiLogIO(),
                 Yii::getAlias('@composer/composer.json'),
                 false,
                 Yii::getAlias('@composer')
@@ -186,7 +186,7 @@ class AssetPackage extends Object
     public function getIO()
     {
         if ($this->_io === null) {
-            $this->_io = new NullIO();
+            $this->_io = new YiiLogIO();
         }
 
         return $this->_io;
