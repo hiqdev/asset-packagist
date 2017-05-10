@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var yii\web\View
+ * @var yii\web\View $this
  * @var string $query the search query that was submitted
  * @var \hiqdev\assetpackagist\models\AssetPackage $package
  * @var bool $forceUpdate Whether the application must force package update
@@ -13,6 +13,8 @@ use yii\helpers\Url;
 
 $this->title = 'Search';
 $this->params['searchQuery'] = $query;
+$this->params['subtitle'] = $query;
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
     <div class="package-details">

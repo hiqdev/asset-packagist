@@ -1,8 +1,10 @@
 <?php
 
-/* @var $this yii\web\View */
+/** @var yii\web\View $this */
 
 $this->title = 'About';
+$this->params['subtitle'] = 'Composer + Bower + NPM = friends forever!';
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="site-about">
