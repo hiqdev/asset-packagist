@@ -1,37 +1,38 @@
 deploy:
     after:
-        - create-storage
-        - chmod-storage
+        - asset-storage/create
+        - asset-storage/chmod
         - migrate/up
 
-create-storage:
-    class:      directory
-    path:       '@storage'
-    lock:
-        once:       true
-        template:   empty
-        chmod:      '0664'
-    lastid:
-        once:       true
-        template:   empty
-        chmod:      '0664'
-    packages.json:
-        once:       true
-        template:   empty
-        chmod:      '0664'
-    p:
-        chmod:      '0775'
+asset-storage:
+    create:
+        class:      directory
+        path:       '@storage'
+        lock:
+            once:       true
+            template:   empty
+            chmod:      '0664'
+        lastid:
+            once:       true
+            template:   empty
+            chmod:      '0664'
+        packages.json:
+            once:       true
+            template:   empty
+            chmod:      '0664'
+        p:
+            chmod:      '0775'
 
-clean-storage:
-    class:      command
-    path:       '@storage'
-    sudo:       true
-    command:    rm -rf lock lastid packages.json p
+    clean:
+        class:      command
+        path:       '@storage'
+        sudo:       true
+        command:    rm -rf lock lastid packages.json p
 
-chmod-storage:
-    class:      command
-    path:       '@storage'
-    sudo:       true
-    commands:   |
-       chown -R www-data lock lastid packages.json p
-       chmod -R g+w,o-w lock lastid packages.json p
+    chmod:
+        class:      command
+        path:       '@storage'
+        sudo:       true
+        commands:   |
+           chown -R www-data lock lastid packages.json p
+           chmod -R g+w,o-w lock lastid packages.json p
