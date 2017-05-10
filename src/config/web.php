@@ -31,5 +31,10 @@ return [
                 'class' => \hiqdev\assetpackagist\menus\FooterMenu::class,
             ],
         ],
+        'definitions' => [
+            \hiqdev\themes\original\menus\NavbarMenu::class => [
+                'class' => \hiqdev\assetpackagist\menus\NavbarMenu::class,
+            ],
+        ],
     ],
 ];

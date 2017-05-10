@@ -22,9 +22,6 @@ class MainMenu extends \hiqdev\yii2\menus\Menu
     public function items()
     {
         return [
-            'search' => [
-                'label' => $this->render('main-search'),
-            ],
             'about' => [
                 'label' => Yii::t('hisite', 'About'),
                 'url' => ['/site/about'],
