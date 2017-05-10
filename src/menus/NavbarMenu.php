@@ -16,7 +16,7 @@ use Yii;
  * Navbar menu.
  * @author Andrii Vasyliev <sol@hiqdev.com>
  */
-class NavbarMenu extends \hiqdev\themes\original\menus\NavbarMenu
+class NavbarMenu extends \hiqdev\thememanager\menus\NavbarMenu
 {
     public function items()
     {
