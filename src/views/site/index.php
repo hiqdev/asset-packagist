@@ -12,7 +12,7 @@ $this->title = Yii::$app->name;
 $this->params['noTitle'] = true;
 
 ?>
-<div class="site-index">
+<div class="container site-index">
     <div style="text-align:center;margin:30px 0px 20px">
         <div>
             <img src="<?= $logoUrl ?>/composer.png" height="140px">
@@ -59,7 +59,7 @@ $this->params['noTitle'] = true;
             <div class="col-lg-4">
                 <h2>Why?</h2>
 
-                <p>Got tired of <code><a href="https://github.com/francoispluchino/composer-asset-plugin">fxp/composer-asset-plugin</a></code>.
+                <p>Got tired of <code><a href="https://github.com/fxpio/composer-asset-plugin">fxp/composer-asset-plugin</a></code>.
                 </p>
                 <p>
                     It's a good project with nice idea and good implementation.
