@@ -24,12 +24,16 @@ return [
             'password' => $params['db.password'],
             'charset' => 'utf8',
         ],
+        'mutex' => [
+            'class' => \yii\mutex\MysqlMutex::class,
+            'db' => 'db',
+        ],
         'queue' => [
             'class' => \zhuravljov\yii\queue\db\Queue::class,
             'db' => 'db',
             'tableName' => '{{%queue}}',
             'channel' => 'package',
-            'mutex' => \yii\mutex\MysqlMutex::class,
+            'mutex' => 'mutex',
             'deleteReleased' => true,
         ],
         'packageStorage' => [

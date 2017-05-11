@@ -11,7 +11,6 @@
 namespace hiqdev\assetpackagist\components;
 
 use hiqdev\assetpackagist\exceptions\AssetFileStorageException;
-use hiqdev\assetpackagist\helpers\Locker;
 use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
 use yii\base\Component;
@@ -30,13 +29,22 @@ class Storage extends Component implements StorageInterface
         $this->_path = Yii::getAlias('@storage', false);
     }
 
-    protected function getLocker()
+    protected function acquireLock()
     {
-        if ($this->_locker === null) {
-            $this->_locker = Locker::getInstance($this->buildPath('lock')); // TODO: get rid of singleton
-        }
+        /* @var $mutex \yii\mutex\Mutex */
+        $mutex = Yii::$app->mutex;
 
-        return $this->_locker;
+        if (!$mutex->acquire('lock', 5)) {
+            throw new \Exception('failed get lock');
+        }
+    }
+
+    protected function releaseLock()
+    {
+        /* @var $mutex \yii\mutex\Mutex */
+        $mutex = Yii::$app->mutex;
+
+        $mutex->release('lock');
     }
 
     /**
@@ -44,12 +52,12 @@ class Storage extends Component implements StorageInterface
      */
     public function getNextId()
     {
-        $this->getLocker()->lock();
+        $this->acquireLock();
         {
             $nextID = $this->readLastId() + 1;
             $this->writeLastId($nextID);
         }
-        $this->getLocker()->release();
+        $this->releaseLock();
 
         return $nextID;
     }
@@ -89,7 +97,7 @@ class Storage extends Component implements StorageInterface
         $path = $this->buildHashedPath($name, $hash);
         $latestPath = $this->buildHashedPath($name);
         if (!file_exists($path)) {
-            $this->getLocker()->lock();
+            $this->acquireLock();
             try {
                 if ($this->mkdir(dirname($path)) === false) {
                     throw new AssetFileStorageException('Failed to create a directory for asset-package', $package);
@@ -102,7 +110,7 @@ class Storage extends Component implements StorageInterface
                 }
                 $this->writeProviderLatest($name, $hash);
             } finally {
-                $this->getLocker()->release();
+                $this->releaseLock();
             }
         } else {
             touch($latestPath);
@@ -162,7 +170,7 @@ class Storage extends Component implements StorageInterface
         $path = $this->buildHashedPath('provider-latest', $hash);
 
         if (!file_exists($path)) {
-            $this->getLocker()->lock();
+            $this->acquireLock();
 
             try {
                 if ($this->mkdir(dirname($path)) === false) {
@@ -176,7 +184,7 @@ class Storage extends Component implements StorageInterface
                 }
                 $this->writePackagesJson($hash);
             } finally {
-                $this->getLocker()->release();
+                $this->releaseLock();
             }
         } else {
             touch($latestPath);
@@ -195,7 +203,7 @@ class Storage extends Component implements StorageInterface
                 ],
             ],
         ];
-        $this->getLocker()->lock();
+        $this->acquireLock();
         $filename = $this->buildPath('packages.json');
         try {
             if (file_put_contents($filename, Json::encode($data)) === false) {
@@ -203,7 +211,7 @@ class Storage extends Component implements StorageInterface
             }
             touch($filename);
         } finally {
-            $this->getLocker()->release();
+            $this->releaseLock();
         }
     }
 
