@@ -6,7 +6,7 @@
 use yii\helpers\Html;
 
 $this->title = 'Contact';
-$this->params['subtitle'] = '<a href="https://github.com/hiqdev/asset-packagist/issues">GitHub issues</a> is the preferred way';
+$this->params['subtitle'] = 'GitHub issues is the preferred way';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
