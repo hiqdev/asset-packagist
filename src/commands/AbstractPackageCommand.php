@@ -22,6 +22,11 @@ abstract class AbstractPackageCommand extends Component implements Job
     const EVENT_AFTER_RUN = 'afterRun';
 
     /**
+     * @var string
+     */
+    protected $fullName;
+
+    /**
      * @var AssetPackage
      */
     protected $package;
@@ -57,8 +62,18 @@ abstract class AbstractPackageCommand extends Component implements Job
     {
         parent::__construct($config);
 
+        $this->fullName = $package->getFullName();
         $this->package = $package;
         $this->packageRepository = $packageRepository;
+    }
+    
+    /**
+     * Serialize only the name of package for more performance
+     *
+     * @void
+     */
+    public function __sleep() {
+        return ['fullName'];
     }
 
     /**
@@ -68,6 +83,9 @@ abstract class AbstractPackageCommand extends Component implements Job
      */
     public function __wakeup()
     {
+        if($this->fullName){
+            $this->package = AssetPackage::fromFullName($this->fullName);
+        }
         $this->package->load();
         $this->packageRepository = Yii::createObject(PackageRepository::class);
     }
