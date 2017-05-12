@@ -233,6 +233,7 @@ class AssetPackage extends Object
     {
         $releases = [];
 
+        /** @var $package \Fxp\Composer\AssetPlugin\Package\AbstractLazyCompletePackage */
         foreach ($repository->getPackages() as $package) {
             if ($package instanceof \Composer\Package\AliasPackage) {
                 continue;
@@ -249,6 +250,10 @@ class AssetPackage extends Object
             ];
             if ($require) {
                 $release['require'] = $require;
+            }
+            $extra = $package->getExtra();
+            if ($extra && isset($extra['branch-alias'])) {
+                $release['extra'] = ['branch-alias' => $extra['branch-alias']];
             }
             if ($package->getDistUrl()) {
                 $release['dist'] = [
