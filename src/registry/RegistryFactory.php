@@ -30,14 +30,7 @@ use yii\di\Instance;
 class RegistryFactory extends Object
 {
     /**
-     * @var array
-     */
-    public $registryMap = [
-        //'bower' => BowerRegistry::class,
-        //'npm'   => NpmRegistry::class,
-    ];
-
-    /**
+     * The composer output.
      * @var string|IOInterface
      */
     public $io = [
@@ -85,38 +78,49 @@ class RegistryFactory extends Object
 
         $this->io = Instance::ensure($this->io, IOInterface::class);
 
+        /**
+         * Factory::createConfig load the composer configuration in COMPOSER_HOME
+         * First read COMPOSER_HOME/config.json and COMPOSER_HOME/auth.json.
+         */
         $this->composerConfig = Factory::createConfig($this->io);
 
+        /**
+         * Required to read authentication tokens (Ex. GitHub API)
+         * See https://getcomposer.org/doc/articles/troubleshooting.md#api-rate-limit-and-oauth-tokens.
+         */
         $this->io->loadConfiguration($this->composerConfig);
 
+        /**
+         * Create RepositoryManager with defaults repositories classes.
+         */
         $this->repositoryManager = RepositoryFactory::manager($this->io, $this->composerConfig);
 
+        /**
+         * Read fxp/composer-asset-plugin config
+         * See https://github.com/fxpio/composer-asset-plugin/blob/master/Resources/doc/index.md
+         * Note: The "COMPOSER_HOME/config.json" file is already the "config" key.
+         */
         $arrayConfig = [];
         if ($this->composerConfig->has('fxp-asset')) {
             $arrayConfig = $this->composerConfig->get('fxp-asset');
         }
 
+        /**
+         * Enabling the fxp/composer-asset-plugin plugin
+         * See activate method in https://github.com/fxpio/composer-asset-plugin/blob/master/FxpAssetPlugin.php.
+         */
         $this->assetConfig = new AssetConfig($arrayConfig);
 
+        //Dummy Package
         $this->rootPackage = new RootPackage('asset-packagist', '0.0.0.0', '0.0.0');
-
         $this->installationManager = new InstallationManager();
-
         $this->packageFilter = new VcsPackageFilter($this->assetConfig, $this->rootPackage, $this->installationManager);
-
         $this->assetRepositoryManager = new AssetRepositoryManager($this->io, $this->repositoryManager, $this->assetConfig, $this->packageFilter);
 
-        //This not allow override class
+        /**
+         * Define default repositories for Bower and NPM.
+         */
         AssetPlugin::addRegistryRepositories($this->assetRepositoryManager, $this->packageFilter, $this->assetConfig);
-        //
-        //This allow override class
-        //$this->registryMap = \yii\helpers\ArrayHelper::merge(Assets::getDefaultRegistries(), $this->registryMap);
-        //foreach ($this->classMap as $assetType => $class) {
-        //    $repoConfig = AssetPlugin::createRepositoryConfig($this->assetRepositoryManager, $this->packageFilter, $this->assetConfig, $assetType);
-        //    $this->repositoryManager->setRepositoryClass($assetType, $class);
-        //    $this->repositoryManager->addRepository($this->repositoryManager->createRepository($assetType, $repoConfig));
-        //}
-
         AssetPlugin::setVcsTypeRepositories($this->repositoryManager);
     }
 
