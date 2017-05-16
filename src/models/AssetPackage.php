@@ -202,6 +202,9 @@ class AssetPackage extends Object
             }
         }
 
+        //Sort before save
+        \hiqdev\assetpackagist\components\PackageUtil::sort($releases);
+
         return $releases;
     }
 
