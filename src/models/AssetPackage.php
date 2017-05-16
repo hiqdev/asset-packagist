@@ -10,15 +10,9 @@
 
 namespace hiqdev\assetpackagist\models;
 
-use Composer\Composer;
-use Composer\Factory;
 use Composer\Package\Link;
 use Exception;
-use Fxp\Composer\AssetPlugin\Repository\AssetVcsRepository;
 use hiqdev\assetpackagist\components\Storage;
-use hiqdev\assetpackagist\log\YiiLogIO;
-use hiqdev\assetpackagist\registry\BowerRegistry;
-use hiqdev\assetpackagist\registry\NpmRegistry;
 use hiqdev\assetpackagist\registry\RegistryFactory;
 use Yii;
 use yii\base\Object;
@@ -33,28 +27,11 @@ class AssetPackage extends Object
      */
     protected $_releases = [];
     protected $_saved;
-    /**
-     * @var AssetVcsRepository|BowerRegistry|NpmRegistry
-     */
-    protected $_registry;
 
     /**
      * @var integer UNIX Epoch timestamp of the latest package update
      */
     protected $_updateTime;
-
-    /**
-     * @var YiiLogIO
-     */
-    protected $_io;
-    /**
-     * @var Composer
-     */
-    protected $_composer;
-    /**
-     * @var Composer
-     */
-    protected static $_commonComposer;
 
     public static function normalizeName($name)
     {
@@ -82,13 +59,12 @@ class AssetPackage extends Object
         $this->_name = $name;
     }
 
+    /**
+     * @return RegistryFactory
+     */
     public function getRegistry()
     {
-        if ($this->_registry === null) {
-            $this->_registry = RegistryFactory::getRegistry($this->getType(), $this->getComposer()->getRepositoryManager());
-        }
-
-        return $this->_registry;
+        return Yii::$app->get('registryFactory');
     }
 
     public function checkType($type)
@@ -150,49 +126,6 @@ class AssetPackage extends Object
     }
 
     /**
-     * @return Composer
-     */
-    public static function getCommonComposer()
-    {
-        if (static::$_commonComposer === null) {
-            static::$_commonComposer = (new Factory())->createComposer(
-                new YiiLogIO(),
-                Yii::getAlias('@composer/composer.json'),
-                false,
-                Yii::getAlias('@composer')
-            );
-        }
-
-        return static::$_commonComposer;
-    }
-
-    public function setComposer($value)
-    {
-        $this->_composer = $value;
-    }
-
-    /**
-     * @return Composer
-     */
-    public function getComposer()
-    {
-        if ($this->_composer === null) {
-            $this->_composer = static::getCommonComposer();
-        }
-
-        return $this->_composer;
-    }
-
-    public function getIO()
-    {
-        if ($this->_io === null) {
-            $this->_io = new YiiLogIO();
-        }
-
-        return $this->_io;
-    }
-
-    /**
      * findOne.
      *
      * @param string $type
@@ -219,21 +152,21 @@ class AssetPackage extends Object
 
     public function update()
     {
-        $repo = $this->getRegistry()->buildVcsRepository($this->getName());
-        $this->_releases = $this->prepareReleases($repo);
+        $pool = $this->getRegistry()->getPool();
+        $this->_releases = $this->prepareReleases($pool);
         $this->getStorage()->writePackage($this);
         $this->load();
     }
 
     /**
-     * @param AssetVcsRepository $repository
+     * @param \Composer\DependencyResolver\Pool $pool
      * @return array
      */
-    public function prepareReleases($repository)
+    public function prepareReleases($pool)
     {
         $releases = [];
 
-        foreach ($repository->getPackages() as $package) {
+        foreach ($pool->whatProvides($this->getFullName()) as $package) {
             if ($package instanceof \Composer\Package\AliasPackage) {
                 continue;
             }

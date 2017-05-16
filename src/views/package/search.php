@@ -22,9 +22,14 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::encode($package->getFullName()) ?>
             <small class="repository-link">
                 <?php
+                if ($package->getType() === 'npm') {
+                    $link = 'https://npmjs.com/package/' . $package->getName();
+                } elseif ($package->getType() === 'bower') {
+                    $link = 'https://bower.io/search?q=' . $package->getName();
+                }
                 echo Html::a(
                     Yii::t('app', 'see on {registry}', ['registry' => Inflector::titleize($package->getType())]),
-                    $package->getRegistry()->buildPackageUrl($package->getName())
+                    $link
                 ) ?>
             </small>
         </h1>
