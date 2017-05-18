@@ -10,8 +10,6 @@
 
 namespace hiqdev\assetpackagist\menus;
 
-use Yii;
-
 /**
  * Navbar menu.
  * @author Andrii Vasyliev <sol@hiqdev.com>

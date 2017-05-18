@@ -38,7 +38,7 @@ class RegistryFactory extends Object
     ];
 
     /**
-     * @var ComposerConfig 
+     * @var ComposerConfig
      */
     public $composerConfig;
 
@@ -48,27 +48,27 @@ class RegistryFactory extends Object
     public $repositoryManager;
 
     /**
-     * @var AssetConfig 
+     * @var AssetConfig
      */
     public $assetConfig;
 
     /**
-     * @var RootPackage 
+     * @var RootPackage
      */
     public $rootPackage;
 
     /**
-     * @var InstallationManager 
+     * @var InstallationManager
      */
     public $installationManager;
 
     /**
-     * @var VcsPackageFilter 
+     * @var VcsPackageFilter
      */
     public $packageFilter;
 
     /**
-     * @var AssetRepositoryManager 
+     * @var AssetRepositoryManager
      */
     public $assetRepositoryManager;
 

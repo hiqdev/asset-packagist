@@ -66,13 +66,14 @@ abstract class AbstractPackageCommand extends Component implements Job
         $this->package = $package;
         $this->packageRepository = $packageRepository;
     }
-    
+
     /**
-     * Serialize only the name of package for more performance
+     * Serialize only the name of package for more performance.
      *
      * @void
      */
-    public function __sleep() {
+    public function __sleep()
+    {
         return ['fullName'];
     }
 
@@ -83,7 +84,7 @@ abstract class AbstractPackageCommand extends Component implements Job
      */
     public function __wakeup()
     {
-        if($this->fullName){
+        if ($this->fullName) {
             $this->package = AssetPackage::fromFullName($this->fullName);
         }
         $this->package->load();

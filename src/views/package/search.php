@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var yii\web\View $this
+ * @var yii\web\View
  * @var string $query the search query that was submitted
  * @var \hiqdev\assetpackagist\models\AssetPackage $package
  * @var bool $forceUpdate Whether the application must force package update
