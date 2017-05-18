@@ -39,6 +39,9 @@ return [
         'packageStorage' => [
             'class' => \hiqdev\assetpackagist\components\Storage::class,
         ],
+        'registryFactory' => [
+            'class' => hiqdev\assetpackagist\registry\RegistryFactory::class,
+        ],
     ],
     'container' => [
         'singletons' => [

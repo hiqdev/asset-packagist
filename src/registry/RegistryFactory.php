@@ -10,64 +10,129 @@
 
 namespace hiqdev\assetpackagist\registry;
 
+use Composer\Config as ComposerConfig;
+use Composer\DependencyResolver\Pool;
+use Composer\Factory;
+use Composer\Installer\InstallationManager;
+use Composer\IO\IOInterface;
+use Composer\Package\RootPackage;
+use Composer\Repository\CompositeRepository;
+use Composer\Repository\RepositoryFactory;
 use Composer\Repository\RepositoryManager;
-use Fxp\Composer\AssetPlugin\Config\Config;
-use Fxp\Composer\AssetPlugin\Repository\AbstractAssetsRepository;
+use Fxp\Composer\AssetPlugin\Config\Config as AssetConfig;
 use Fxp\Composer\AssetPlugin\Repository\AssetRepositoryManager;
 use Fxp\Composer\AssetPlugin\Repository\VcsPackageFilter;
+use Fxp\Composer\AssetPlugin\Util\AssetPlugin;
 use hiqdev\assetpackagist\log\YiiLogIO;
+use yii\base\Object;
+use yii\di\Instance;
 
-class RegistryFactory
+class RegistryFactory extends Object
 {
     /**
-     * @var array
+     * The composer output.
+     * @var string|IOInterface
      */
-    protected static $classes = [
-        'bower' => BowerRegistry::class,
-        'npm'   => NpmRegistry::class,
+    public $io = [
+        'class' => YiiLogIO::class,
     ];
 
     /**
-     * @var AbstractAssetsRepository[]
+     * @var ComposerConfig 
      */
-    public static $registries = [];
+    public $composerConfig;
 
     /**
-     * @param string $type
-     * @param RepositoryManager $rm
-     * @return AbstractAssetsRepository|BowerRegistry|NpmRegistry
+     * @var RepositoryManager
      */
-    public static function getRegistry($type, $rm)
+    public $repositoryManager;
+
+    /**
+     * @var AssetConfig 
+     */
+    public $assetConfig;
+
+    /**
+     * @var RootPackage 
+     */
+    public $rootPackage;
+
+    /**
+     * @var InstallationManager 
+     */
+    public $installationManager;
+
+    /**
+     * @var VcsPackageFilter 
+     */
+    public $packageFilter;
+
+    /**
+     * @var AssetRepositoryManager 
+     */
+    public $assetRepositoryManager;
+
+    public function init()
     {
-        if (!isset(static::$registries[$type])) {
-            static::$registries[$type] = static::buildRegistry($type, $rm);
+        parent::init();
+
+        $this->io = Instance::ensure($this->io, IOInterface::class);
+
+        /**
+         * Factory::createConfig load the composer configuration in COMPOSER_HOME
+         * First read COMPOSER_HOME/config.json and COMPOSER_HOME/auth.json.
+         */
+        $this->composerConfig = Factory::createConfig($this->io);
+
+        /**
+         * Required to read authentication tokens (Ex. GitHub API)
+         * See https://getcomposer.org/doc/articles/troubleshooting.md#api-rate-limit-and-oauth-tokens.
+         */
+        $this->io->loadConfiguration($this->composerConfig);
+
+        /**
+         * Create RepositoryManager with defaults repositories classes.
+         */
+        $this->repositoryManager = RepositoryFactory::manager($this->io, $this->composerConfig);
+
+        /**
+         * Read fxp/composer-asset-plugin config
+         * See https://github.com/fxpio/composer-asset-plugin/blob/master/Resources/doc/index.md
+         * Note: The "COMPOSER_HOME/config.json" file is already the "config" key.
+         */
+        $arrayConfig = [];
+        if ($this->composerConfig->has('fxp-asset')) {
+            $arrayConfig = $this->composerConfig->get('fxp-asset');
         }
 
-        return static::$registries[$type];
+        /**
+         * Enabling the fxp/composer-asset-plugin plugin
+         * See activate method in https://github.com/fxpio/composer-asset-plugin/blob/master/FxpAssetPlugin.php.
+         */
+        $this->assetConfig = new AssetConfig($arrayConfig);
+
+        //Dummy Package
+        $this->rootPackage = new RootPackage('asset-packagist', '0.0.0.0', '0.0.0');
+        $this->installationManager = new InstallationManager();
+        $this->packageFilter = new VcsPackageFilter($this->assetConfig, $this->rootPackage, $this->installationManager);
+        $this->assetRepositoryManager = new AssetRepositoryManager($this->io, $this->repositoryManager, $this->assetConfig, $this->packageFilter);
+
+        /**
+         * Define default repositories for Bower and NPM.
+         */
+        AssetPlugin::addRegistryRepositories($this->assetRepositoryManager, $this->packageFilter, $this->assetConfig);
+        AssetPlugin::setVcsTypeRepositories($this->repositoryManager);
     }
 
-    /**
-     * @param string $type
-     * @param RepositoryManager $rm
-     * @return mixed
-     */
-    protected static function buildRegistry($type, $rm)
+    public function getRepository()
     {
-        $class = static::$classes[$type];
-        $rm->setRepositoryClass($type, $class);
-
-        $config = [
-            'asset-repository-manager' => self::createAssetRepositoryManager($rm),
-            'asset-options'      => [],
-        ];
-
-        return $rm->createRepository($type, $config);
+        return new CompositeRepository($this->repositoryManager->getRepositories());
     }
 
-    public static function createAssetRepositoryManager($repositoryManager)
+    public function getPool($minimumStability = 'dev')
     {
-        $filter = (new \ReflectionClass(VcsPackageFilter::class))->newInstanceWithoutConstructor();
-
-        return new AssetRepositoryManager(new YiiLogIO(), $repositoryManager, new Config([]), $filter);
+        $pool = new Pool($minimumStability);
+        $pool->addRepository($this->getRepository());
+        return $pool;
     }
 }
