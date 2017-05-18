@@ -2,18 +2,17 @@
 
 ## [Under development]
 
+- Refactored internals: RegistryFactory, Mutex <- Locker, logging ([@hiqsol], [@edgardmessias])
 - Updated documentation ([@hiqsol], [@SilverFire], [@edgardmessias])
 - Fixed use of `hidev` ([@hiqsol])
-- Added passing composer log into Yii ([@hiqsol], [@edgardmessias])
 - Implemented package management using queues with [zhuravljov/yii2-queue] ([@SilverFire], [@edgardmessias], [@hiqsol], [@zhuravljov])
-- Improved look, added color by stability in package details page ([@SilverFire], [@tafid], [@edgardmessias])
-- Added order for packages releases ([@SilverFire], [@edgardmessias])
+- Improved look, moved search form to NavBar, added color by stability in package details page ([@hiqsol], [@SilverFire], [@tafid], [@edgardmessias])
+- Added order for packages releases ([@edgardmessias], [@SilverFire])
 - Added `version_normalized` ([@SilverFire], [@edgardmessias])
 - Added providing `require` to support dependencies of bower/npm packages ([@hiqsol])
 - Added DB layer to store packages and their properties ([@SilverFire])
 - Added dependencies auto resolving for new packages ([@SilverFire])
 - Added automatic package avoiding for corrupted packages, enhanced error handling ([@SilverFire])
-- Fixed sources to follow [fxpio/composer-asset-plugin] API changes ([@SilverFire])
 - Fixed minor issues ([@SilverFire], [@edgardmessias], [@hiqsol], [et.coder@gmail.com], [jo@surikat.pro])
 
 ## [0.1.0] - 2016-05-31

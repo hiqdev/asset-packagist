@@ -2,6 +2,18 @@
 
 ## [Under development]
 
+- Refactored internals: RegistryFactory, Mutex <- Locker, logging
+    - [cd0f3cc] 2017-05-18 csfixed [@hiqsol]
+    - [b76fbcd] 2017-05-18 Merge pull request #50 from edgardmessias/refactored [@hiqsol]
+    - [dc47aff] 2017-05-16 Added comments [@edgardmessias]
+    - [863dea3] 2017-05-16 Refactored RegistryFactory [@edgardmessias]
+    - [1f0abde] 2017-05-12 Merge pull request #48 from `edgardmessias/locker_to_mutex` [@hiqsol]
+    - [035f1ea] 2017-05-12 Merge pull request #49 from `edgardmessias/queue_jobs` [@hiqsol]
+    - [6f7aaae] 2017-05-11 Serialize only the name of package for more performance in queue jobs [@edgardmessias]
+    - [ab5e2bd] 2017-05-11 Switch Locker to Mutex (Close #47) [@edgardmessias]
+    - [257b2f5] 2017-05-10 csfixed [@hiqsol]
+    - [b1a7d9c] 2017-05-10 Merge pull request #44 from `edgardmessias/composer_log` [@hiqsol]
+    - [0aa27f6] 2017-05-08 Added composer log into Yii [@edgardmessias]
 - Updated documentation
     - [5b5f435] 2017-05-10 docs [@hiqsol]
     - [2dd8b25] 2016-06-16 added Yii2 section to about page [@hiqsol]
@@ -20,10 +32,6 @@
     - [5390524] 2017-05-05 fixed config for controllers [@hiqsol]
     - [d89b68c] 2017-05-04 fixed hidev config for hidev 0.6 [@hiqsol]
     - [b850cba] 2017-05-05 renamed configs `web`, `console` <- hisite, hidev [@hiqsol]
-- Added passing composer log into Yii
-    - [257b2f5] 2017-05-10 csfixed [@hiqsol]
-    - [b1a7d9c] 2017-05-10 Merge pull request #44 from `edgardmessias/composer_log` [@hiqsol]
-    - [0aa27f6] 2017-05-08 Added composer log into Yii [@edgardmessias]
 - Implemented package management using queues with [zhuravljov/yii2-queue]
     - [ace352d] 2017-05-05 Merge pull request #42 from edgardmessias/fix-queue [@SilverFire]
     - [7c5d01d] 2017-05-05 Fixed [zhuravljov/yii2-queue] API changes [@edgardmessias]
@@ -39,7 +47,15 @@
     - [5ff526c] 2016-12-01 Added maintenance/update-expired action [@SilverFire]
     - [9515fd0] 2016-12-01 Refactored Storage - added StorageInterface, changes visibiliy of some method [@SilverFire]
     - [bc20b98] 2016-11-30 Fixed typo [@SilverFire]
-- Improved look, added color by stability in package details page
+- Improved look, moved search form to NavBar, added color by stability in package details page
+    - [33befd4] 2017-05-11 added container class in outer div [@hiqsol]
+    - [856c104] 2017-05-10 added breadcrumbs and subtitle for pages [@hiqsol]
+    - [6aa8285] 2017-05-10 fixed navbar menu [@hiqsol]
+    - [7f3a5b4] 2017-05-10 removed flat theme tuning views [@hiqsol]
+    - [bbbb7b5] 2017-05-10 added NavbarMenu with search form [@hiqsol]
+    - [ca928cf] 2017-05-10 moved theme tuning to views/themes [@hiqsol]
+    - [cd5c912] 2017-05-10 added search form into main menu [@hiqsol]
+    - [300594c] 2017-05-10 removed original theme tuning [@hiqsol]
     - [6438a47] 2017-05-04 Revert "Fixed styles" [@SilverFire]
     - [b599663] 2017-05-04 Fixed styles [@SilverFire]
     - [404f689] 2017-04-28 Code style adjustment [@SilverFire]
@@ -52,6 +68,7 @@
     - [1aa2d23] 2017-04-28 Merge pull request #35 from edgardmessias/patch-5 [@SilverFire]
     - [edcc58c] 2017-04-28 Added color by stability [@edgardmessias]
 - Added order for packages releases
+    - [8542c16] 2017-05-16 Refactored package sort [@edgardmessias]
     - [f87848c] 2017-04-27 Merge pull request #32 from edgardmessias/patch-3 [@SilverFire]
     - [0ea6a4a] 2017-04-27 Code style fixed [@SilverFire]
     - [1ae0b89] 2017-04-27 Added order for packages releases [@edgardmessias]
@@ -80,9 +97,8 @@
     - [7d20e30] 2017-04-26 Enhanced error handling [@SilverFire]
     - [bdc0fb1] 2017-04-26 Enhanced package info displaying [@SilverFire]
     - [1c947e1] 2017-04-26 Bootstarap log module [@SilverFire]
-- Fixed sources to follow [fxpio/composer-asset-plugin] API changes
-    - [59e4260] 2017-04-24 Fixed to follow FXP/composer-asset-plugin API changes [@SilverFire]
 - Fixed minor issues
+    - [59e4260] 2017-04-24 Fixed to follow FXP/composer-asset-plugin API changes [@SilverFire]
     - [c95600b] 2017-05-08 Merge pull request #43 from `edgardmessias/fix_urls` [@SilverFire]
     - [2c47200] 2017-05-08 Fixed urls for use in urlManager [@edgardmessias]
     - [399d379] 2017-03-02 Merge pull request #27 from githubjeka/patch-1 [@hiqsol]
@@ -451,3 +467,20 @@
 [76f75df]: https://github.com/hiqdev/asset-packagist/commit/76f75df
 [383e494]: https://github.com/hiqdev/asset-packagist/commit/383e494
 [85a5314]: https://github.com/hiqdev/asset-packagist/commit/85a5314
+[cd0f3cc]: https://github.com/hiqdev/asset-packagist/commit/cd0f3cc
+[b76fbcd]: https://github.com/hiqdev/asset-packagist/commit/b76fbcd
+[dc47aff]: https://github.com/hiqdev/asset-packagist/commit/dc47aff
+[8542c16]: https://github.com/hiqdev/asset-packagist/commit/8542c16
+[863dea3]: https://github.com/hiqdev/asset-packagist/commit/863dea3
+[1f0abde]: https://github.com/hiqdev/asset-packagist/commit/1f0abde
+[035f1ea]: https://github.com/hiqdev/asset-packagist/commit/035f1ea
+[6f7aaae]: https://github.com/hiqdev/asset-packagist/commit/6f7aaae
+[ab5e2bd]: https://github.com/hiqdev/asset-packagist/commit/ab5e2bd
+[33befd4]: https://github.com/hiqdev/asset-packagist/commit/33befd4
+[856c104]: https://github.com/hiqdev/asset-packagist/commit/856c104
+[6aa8285]: https://github.com/hiqdev/asset-packagist/commit/6aa8285
+[7f3a5b4]: https://github.com/hiqdev/asset-packagist/commit/7f3a5b4
+[bbbb7b5]: https://github.com/hiqdev/asset-packagist/commit/bbbb7b5
+[ca928cf]: https://github.com/hiqdev/asset-packagist/commit/ca928cf
+[cd5c912]: https://github.com/hiqdev/asset-packagist/commit/cd5c912
+[300594c]: https://github.com/hiqdev/asset-packagist/commit/300594c
