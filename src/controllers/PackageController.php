@@ -15,6 +15,7 @@ use hiqdev\assetpackagist\commands\PackageUpdateCommand;
 use hiqdev\assetpackagist\exceptions\CorruptedPackageException;
 use hiqdev\assetpackagist\exceptions\PackageNotExistsException;
 use hiqdev\assetpackagist\exceptions\UpdateRateLimitException;
+use hiqdev\assetpackagist\librariesio\ProjectDataProvider;
 use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
 use yii\filters\VerbFilter;
@@ -63,14 +64,32 @@ class PackageController extends Controller
         }
         $package->load();
 
-        return $this->renderPartial('details', ['package' => $package]);
+        return $this->renderPartial('versions', ['package' => $package]);
     }
 
-    public function actionSearch($query)
+    public function actionSearch($query, $platform = null)
+    {
+        $dataProvider = new ProjectDataProvider();
+        $dataProvider->query = $query;
+        $dataProvider->platform = $platform;
+
+        $params = [
+            'query' => $query,
+            'platform' => $platform,
+            'dataProvider' => $dataProvider,
+        ];
+
+        return $this->render('search', $params);
+    }
+
+    public function actionDetail($fullname)
     {
         try {
-            $package = $this->getAssetPackage($query);
-            $params = ['package' => $package, 'query' => $query, 'forceUpdate' => false];
+            $package = $this->getAssetPackage($fullname);
+            $params = [
+                'package' => $package,
+                'forceUpdate' => false,
+            ];
 
             if ($package->canAutoUpdate()) {
                 $params['forceUpdate'] = true;
@@ -79,7 +98,7 @@ class PackageController extends Controller
             return $this->render('wrong-name', compact('query'));
         }
 
-        return $this->render('search', $params);
+        return $this->render('details', $params);
     }
 
     /**

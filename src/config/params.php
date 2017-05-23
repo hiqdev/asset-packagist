@@ -9,9 +9,11 @@
  */
 
 return [
-    'favicon.ico'   => '@hiqdev/assetpackagist/assets/images/favicon.ico',
+    'favicon.ico'         => '@hiqdev/assetpackagist/assets/images/favicon.ico',
 
-    'db.name'       => 'asset_packagist',
-    'db.username'   => 'asset-packagist',
-    'db.password'   => '',
+    'db.name'             => 'asset_packagist',
+    'db.username'         => 'asset-packagist',
+    'db.password'         => '',
+
+    'librariesio.api_key' => '',
 ];

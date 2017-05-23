@@ -42,6 +42,10 @@ return [
         'registryFactory' => [
             'class' => hiqdev\assetpackagist\registry\RegistryFactory::class,
         ],
+        'librariesio' => [
+            'class' => \hiqdev\assetpackagist\librariesio\LibrariesioRepository::class,
+            'apiKey' => $params['librariesio.api_key'],
+        ],
     ],
     'container' => [
         'singletons' => [
