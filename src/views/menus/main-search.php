@@ -37,7 +37,7 @@ $this->registerCss('
                 'id' => 'query',
                 'required' => true,
                 'autocomplete' => false,
-                'placeholder' => 'package name to search',
+                'placeholder' => 'package name to search, powered by libraries.io',
                 'class' => 'form-control',
                 'autofocus' => true,
                 'tabindex' => 1,
