@@ -8,12 +8,16 @@ use yii\widgets\ListView;
 /* @var $widget ListView */
 /* @var $model Project */
 
+$bundle = \hiqdev\assetpackagist\assets\AppAsset::register($this);
+$logoUrl = $bundle->baseUrl . '/logo';
+
 $url = Url::to(['package/detail', 'fullname' =>  $model->fullName]);
 $url = str_replace('%2F', '/', $url);
 ?>
 <div class="row well well-sm">
     <div class="col-sm-9">
         <h4 class="search-result-item-heading">
+            <img src="<?= $logoUrl . '/' . strtolower($model->platform) ?>.svg" title="<?= Html::encode($model->platform) ?>" height="20px" />
             <a href="<?= $url ?>"><?= Html::encode($model->fullName) ?></a>
         </h4>
         <?php if ($model->description): ?>
