@@ -108,13 +108,16 @@ class Storage extends Component implements StorageInterface
                 if (file_put_contents($latestPath, $json) === false) {
                     throw new AssetFileStorageException('Failed to write file "latest.json" for asset-packge', $package);
                 }
-                $this->writeProviderLatest($name, $hash);
             } finally {
                 $this->releaseLock();
             }
         } else {
             touch($latestPath);
         }
+
+        $this->buildHashFile($name, $hash);
+
+        $this->writeProviderList();
 
         return $hash;
     }
@@ -147,62 +150,165 @@ class Storage extends Component implements StorageInterface
         return implode(DIRECTORY_SEPARATOR, $args);
     }
 
-    protected function buildHashedPath($name, $hash = 'latest')
+    protected function buildHashedPath($name, $hash = 'latest', $ext = '.json')
     {
-        return $this->buildPath('p', $name, $hash . '.json');
+        return $this->buildPath('p', $name, $hash . $ext);
     }
 
-    protected function writeProviderLatest($name, $hash)
+    /**
+     * Generate a "latest.hash" containing last valid hash for provider.
+     */
+    protected function buildHashFile($name, $hash = null)
     {
-        $latestPath = $this->buildHashedPath('provider-latest');
-        if (file_exists($latestPath)) {
-            $data = Json::decode(file_get_contents($latestPath) ?: '[]');
+        if ($hash === null) {
+            $file = $this->buildHashedPath($name);
+            $hash = hash_file('sha256', $file);
         }
-        if (!isset($data) || !is_array($data)) {
-            $data = [];
-        }
-        if (!isset($data['providers'])) {
-            $data['providers'] = [];
-        }
-        $data['providers'][$name] = ['sha256' => $hash];
-        $json = Json::encode($data);
-        $hash = hash('sha256', $json);
-        $path = $this->buildHashedPath('provider-latest', $hash);
 
-        if (!file_exists($path)) {
-            $this->acquireLock();
+        $lastHash = $this->buildHashedPath($name, 'latest', '.hash');
 
-            try {
-                if ($this->mkdir(dirname($path)) === false) {
-                    throw new AssetFileStorageException('Failed to create a directory for provider-latest storage');
-                }
-                if (file_put_contents($path, $json) === false) {
-                    throw new AssetFileStorageException('Failed to write package to provider-latest storage for package "' . $name . '"');
-                }
-                if (file_put_contents($latestPath, $json) === false) {
-                    throw new AssetFileStorageException('Failed to write file "latest.json" to provider-latest storage for package "' . $name . '"');
-                }
-                $this->writePackagesJson($hash);
-            } finally {
-                $this->releaseLock();
+        $json = Json::encode([$name => ['sha256' => $hash]]);
+
+        file_put_contents($lastHash, $json);
+
+        $hashFile = $this->buildHashedPath($name, $hash);
+
+        //Set the real last update of package
+        if (file_exists($hashFile)) {
+            $last_hash = $this->buildPath('p', $name, 'latest.hash');
+            touch($last_hash, filemtime($hashFile));
+            clearstatcache(false, $last_hash);
+        }
+    }
+
+    /**
+     * Gerente the name of block for provider, using the real update time.
+     * @param string $hashFile The "latest.hash" file path
+     * @return string The block name
+     */
+    protected function buildBlockNameProvider($hashFile)
+    {
+        $timestamp = filemtime($hashFile);
+
+        if ($timestamp >= strtotime(date('Y-m-d 00:00:00'))) {
+            return 'today';
+        }
+
+        if ($timestamp >= strtotime('monday last week')) {
+            return 'this-week';
+        }
+
+        return date('Y-m', $timestamp);
+    }
+
+    /**
+     * Generate all providers.
+     */
+    public function writeProviderList()
+    {
+        /**
+         * Find all "latest.json" files in "p/*-asset/*".
+         */
+        $dir = new \RecursiveDirectoryIterator($this->_path);
+        $ite = new \RecursiveIteratorIterator($dir);
+        $files = new \RegexIterator($ite, '/.*\w+\-asset.*latest\.json$/', \RegexIterator::GET_MATCH);
+        $fileList = [];
+        foreach ($files as $file) {
+            $fileList = array_merge($fileList, $file);
+        }
+
+        /**
+         * Generate provider content.
+         */
+        $providers = [];
+        foreach ($fileList as $file) {
+            /**
+             * Generate "latest.hash" for old files.
+             */
+            $hashFile = dirname($file) . DIRECTORY_SEPARATOR . 'latest.hash';
+            if (!file_exists($hashFile)) {
+                $this->buildHashFile(basename(dirname($file, 2)) . '/' . basename(dirname($file)));
             }
-        } else {
-            touch($latestPath);
+
+            $block = $this->buildBlockNameProvider($hashFile);
+
+            if (!isset($providers[$block])) {
+                $providers[$block] = [
+                    'providers' => [],
+                ];
+            }
+
+            $hashData = Json::decode(file_get_contents($hashFile) ?: '[]');
+
+            if (empty($hashData)) {
+                continue;
+            }
+
+            $providers[$block]['providers'][key($hashData)] = reset($hashData);
         }
 
-        return $hash;
+        $includes = [];
+
+        // Save the content of provider to file.
+        foreach ($providers as $block => $data) {
+            $name = 'provider-' . $block;
+
+            $json = Json::encode($data);
+            $hash = hash('sha256', $json);
+
+            $includes[$block] = $hash;
+
+            $latestPath = $this->buildHashedPath($name);
+            $path = $this->buildHashedPath($name, $hash);
+
+            if (!file_exists($path)) {
+                $this->acquireLock();
+
+                try {
+                    if ($this->mkdir(dirname($path)) === false) {
+                        throw new AssetFileStorageException('Failed to create a directory for provider-latest storage');
+                    }
+                    if (file_put_contents($path, $json) === false) {
+                        throw new AssetFileStorageException('Failed to write package to provider-latest storage for package "' . $name . '"');
+                    }
+                    if (file_put_contents($latestPath, $json) === false) {
+                        throw new AssetFileStorageException('Failed to write file "latest.json" to provider-latest storage for package "' . $name . '"');
+                    }
+                } finally {
+                    $this->releaseLock();
+                }
+            } else {
+                touch($latestPath);
+            }
+            //Build "latest.hash" for provider
+            $this->buildHashFile($name, $hash);
+        }
+
+        $this->writePackagesJson($includes);
     }
 
-    protected function writePackagesJson($hash)
+    /**
+     * Update the "packages.json" file, with all providers.
+     * @param array $includes The providers with hash
+     * @throws AssetFileStorageException
+     */
+    protected function writePackagesJson($includes)
     {
         $data = [
             'providers-url'     => '/p/%package%/%hash%.json',
-            'provider-includes' => [
-                'p/provider-latest/%hash%.json' => [
-                    'sha256' => $hash,
-                ],
-            ],
+            'provider-includes' => [],
         ];
+
+        ksort($includes);
+
+        foreach ($includes as $block => $hash) {
+            $name = 'p/provider-' . $block . '/%hash%.json';
+
+            $data['provider-includes'][$name] = [
+                'sha256' => $hash,
+            ];
+        }
+
         $this->acquireLock();
         $filename = $this->buildPath('packages.json');
         try {
@@ -212,6 +318,38 @@ class Storage extends Component implements StorageInterface
             touch($filename);
         } finally {
             $this->releaseLock();
+        }
+
+        $this->clearOldFiles();
+    }
+
+    /**
+     * Remove all olds files.
+     * @param integer $ttl Time to live comparing with "latest.hash"
+     */
+    public function clearOldFiles($ttl = 300)
+    {
+        $dir = new \RecursiveDirectoryIterator($this->_path . DIRECTORY_SEPARATOR . 'p');
+        $ite = new \RecursiveIteratorIterator($dir);
+        $filesIterator = new \RegexIterator($ite, '/.*\.json$/', \RegexIterator::GET_MATCH);
+        $fileList = [];
+        foreach ($filesIterator as $files) {
+            foreach ($files as $file) {
+                //Ignore "latest.json" files
+                if (preg_match('/latest\.json$/', $file)) {
+                    continue;
+                }
+
+                $hash_file = dirname($file) . DIRECTORY_SEPARATOR . 'latest.hash';
+
+                if (!file_exists($hash_file)) {
+                    continue;
+                }
+
+                if (filemtime($file) < filemtime($hash_file) - $ttl) {
+                    unlink($file);
+                }
+            }
         }
     }
 
