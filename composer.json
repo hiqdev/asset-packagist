@@ -50,6 +50,8 @@
         "hiqdev/hidev": "<2.0 || dev-master",
         "hiqdev/hisite": "<2.0 || dev-master",
         "hiqdev/yii2-pnotify": "<2.0 || dev-master",
+        "hiqdev/yii2-hiart-guzzle": "<2.0 || dev-master",
+        "hiqdev/yii2-hiart-librariesio": "<2.0 || dev-master",
         "yiisoft/yii2-debug": "^2.0",
         "guzzlehttp/guzzle": "^6.0",
         "zhuravljov/yii2-queue": "^1.0"
