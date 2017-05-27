@@ -1,13 +1,8 @@
 <?php
 
-use hiqdev\assetpackagist\librariesio\Project;
 use hiqdev\assetpackagist\models\AssetPackage;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ListView;
-
-/* @var $widget ListView */
-/* @var $model Project */
 
 $bundle = \hiqdev\assetpackagist\assets\AppAsset::register($this);
 $logoUrl = $bundle->baseUrl . '/logo';
@@ -45,20 +40,20 @@ $url = str_replace('%2F', '/', $url);
         <?php if ($model->homepage): ?>
             <p class="homepage">
                 <a href="<?= Html::encode($model->homepage) ?>" target="_blank">
-                    <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Homepage
+                    <i class="glyphicon glyphicon-globe" aria-hidden="true"></i> Homepage
                 </a>
             </p>
         <?php endif ?>
         <?php if ($model->repository_url): ?>
             <p class="repository_url">
                 <a href="<?= Html::encode($model->repository_url) ?>" target="_blank">
-                    <span class="glyphicon glyphicon-random" aria-hidden="true"></span> Repository
+                    <i class="glyphicon glyphicon-random" aria-hidden="true"></i> Repository
                 </a>
             </p>
         <?php endif ?>
         <?php if (!empty($model->normalized_licenses)): ?>
             <p class="normalized_licenses">
-                License:
+                <i class="fa fa-balance-scale"></i> License:
                 <?= implode(',', $model->normalized_licenses) ?>
             </p>
         <?php endif ?>
