@@ -69,17 +69,18 @@ class PackageController extends Controller
 
     public function actionSearch($query, $platform = null)
     {
-        $dataProvider = new ProjectDataProvider();
-        $dataProvider->query = $query;
-        $dataProvider->platform = $platform;
+        $activeQuery = \hiqdev\hiart\librariesio\models\Project::find()->where([
+            'q' => $query,
+            'platforms' => in_array($platform, ['npm', 'bower']) ? $platform : 'bower,npm',
+        ]);
 
-        $params = [
+        return $this->render('search', [
             'query' => $query,
             'platform' => $platform,
-            'dataProvider' => $dataProvider,
-        ];
-
-        return $this->render('search', $params);
+            'dataProvider' => new \yii\data\ActiveDataProvider([
+                'query' => $activeQuery,
+            ]),
+        ]);
     }
 
     public function actionDetail($fullname)
@@ -95,7 +96,7 @@ class PackageController extends Controller
                 $params['forceUpdate'] = true;
             }
         } catch (Exception $e) {
-            return $this->render('wrong-name', compact('query'));
+            return $this->render('wrong-name', ['query' => $fullname]);
         }
 
         return $this->render('details', $params);
@@ -107,8 +108,7 @@ class PackageController extends Controller
      */
     private static function getAssetPackage($query)
     {
-        $filtredQuery = trim($query);
-        $package = AssetPackage::fromFullName($filtredQuery);
+        $package = AssetPackage::fromFullName(trim($query));
         $package->load();
 
         return $package;

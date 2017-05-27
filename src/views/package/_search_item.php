@@ -1,6 +1,7 @@
 <?php
 
 use hiqdev\assetpackagist\librariesio\Project;
+use hiqdev\assetpackagist\models\AssetPackage;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ListView;
@@ -10,15 +11,16 @@ use yii\widgets\ListView;
 
 $bundle = \hiqdev\assetpackagist\assets\AppAsset::register($this);
 $logoUrl = $bundle->baseUrl . '/logo';
+$package = new AssetPackage(strtolower($model->platform), $model->name);
 
-$url = Url::to(['package/detail', 'fullname' =>  $model->fullName]);
+$url = Url::to(['package/detail', 'fullname' =>  $package->fullName]);
 $url = str_replace('%2F', '/', $url);
 ?>
 <div class="row well well-sm">
     <div class="col-sm-9">
         <h4 class="search-result-item-heading">
             <img src="<?= $logoUrl . '/' . strtolower($model->platform) ?>.svg" title="<?= Html::encode($model->platform) ?>" height="20px" />
-            <a href="<?= $url ?>"><?= Html::encode($model->fullName) ?></a>
+            <a href="<?= $url ?>"><?= Html::encode($package->fullName) ?></a>
         </h4>
         <?php if ($model->description): ?>
             <p class="description"><?= Html::encode($model->description) ?></p>
@@ -60,7 +62,7 @@ $url = str_replace('%2F', '/', $url);
                 <?= implode(',', $model->normalized_licenses) ?>
             </p>
         <?php endif ?>
-        <?php if ($model->isAvailable()): ?>
+        <?php if ($package->isAvailable()): ?>
             <a class="btn btn-success btn-sm" href="<?= $url ?>">Ready to use</a>
         <?php else: ?>
             <a class="btn btn-warning btn-sm" href="<?= $url ?>">Fetch</a>
