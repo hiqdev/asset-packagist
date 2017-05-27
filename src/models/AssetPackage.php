@@ -14,6 +14,7 @@ use Composer\Package\Link;
 use Exception;
 use hiqdev\assetpackagist\components\Storage;
 use hiqdev\assetpackagist\registry\RegistryFactory;
+use hiqdev\assetpackagist\repositories\PackageRepository;
 use Yii;
 use yii\base\Object;
 
@@ -82,6 +83,11 @@ class AssetPackage extends Object
         return static::buildFullName($this->_type, $this->_name);
     }
 
+    public static function buildNormalName($type, $name)
+    {
+        return static::buildFullName($type, static::normalizeName($name));
+    }
+
     public static function buildFullName($type, $name)
     {
         return $type . '-asset/' . $name;
@@ -94,6 +100,7 @@ class AssetPackage extends Object
 
         return [$type, $name];
     }
+
 
     /**
      * @param string $full package name
@@ -112,7 +119,7 @@ class AssetPackage extends Object
 
     public function getNormalName()
     {
-        return static::buildFullName($this->_type, static::normalizeName($this->_name));
+        return static::buildNormalName($this->_type, $this->_name);
     }
 
     public function getName()
@@ -290,6 +297,13 @@ class AssetPackage extends Object
     public function canAutoUpdate()
     {
         return time() - $this->getUpdateTime() > 60 * 60 * 24; // 1 day
+    }
+
+    public function isAvailable()
+    {
+        $repository = Yii::createObject(PackageRepository::class, []);
+
+        return $repository->exists($this);
     }
 
     /**
