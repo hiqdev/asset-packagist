@@ -2,85 +2,74 @@
 
 /**
  * @var yii\web\View
+ * @var string $query the search query that was submitted
  * @var \hiqdev\assetpackagist\models\AssetPackage $package
+ * @var bool $forceUpdate Whether the application must force package update
  */
-use Composer\Semver\VersionParser;
 use yii\helpers\Html;
+use yii\helpers\Inflector;
+use yii\helpers\Json;
+use yii\helpers\Url;
+
+$this->title = 'Search';
+$this->params['searchQuery'] = $query;
+$this->params['subtitle'] = $query;
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
+    <div class="package-details">
+        <h1>
+            <?= Html::encode($package->getFullName()) ?>
+            <small class="repository-link">
+                <?php
+                if ($package->getType() === 'npm') {
+                    $link = 'https://npmjs.com/package/' . $package->getName();
+                } elseif ($package->getType() === 'bower') {
+                    $link = 'https://bower.io/search?q=' . $package->getName();
+                }
+                echo Html::a(
+                    Yii::t('app', 'see on {registry}', ['registry' => Inflector::titleize($package->getType())]),
+                    $link
+                ) ?>
+            </small>
+        </h1>
+        <?= Html::button(Yii::t('app', 'Fetch updates from {registry}', [
+            'registry' => Inflector::titleize($package->getType()),
+        ]), [
+            'id' => 'fetch-btn',
+            'type' => 'button',
+            'class' => 'btn btn-success fetch-btn pull-right',
+            'data-loading-text' => Yii::t('app', 'Fetching for you...'),
+        ]) ?>
+
+        <?= $this->render('versions', ['package' => $package]); ?>
+    </div>
 
 <?php
-$releases = $package->getReleases();
+$options = Json::encode([
+    'url' => Url::to(['update']),
+    'type' => 'post',
+    'data' => [
+        'query' => $package->getFullName(),
+    ],
+    'success' => new \yii\web\JsExpression("function (html) {
+        versions.removeClass('updating').html(html);
+        btn.button('reset');
+    }"),
+    'beforeSend' => new \yii\web\JsExpression("function (event) {
+        versions.addClass('updating').html($('<i class=\"fa fa-cog fa-spin fa-3x fa-fw\"></i>'));
+        btn.button('loading');
+    }"),
+]);
 
-hiqdev\assetpackagist\components\PackageUtil::sort($releases);
+$this->registerJs(<<<JS
+    $('#fetch-btn').on('click', function () {
+        var versions = $('.versions'), btn = $('#fetch-btn');
+        $.ajax($options);
+    })
+JS
+);
 
-$stability_colors = [
-    'stable' => 'success',
-    'RC' => 'primary',
-    'beta' => 'info',
-    'alpha' => 'warning',
-    'dev' => 'default',
-];
-?>
-
-<div class="versions">
-    <?php if (!empty($releases)) : ?>
-        <?= Html::tag('div', Yii::t('app', '✔ This package is OK to use!'), [
-            'class' => 'package-ok',
-        ]) ?>
-    <?php endif ?>
-
-    <br><br>
-    <b>Last updated:</b> <?= Yii::$app->formatter->asDateTime($package->getUpdateTime()) ?> (<?= Yii::$app->formatter->asRelativeTime($package->getUpdateTime()) ?>)
-    <br>
-    <b>Legend:</b>
-    <?php foreach ($stability_colors as $stability => $color) : ?>
-        <?= Html::tag('span', $stability, ['class' => 'label label-' . $color]) . ' ' ?>
-    <?php endforeach ?>
-    <br><br>
-
-    <?php if (Yii::$app->session->hasFlash('rate-limited')) : ?>
-        <div class="alert alert-warning too-fast-update" role="alert">
-            <h4><?= Yii::t('app', 'Wow, you are very fast!') ?></h4>
-            <p><?= Yii::t('app', 'The package was updated recently. Could you wait another 10 minutes before fetching it again, please?') ?></p>
-        </div>
-        <?php Yii::$app->session->removeFlash('rate-limited') ?>
-    <?php endif ?>
-
-    <table class="table">
-        <thead>
-        <tr>
-            <th><?= Yii::t('app', 'Version') ?></th>
-            <th colspan="2"><?= Yii::t('app', 'Commit SHA') ?></th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ((array) $releases as $version => $release) : ?>
-            <tr>
-                <th>
-                    <?php 
-                        $stability = VersionParser::parseStability($release['version_normalized']);
-                        echo Html::tag('span', $version, ['class' => 'label label-' . $stability_colors[$stability]]);
-                    ?>
-                </th>
-                <td>
-                    <code><?= $release['source']['reference'] ?: $release['dist']['reference'] ?: 'n/a' ?></code>
-                </td>
-                <td>
-                    <?php
-                    $links = [];
-                    if ($release['dist']['url']) {
-                        $links[] = Html::a(Yii::t('app', 'Get ZIP'), $release['dist']['url']);
-                    }
-                    if ($release['source']['url']) {
-                        $links[] = Html::a(Yii::t('app', 'see sources'), $release['source']['url']);
-                    }
-
-                    echo implode(' or ', $links);
-                    ?>
-                </td>
-            </tr>
-        <?php endforeach ?>
-        </tbody>
-    </table>
-</div>
+if ($forceUpdate) {
+    $this->registerJs("$('#fetch-btn').trigger('click')");
+}

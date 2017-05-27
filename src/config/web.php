@@ -11,6 +11,11 @@
 return [
     'controllerNamespace' => 'hiqdev\assetpackagist\controllers',
     'components' => [
+        'urlManager' => [
+            'rules' => [
+                '/package/<fullname:\w+\-asset\/[\w-]+>' => '/package/detail',
+            ],
+        ],
         'themeManager' => [
             'pathMap' => [
                 '$themedViewPaths' => ['@hiqdev/assetpackagist/views'],

@@ -103,4 +103,5 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>This project uses Francois Pluchino's <a href="https://github.com/fxpio/composer-asset-plugin">composer-asset-plugin</a>
         to convert Bower and NPM packages to Composer format.</p>
+    <p>The search is powered by <a href="https://libraries.io/">https://libraries.io/</a>.</p>
 </div>
