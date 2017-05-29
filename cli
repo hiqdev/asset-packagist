@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+
+define('YII_DEBUG', true);
+define('HISITE_VENDOR_DIR',__DIR__.'/vendor');
+
+require __DIR__ . '/src/config/bootstrap.php';
+require_once HISITE_VENDOR_DIR . '/autoload.php';
+require_once HISITE_VENDOR_DIR . '/yiisoft/yii2/Yii.php';
+
+Yii::setAlias('hiqdev/assetpackagist', HISITE_VENDOR_DIR.'/hiqdev/asset-packagist/src');
+Yii::setAlias('@hiqdev/assetpackagist/console', HISITE_VENDOR_DIR.'/hiqdev/asset-packagist/src/console');
+Yii::setAlias('@composer', __DIR__);
+
+$application = new yii\console\Application([
+    'id' => 'yii-console',
+    'basePath' => HISITE_VENDOR_DIR.'/hiqdev/asset-packagist/src/console',
+    'controllerNamespace' => 'hiqdev\assetpackagist\console',
+]);
+$application->set('packageStorage',hiqdev\assetpackagist\components\Storage::class);
+
+foreach(include(HISITE_VENDOR_DIR.'/hiqdev/config/aliases.php') as $k=>$v){
+	Yii::setAlias($k, $v);
+}
+
+$application->setVendorPath(HISITE_VENDOR_DIR);
+$exitCode = $application->run();
+exit($exitCode);
