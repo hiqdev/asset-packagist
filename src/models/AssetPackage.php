@@ -197,6 +197,9 @@ class AssetPackage extends Object
                     'reference' => $package->getDistReference(),
                 ];
             }
+            if($package->getLicense()) {
+                $release['license'] = $package->getLicense();
+            }
             if ($package->getSourceUrl()) {
                 $release['source'] = [
                     'type' => $package->getSourceType(),
