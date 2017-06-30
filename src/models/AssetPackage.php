@@ -101,7 +101,6 @@ class AssetPackage extends Object
         return [$type, $name];
     }
 
-
     /**
      * @param string $full package name
      * @return static
@@ -197,7 +196,7 @@ class AssetPackage extends Object
                     'reference' => $package->getDistReference(),
                 ];
             }
-            if($package->getLicense()) {
+            if ($package->getLicense()) {
                 $release['license'] = $package->getLicense();
             }
             if ($package->getSourceUrl()) {

@@ -15,7 +15,6 @@ use hiqdev\assetpackagist\commands\PackageUpdateCommand;
 use hiqdev\assetpackagist\exceptions\CorruptedPackageException;
 use hiqdev\assetpackagist\exceptions\PackageNotExistsException;
 use hiqdev\assetpackagist\exceptions\UpdateRateLimitException;
-use hiqdev\assetpackagist\librariesio\ProjectDataProvider;
 use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
 use yii\filters\VerbFilter;
@@ -71,7 +70,7 @@ class PackageController extends Controller
     {
         $activeQuery = \hiqdev\hiart\librariesio\models\Project::find()->where([
             'q' => $query,
-            'platforms' => in_array($platform, ['npm', 'bower']) ? $platform : 'bower,npm',
+            'platforms' => in_array($platform, ['npm', 'bower'], true) ? $platform : 'bower,npm',
         ]);
 
         return $this->render('search', [

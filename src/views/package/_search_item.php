@@ -1,10 +1,11 @@
 <?php
 
+use hiqdev\assetpackagist\assets\AppAsset;
 use hiqdev\assetpackagist\models\AssetPackage;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$bundle = \hiqdev\assetpackagist\assets\AppAsset::register($this);
+$bundle = AppAsset::register($this);
 $logoUrl = $bundle->baseUrl . '/logo';
 $package = new AssetPackage(strtolower($model->platform), $model->name);
 
@@ -31,7 +32,7 @@ $url = str_replace('%2F', '/', $url);
         <?php endif ?>
         <?php if (!empty($model->keywords)): ?>
             <p class="keywords">
-                Keywords: 
+                Keywords:
                 <?= '<span class="label label-default">' . implode('</span> <span class="label label-default">', $model->keywords) . '</span>' ?>
             </p>
         <?php endif ?>

@@ -3,8 +3,7 @@
 use hiqdev\assetpackagist\assets\AppAsset;
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-
+/** @var yii\web\View $this */
 $bundle = AppAsset::register($this);
 $logoUrl = $bundle->baseUrl . '/logo';
 
