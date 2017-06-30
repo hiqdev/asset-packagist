@@ -20,9 +20,7 @@ return [
             'pathMap' => [
                 '$themedViewPaths' => ['@hiqdev/assetpackagist/views'],
             ],
-        ],
-        'assetManager' => [
-            'bundles' => [
+            'assets' => [
                 \hiqdev\assetpackagist\assets\AppAsset::class,
             ],
         ],
