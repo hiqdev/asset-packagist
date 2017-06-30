@@ -41,20 +41,20 @@ $url = str_replace('%2F', '/', $url);
         <?php if ($model->homepage): ?>
             <p class="homepage">
                 <a href="<?= Html::encode($model->homepage) ?>" target="_blank">
-                    <i class="glyphicon glyphicon-globe" aria-hidden="true"></i> Homepage
+                    <i class="fa fa-fw fa-globe" aria-hidden="true"></i> Homepage
                 </a>
             </p>
         <?php endif ?>
         <?php if ($model->repository_url): ?>
             <p class="repository_url">
                 <a href="<?= Html::encode($model->repository_url) ?>" target="_blank">
-                    <i class="glyphicon glyphicon-random" aria-hidden="true"></i> Repository
+                    <i class="fa fa-fw fa-random" aria-hidden="true"></i> Repository
                 </a>
             </p>
         <?php endif ?>
         <?php if (!empty($model->normalized_licenses)): ?>
             <p class="normalized_licenses">
-                <i class="fa fa-balance-scale"></i> License:
+                <i class="fa fa-fw fa-balance-scale"></i> License:
                 <?= implode(',', $model->normalized_licenses) ?>
             </p>
         <?php endif ?>

@@ -53,7 +53,7 @@ $this->registerCss('
             ]) ?>
             <span class="input-group-btn">
                 <button type="submit" class="btn btn-default" tabindex="3">
-                    &nbsp;<span class="glyphicon glyphicon-search" aria-hidden="true"></span>            
+                    &nbsp;<span class="fa fa-search" aria-hidden="true"></span>
                 </button>
             </span>
         </div>
