@@ -68,6 +68,10 @@ class PackageController extends Controller
 
     public function actionSearch($query, $platform = null)
     {
+        if (preg_match('/^(npm|bower)-asset\/[a-zA-Z0-9.-]+$/', $query)) {
+            return $this->redirect("/package/$query");
+        }
+
         $activeQuery = \hiqdev\hiart\librariesio\models\Project::find()->where([
             'q' => $query,
             'platforms' => in_array($platform, ['npm', 'bower'], true) ? $platform : 'bower,npm',
