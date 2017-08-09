@@ -172,7 +172,7 @@ class AssetPackage extends Object
     {
         $releases = [];
 
-        foreach ($pool->whatProvides($this->getFullName()) as $package) {
+        foreach ($pool->whatProvides($this->getNormalName()) as $package) {
             if ($package instanceof \Composer\Package\AliasPackage) {
                 continue;
             }
