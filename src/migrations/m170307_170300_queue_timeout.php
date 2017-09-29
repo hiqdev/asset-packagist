@@ -10,7 +10,7 @@
 
 namespace hiqdev\assetpackagist\migrations;
 
-use zhuravljov\yii\queue\db\migrations\M170307170300Later;
+use yii\queue\db\migrations\M170307170300Later;
 
 /**
  * Class m170307_170300_queue_timeout.

@@ -14,7 +14,7 @@ use hiqdev\assetpackagist\models\AssetPackage;
 use hiqdev\assetpackagist\repositories\PackageRepository;
 use Yii;
 use yii\base\Component;
-use zhuravljov\yii\queue\Job;
+use yii\queue\Job;
 
 abstract class AbstractPackageCommand extends Component implements Job
 {

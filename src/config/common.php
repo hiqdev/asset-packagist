@@ -29,7 +29,7 @@ return [
             'db' => 'db',
         ],
         'queue' => [
-            'class' => \zhuravljov\yii\queue\db\Queue::class,
+            'class' => \yii\queue\db\Queue::class,
             'db' => 'db',
             'tableName' => '{{%queue}}',
             'channel' => 'package',
@@ -58,6 +58,9 @@ return [
             \hiqdev\assetpackagist\components\StorageInterface::class => function () {
                 return Yii::$app->get('packageStorage');
             },
+            \yii\queue\Queue::class => function () {
+                return Yii::$app->get('queue');
+            }
         ],
     ],
 ];
