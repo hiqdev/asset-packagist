@@ -36,7 +36,12 @@ class AssetPackage extends Object
 
     public static function normalizeName($name)
     {
-        return strtolower($name);
+        return strtolower(static::normalizeScopedName($name));
+    }
+
+    public static function normalizeScopedName($name)
+    {
+        return preg_replace("#@(.+?)/#", '${1}--', $name);
     }
 
     /**

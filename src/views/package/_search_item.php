@@ -9,14 +9,15 @@ $bundle = AppAsset::register($this);
 $logoUrl = $bundle->baseUrl . '/logo';
 $package = new AssetPackage(strtolower($model->platform), $model->name);
 
-$url = Url::to(['package/detail', 'fullname' =>  $package->fullName]);
+$url = Url::to(['package/detail', 'fullname' =>  $package->getNormalName()]);
 $url = str_replace('%2F', '/', $url);
 ?>
 <div class="row well well-sm">
     <div class="col-sm-9">
         <h4 class="search-result-item-heading">
             <img src="<?= $logoUrl . '/' . strtolower($model->platform) ?>.svg" title="<?= Html::encode($model->platform) ?>" height="20px" />
-            <a href="<?= $url ?>"><?= Html::encode($package->fullName) ?></a>
+            <span class="small text-muted"><?= $package->getName() ?></span>
+            <a href="<?= $url ?>"><?= Html::encode($package->getNormalName()) ?></a>
         </h4>
         <?php if ($model->description): ?>
             <p class="description"><?= Html::encode($model->description) ?></p>
