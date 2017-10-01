@@ -182,13 +182,13 @@ class AssetPackage extends Object
                 continue;
             }
 
-            $version = $package->getPrettyVersion();
+            $version = $this->prepareVersion($package->getPrettyVersion());
             $require = $this->prepareRequire($package->getRequires());
             $release = [
                 'uid' => $this->prepareUid($version),
                 'name' => $this->getNormalName(),
                 'version' => $version,
-                'version_normalized' => $package->getVersion(),
+                'version_normalized' => $this->prepareVersion($package->getVersion()),
                 'type' => $this->getType() . '-asset',
             ];
             if ($require) {
@@ -220,6 +220,20 @@ class AssetPackage extends Object
         \hiqdev\assetpackagist\components\PackageUtil::sort($releases);
 
         return $releases;
+    }
+
+    protected function prepareVersion($version)
+    {
+        if ($this->getNormalName() === 'bower-asset/angular') {
+            return $this->convertPatchToRC($version);
+        }
+
+        return $version;
+    }
+
+    protected function convertPatchToRC($version)
+    {
+        return preg_replace('/-patch(.+)/', '-RC${1}', $version);
     }
 
     /**
