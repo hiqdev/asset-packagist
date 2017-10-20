@@ -46,7 +46,7 @@
     ],
     "require": {
         "composer/composer": "^1.0",
-        "fxp/composer-asset-plugin": "^1.1",
+        "fxp/composer-asset-plugin": "^1.4.2",
         "hiqdev/hidev": "<2.0 || dev-master",
         "hiqdev/hisite": "<2.0 || dev-master",
         "hiqdev/yii2-pnotify": "<2.0 || dev-master",
