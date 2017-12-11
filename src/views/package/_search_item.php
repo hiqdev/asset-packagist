@@ -34,7 +34,12 @@ $url = str_replace('%2F', '/', $url);
         <?php if (!empty($model->keywords)): ?>
             <p class="keywords">
                 Keywords:
-                <?= '<span class="label label-default">' . implode('</span> <span class="label label-default">', $model->keywords) . '</span>' ?>
+                <span class="label label-default">
+                    <?php $keywords = array_map(function ($keyword) {
+                            return Html::encode($keyword);
+                        }, $model->keywords) ?>
+                    <?= implode('</span> <span class="label label-default">', $keywords) ?>
+                </span>
             </p>
         <?php endif ?>
     </div>

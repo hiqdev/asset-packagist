@@ -2,11 +2,14 @@
 
 use hiqdev\assetpackagist\librariesio\ProjectDataProvider;
 use yii\widgets\ListView;
+use yii\helpers\Html;
 
 /* @var $this \yii\web\View */
 /* @var $query string */
 /* @var $platform string */
 /* @var $dataProvider ProjectDataProvider */
+
+$query = Html::encode($query);
 
 $this->title = 'Results for "' . $query . '"';
 $this->params['searchQuery'] = $query;
