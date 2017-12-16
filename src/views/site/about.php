@@ -99,6 +99,22 @@ $this->params['breadcrumbs'][] = $this->title;
     ];
     </code></pre>
 
+    <h1>Migrating from composer asset plugin</h1>
+
+    <p>Moving from <a href="https://github.com/fxpio/composer-asset-plugin">composer asset plugin</a> is not
+        straightforward when you host several applications on single server. It's known that asset packagist
+        and asset plugin don't work well together, and plugin is installed in global scope. So, to not affect
+        other applications by deleting the plugin, you may disable the plugin locally via `composer.json`
+        config option <i>(you need plugin version ≥ 1.3.0 for this)</i>:</p>
+
+    <pre><code>
+    "config": {
+        "fxp-asset": {
+            "enabled": false
+        }
+    }
+    </code></pre>
+
     <h1>Acknowledgements</h1>
 
     <p>This project uses Francois Pluchino's <a href="https://github.com/fxpio/composer-asset-plugin">composer-asset-plugin</a>
