@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
     "extra": {
         "installer-types": ["bower-asset", "npm-asset"],
         "installer-paths": {
-            "public/assets/{$vendor}/{$name}/": ["type:bower-asset", "type:npm-asset"],
+            "public/assets/{$vendor}/{$name}/": ["type:bower-asset", "type:npm-asset"]
         }
     },
     "repositories": [
