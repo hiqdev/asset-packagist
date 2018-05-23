@@ -2,6 +2,12 @@
 
 ## [Under development]
 
+- Fixed XSS vulnerabilities
+    - [92c0fd7] 2017-12-11 Fixed XSS vulnerabilities [@SilverFire]
+- Added patch version support for `bower-asset/angular`
+    - [be126d4] 2017-10-01 added converting patch version to RC for bower-asset/angular [@hiqsol]
+- Added redirect to package page when its full name given
+    - [eb93960] 2017-07-04 improved search: added redirect to package page when full name given [@hiqsol]
 - Refactored internals: RegistryFactory, Mutex <- Locker, logging
     - [cd0f3cc] 2017-05-18 csfixed [@hiqsol]
     - [b76fbcd] 2017-05-18 Merge pull request #50 from edgardmessias/refactored [@hiqsol]
@@ -33,6 +39,10 @@
     - [d89b68c] 2017-05-04 fixed hidev config for hidev 0.6 [@hiqsol]
     - [b850cba] 2017-05-05 renamed configs `web`, `console` <- hisite, hidev [@hiqsol]
 - Implemented package management using queues with [zhuravljov/yii2-queue]
+    - [9f54f52] 2017-09-29 Updated to use `yiisoft/yii2-queue`, implemented sequention jobs execution limit [@SilverFire]
+    - [2ba21ee] 2017-09-29 Switched to yiisoft/yii2-queue [@SilverFire]
+    - [9b7d7ff] 2017-09-21 Added migration to follow yii2-queue API changes [@SilverFire]
+    - [88b96a6] 2018-05-23 Updated `QueueController` to follow yii2-queue API changes [@SilverFire]
     - [ace352d] 2017-05-05 Merge pull request #42 from edgardmessias/fix-queue [@SilverFire]
     - [7c5d01d] 2017-05-05 Fixed [zhuravljov/yii2-queue] API changes [@edgardmessias]
     - [b07d11b] 2017-05-04 Updated to follow [zhuravljov/yii2-queue] API changes [@SilverFire]
@@ -48,6 +58,11 @@
     - [9515fd0] 2016-12-01 Refactored Storage - added StorageInterface, changes visibiliy of some method [@SilverFire]
     - [bc20b98] 2016-11-30 Fixed typo [@SilverFire]
 - Improved look, moved search form to NavBar, added color by stability in package details page
+    - [d428eef] 2017-05-27 added require yii2-hiart-librariesio and yii2-hiart-guzzle [@hiqsol]
+    - [2ec9f08] 2017-05-27 Merge pull request #52 from edgardmessias/improved_search [@hiqsol]
+    - [b9972eb] 2017-05-24 Added image by platform in result search [@edgardmessias]
+    - [9f04bf5] 2017-05-24 Added "Powered by libraries.io" [@edgardmessias]
+    - [3511c98] 2017-05-23 Improved Search using libraries.io (Close #36) [@edgardmessias]
     - [33befd4] 2017-05-11 added container class in outer div [@hiqsol]
     - [856c104] 2017-05-10 added breadcrumbs and subtitle for pages [@hiqsol]
     - [6aa8285] 2017-05-10 fixed navbar menu [@hiqsol]
@@ -98,6 +113,20 @@
     - [bdc0fb1] 2017-04-26 Enhanced package info displaying [@SilverFire]
     - [1c947e1] 2017-04-26 Bootstarap log module [@SilverFire]
 - Fixed minor issues
+    - [ea55b5c] 2017-06-30 switched icons to fixed weight fontawesome [@hiqsol]
+    - [8a5882e] 2017-06-30 csfixed [@hiqsol]
+    - [a5f52c5] 2017-06-30 added AppAsset to be registered by themeManager at startup [@hiqsol]
+    - [f4dc2fc] 2017-06-16 Merge pull request #56 from anyt/add_license_information_to_package_info [@hiqsol]
+    - [b2c50d1] 2017-06-15 Added license information to package info. [yatsenco@gmail.com]
+    - [38e5b4b] 2017-05-27 added icon for License at _search_item [@hiqsol]
+    - [8ea9f6b] 2017-05-27 redone to use `yii2-hiart-librariesio` [@hiqsol]
+    - [68e6592] 2017-05-27 added AssetPackage::isAvailable and buildNormalName [@hiqsol]
+    - [eb5f5d9] 2017-10-01 added `normalizeScopedName` [@hiqsol]
+    - [052b795] 2017-07-17 moved `yiisoft/yii2-debug` to require-dev closes #46 [@hiqsol]
+    - [e1f21c7] 2017-12-16 Merge pull request #75 from and800/master [@hiqsol]
+    - [0365f77] 2017-10-20 Merge pull request #73 from SilverFire/master [@hiqsol]
+    - [27ad14d] 2017-10-20 Updated fxp/composer-asset-plugin constraint to ^1.4.2 [@SilverFire]
+    - [843800f] 2018-02-17 typo [@hiqsol]
     - [59e4260] 2017-04-24 Fixed to follow FXP/composer-asset-plugin API changes [@SilverFire]
     - [c95600b] 2017-05-08 Merge pull request #43 from `edgardmessias/fix_urls` [@SilverFire]
     - [2c47200] 2017-05-08 Fixed urls for use in urlManager [@edgardmessias]
@@ -484,3 +513,29 @@
 [ca928cf]: https://github.com/hiqdev/asset-packagist/commit/ca928cf
 [cd5c912]: https://github.com/hiqdev/asset-packagist/commit/cd5c912
 [300594c]: https://github.com/hiqdev/asset-packagist/commit/300594c
+[88b96a6]: https://github.com/hiqdev/asset-packagist/commit/88b96a6
+[843800f]: https://github.com/hiqdev/asset-packagist/commit/843800f
+[e1f21c7]: https://github.com/hiqdev/asset-packagist/commit/e1f21c7
+[92c0fd7]: https://github.com/hiqdev/asset-packagist/commit/92c0fd7
+[0365f77]: https://github.com/hiqdev/asset-packagist/commit/0365f77
+[27ad14d]: https://github.com/hiqdev/asset-packagist/commit/27ad14d
+[be126d4]: https://github.com/hiqdev/asset-packagist/commit/be126d4
+[eb5f5d9]: https://github.com/hiqdev/asset-packagist/commit/eb5f5d9
+[9f54f52]: https://github.com/hiqdev/asset-packagist/commit/9f54f52
+[2ba21ee]: https://github.com/hiqdev/asset-packagist/commit/2ba21ee
+[9b7d7ff]: https://github.com/hiqdev/asset-packagist/commit/9b7d7ff
+[052b795]: https://github.com/hiqdev/asset-packagist/commit/052b795
+[eb93960]: https://github.com/hiqdev/asset-packagist/commit/eb93960
+[ea55b5c]: https://github.com/hiqdev/asset-packagist/commit/ea55b5c
+[8a5882e]: https://github.com/hiqdev/asset-packagist/commit/8a5882e
+[a5f52c5]: https://github.com/hiqdev/asset-packagist/commit/a5f52c5
+[f4dc2fc]: https://github.com/hiqdev/asset-packagist/commit/f4dc2fc
+[b2c50d1]: https://github.com/hiqdev/asset-packagist/commit/b2c50d1
+[38e5b4b]: https://github.com/hiqdev/asset-packagist/commit/38e5b4b
+[8ea9f6b]: https://github.com/hiqdev/asset-packagist/commit/8ea9f6b
+[68e6592]: https://github.com/hiqdev/asset-packagist/commit/68e6592
+[d428eef]: https://github.com/hiqdev/asset-packagist/commit/d428eef
+[2ec9f08]: https://github.com/hiqdev/asset-packagist/commit/2ec9f08
+[b9972eb]: https://github.com/hiqdev/asset-packagist/commit/b9972eb
+[9f04bf5]: https://github.com/hiqdev/asset-packagist/commit/9f04bf5
+[3511c98]: https://github.com/hiqdev/asset-packagist/commit/3511c98
