@@ -53,7 +53,7 @@
         "hiqdev/yii2-hiart-guzzle": "<2.0 || dev-master",
         "hiqdev/yii2-hiart-librariesio": "<2.0 || dev-master",
         "guzzlehttp/guzzle": "^6.0",
-        "yiisoft/yii2-queue": "^2.0"
+        "yiisoft/yii2-queue": "^2.0.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "^2.0",

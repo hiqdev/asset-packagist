@@ -57,7 +57,7 @@ class QueueController extends Controller
      */
     public function actionRun()
     {
-        $this->queue->run();
+        $this->queue->run(true);
     }
 
     /**
@@ -68,7 +68,6 @@ class QueueController extends Controller
         Yii::info(Console::renderColoredString('Lorem ipsum for time %y' . time() . '%n ' . "\n"), \hiqdev\assetpackagist\commands\CollectDependenciesCommand::class);
         sleep(1);
     }
-
 
     private function ensureLimits()
     {
