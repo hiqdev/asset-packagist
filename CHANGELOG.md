@@ -1,19 +1,22 @@
 # hiqdev/asset-packagist
 
-## [Under development]
+## [1.0.0] - 2018-05-23
 
+- Fixed XSS vulnerabilities ([@SilverFire])
+- Added patch version support for `bower-asset/angular` ([@hiqsol])
+- Added redirect to package page when its full name given ([@hiqsol])
 - Refactored internals: RegistryFactory, Mutex <- Locker, logging ([@hiqsol], [@edgardmessias])
 - Updated documentation ([@hiqsol], [@SilverFire], [@edgardmessias])
 - Fixed use of `hidev` ([@hiqsol])
 - Implemented package management using queues with [zhuravljov/yii2-queue] ([@SilverFire], [@edgardmessias], [@hiqsol], [@zhuravljov])
-- Improved look, moved search form to NavBar, added color by stability in package details page ([@hiqsol], [@SilverFire], [@tafid], [@edgardmessias])
+- Improved look, moved search form to NavBar, added color by stability in package details page ([@hiqsol], [@edgardmessias], [@SilverFire], [@tafid])
 - Added order for packages releases ([@edgardmessias], [@SilverFire])
 - Added `version_normalized` ([@SilverFire], [@edgardmessias])
 - Added providing `require` to support dependencies of bower/npm packages ([@hiqsol])
 - Added DB layer to store packages and their properties ([@SilverFire])
 - Added dependencies auto resolving for new packages ([@SilverFire])
 - Added automatic package avoiding for corrupted packages, enhanced error handling ([@SilverFire])
-- Fixed minor issues ([@SilverFire], [@edgardmessias], [@hiqsol], [et.coder@gmail.com], [jo@surikat.pro])
+- Fixed minor issues ([@SilverFire], [@hiqsol], [yatsenco@gmail.com], [@edgardmessias], [et.coder@gmail.com], [jo@surikat.pro])
 
 ## [0.1.0] - 2016-05-31
 
@@ -46,3 +49,4 @@
 [zhuravljov@gmail.com]: https://github.com/zhuravljov
 [Under development]: https://github.com/hiqdev/asset-packagist/compare/0.1.0...HEAD
 [0.1.0]: https://github.com/hiqdev/asset-packagist/releases/tag/0.1.0
+[1.0.0]: https://github.com/hiqdev/asset-packagist/compare/0.1.0...1.0.0

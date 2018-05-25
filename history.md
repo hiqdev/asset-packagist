@@ -1,6 +1,6 @@
 # hiqdev/asset-packagist
 
-## [Under development]
+## [1.0.0] - 2018-05-23
 
 - Fixed XSS vulnerabilities
     - [92c0fd7] 2017-12-11 Fixed XSS vulnerabilities [@SilverFire]
@@ -59,7 +59,7 @@
     - [bc20b98] 2016-11-30 Fixed typo [@SilverFire]
 - Improved look, moved search form to NavBar, added color by stability in package details page
     - [d428eef] 2017-05-27 added require yii2-hiart-librariesio and yii2-hiart-guzzle [@hiqsol]
-    - [2ec9f08] 2017-05-27 Merge pull request #52 from edgardmessias/improved_search [@hiqsol]
+    - [2ec9f08] 2017-05-27 Merge pull request #52 from `edgardmessias/improved_search` [@hiqsol]
     - [b9972eb] 2017-05-24 Added image by platform in result search [@edgardmessias]
     - [9f04bf5] 2017-05-24 Added "Powered by libraries.io" [@edgardmessias]
     - [3511c98] 2017-05-23 Improved Search using libraries.io (Close #36) [@edgardmessias]
@@ -113,10 +113,11 @@
     - [bdc0fb1] 2017-04-26 Enhanced package info displaying [@SilverFire]
     - [1c947e1] 2017-04-26 Bootstarap log module [@SilverFire]
 - Fixed minor issues
+    - [18bfb40] 2018-05-23 Updated changelogs [@SilverFire]
     - [ea55b5c] 2017-06-30 switched icons to fixed weight fontawesome [@hiqsol]
     - [8a5882e] 2017-06-30 csfixed [@hiqsol]
     - [a5f52c5] 2017-06-30 added AppAsset to be registered by themeManager at startup [@hiqsol]
-    - [f4dc2fc] 2017-06-16 Merge pull request #56 from anyt/add_license_information_to_package_info [@hiqsol]
+    - [f4dc2fc] 2017-06-16 Merge pull request #56 from `anyt/add_license_information_to_package_info` [@hiqsol]
     - [b2c50d1] 2017-06-15 Added license information to package info. [yatsenco@gmail.com]
     - [38e5b4b] 2017-05-27 added icon for License at _search_item [@hiqsol]
     - [8ea9f6b] 2017-05-27 redone to use `yii2-hiart-librariesio` [@hiqsol]
@@ -539,3 +540,5 @@
 [b9972eb]: https://github.com/hiqdev/asset-packagist/commit/b9972eb
 [9f04bf5]: https://github.com/hiqdev/asset-packagist/commit/9f04bf5
 [3511c98]: https://github.com/hiqdev/asset-packagist/commit/3511c98
+[18bfb40]: https://github.com/hiqdev/asset-packagist/commit/18bfb40
+[1.0.0]: https://github.com/hiqdev/asset-packagist/compare/0.1.0...1.0.0
