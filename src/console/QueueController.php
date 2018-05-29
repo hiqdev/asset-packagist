@@ -20,6 +20,7 @@ use yii\queue\cli\Signal;
 use yii\queue\ErrorEvent;
 use yii\queue\JobEvent;
 use yii\queue\Queue;
+use yii\queue\cli\Queue as CliQueue;
 
 /**
  * Manages service Queue.
@@ -71,10 +72,11 @@ class QueueController extends Controller
 
     private function ensureLimits()
     {
-        if (++$this->executedJobsCount >= static::MAX_EXECUTED_JOBS && function_exists('posix_kill')) {
-            $this->stdout('Reached limit of ' . static::MAX_EXECUTED_JOBS . " executed jobs. Stopping process.\n");
-            Signal::setExitFlag();
+        if ($this->executedJobsCount++ > static::MAX_EXECUTED_JOBS && function_exists('posix_kill')) {
+            return 15; // SIGTERM
         }
+
+        return null;
     }
 
     /**
@@ -100,6 +102,14 @@ class QueueController extends Controller
         Event::on(Queue::class, Queue::EVENT_AFTER_ERROR, function ($event) use ($out) {
             /** @var ErrorEvent $event */
             $out("%RJob '" . get_class($event->job) . "' finished with error:%n '" . $event->error . "'\n");
+        });
+
+        Event::on(Queue::class, CliQueue::EVENT_WORKER_LOOP, function (\yii\queue\cli\WorkerEvent $event) use ($out) {
+            $exitCode = $this->ensureLimits();
+            if ($exitCode !== null) {
+                $out('Reached limit of ' . static::MAX_EXECUTED_JOBS . " executed jobs. Stopping process.\n");
+                $event->exitCode = $exitCode;
+            }
         });
 
         Event::on(AbstractPackageCommand::class, AbstractPackageCommand::EVENT_BEFORE_RUN, function ($event) use ($out) {
