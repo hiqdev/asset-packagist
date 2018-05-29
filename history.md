@@ -1,6 +1,11 @@
 # hiqdev/asset-packagist
 
-## [1.0.0] - 2018-05-23
+## [1.0.1] - 2018-05-29
+
+- Fixed executed jobs limit to follow `yiisoft/yii2-queue` API changes [@SilverFire]
+    - [c98c9fa] 2018-05-29 Fixed executed jobs limit to follow yiisoft/yii2-queue API changes [@SilverFire]
+
+## [1.0.0] - 2018-05-25
 
 - Fixed XSS vulnerabilities
     - [92c0fd7] 2017-12-11 Fixed XSS vulnerabilities [@SilverFire]
@@ -459,7 +464,7 @@
 [62c099e]: https://github.com/hiqdev/asset-packagist/commit/62c099e
 [442259c]: https://github.com/hiqdev/asset-packagist/commit/442259c
 [55e1777]: https://github.com/hiqdev/asset-packagist/commit/55e1777
-[Under development]: https://github.com/hiqdev/asset-packagist/compare/0.1.0...HEAD
+[Under development]: https://github.com/hiqdev/asset-packagist/compare/1.0.0...HEAD
 [0.1.0]: https://github.com/hiqdev/asset-packagist/releases/tag/0.1.0
 [257b2f5]: https://github.com/hiqdev/asset-packagist/commit/257b2f5
 [5b5f435]: https://github.com/hiqdev/asset-packagist/commit/5b5f435
@@ -542,3 +547,5 @@
 [3511c98]: https://github.com/hiqdev/asset-packagist/commit/3511c98
 [18bfb40]: https://github.com/hiqdev/asset-packagist/commit/18bfb40
 [1.0.0]: https://github.com/hiqdev/asset-packagist/compare/0.1.0...1.0.0
+[c98c9fa]: https://github.com/hiqdev/asset-packagist/commit/c98c9fa
+[1.0.1]: https://github.com/hiqdev/asset-packagist/compare/1.0.0...1.0.1

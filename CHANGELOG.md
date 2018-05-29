@@ -1,6 +1,10 @@
 # hiqdev/asset-packagist
 
-## [1.0.0] - 2018-05-23
+## [1.0.1] - 2018-05-29
+
+- Fixed executed jobs limit to follow `yiisoft/yii2-queue` API changes [@SilverFire] ([@SilverFire])
+
+## [1.0.0] - 2018-05-25
 
 - Fixed XSS vulnerabilities ([@SilverFire])
 - Added patch version support for `bower-asset/angular` ([@hiqsol])
@@ -47,6 +51,7 @@
 [edgardmessias@gmail.com]: https://github.com/edgardmessias
 [@zhuravljov]: https://github.com/zhuravljov
 [zhuravljov@gmail.com]: https://github.com/zhuravljov
-[Under development]: https://github.com/hiqdev/asset-packagist/compare/0.1.0...HEAD
+[Under development]: https://github.com/hiqdev/asset-packagist/compare/1.0.0...HEAD
 [0.1.0]: https://github.com/hiqdev/asset-packagist/releases/tag/0.1.0
 [1.0.0]: https://github.com/hiqdev/asset-packagist/compare/0.1.0...1.0.0
+[1.0.1]: https://github.com/hiqdev/asset-packagist/compare/1.0.0...1.0.1
