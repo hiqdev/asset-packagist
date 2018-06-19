@@ -202,7 +202,30 @@ class AssetPackage extends Object
                 ];
             }
             if ($package->getLicense()) {
-                $release['license'] = $package->getLicense();
+                $packageLicense = $package->getLicense();
+                $licenses = [];
+                if (is_array($packageLicense)) {
+                    // For packages with an array license, validate values.
+                    foreach ($packageLicense as $license) {
+                        // If the license follows older npm spec follow extract
+                        // url or project name. Otherwise, skip it.
+                        if (is_array($license)) {
+                            if (array_key_exists('url', $license)) {
+                                $licenses[] = $license['url'];
+                            } else if (array_key_exists('type', $license)) {
+                                $licenses[] = $license['type'];
+                            } else {
+                                continue;
+                            }
+                        } else {
+                            // Keep non array licenses.
+                            $licenses[] = $license;
+                        }
+                    }
+                } else {
+                    $licenses[] = $packageLicense;
+                }
+                $release['license'] = $licenses;
             }
             if ($package->getSourceUrl()) {
                 $release['source'] = [
