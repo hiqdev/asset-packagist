@@ -170,6 +170,36 @@ class AssetPackage extends Object
     }
 
     /**
+     * @param mixed $releaseLicense
+     * @return array
+     */
+    public function prepareReleaseLicense($releaseLicense) {
+        $licenses = [];
+        if (is_array($releaseLicense)) {
+            // For packages with an array license, validate values.
+            foreach ($releaseLicense as $license) {
+                // If the license follows older npm spec follow extract
+                // url or project name. Otherwise, skip it.
+                if (is_array($license)) {
+                    if (array_key_exists('url', $license)) {
+                        $licenses[] = $license['url'];
+                    } else if (array_key_exists('type', $license)) {
+                        $licenses[] = $license['type'];
+                    } else {
+                        continue;
+                    }
+                } else {
+                    // Keep non array licenses.
+                    $licenses[] = $license;
+                }
+            }
+        } else {
+            $licenses[] = $releaseLicense;
+        }
+        return $licenses;
+    }
+
+    /**
      * @param \Composer\DependencyResolver\Pool $pool
      * @return array
      */
@@ -202,30 +232,7 @@ class AssetPackage extends Object
                 ];
             }
             if ($package->getLicense()) {
-                $packageLicense = $package->getLicense();
-                $licenses = [];
-                if (is_array($packageLicense)) {
-                    // For packages with an array license, validate values.
-                    foreach ($packageLicense as $license) {
-                        // If the license follows older npm spec follow extract
-                        // url or project name. Otherwise, skip it.
-                        if (is_array($license)) {
-                            if (array_key_exists('url', $license)) {
-                                $licenses[] = $license['url'];
-                            } else if (array_key_exists('type', $license)) {
-                                $licenses[] = $license['type'];
-                            } else {
-                                continue;
-                            }
-                        } else {
-                            // Keep non array licenses.
-                            $licenses[] = $license;
-                        }
-                    }
-                } else {
-                    $licenses[] = $packageLicense;
-                }
-                $release['license'] = $licenses;
+                $release['license'] = $this->prepareReleaseLicense($package->getLicense());
             }
             if ($package->getSourceUrl()) {
                 $release['source'] = [
