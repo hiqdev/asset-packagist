@@ -35,6 +35,7 @@ $this->params['noTitle'] = true;
                     In case Composer fails to install some asset package,
                     use the search line at the top of the page to check specific package health.
                 </p>
+                <p>For NPM scoped packages use `scope--package` instead of `@scope/package`, e.g. `npm-asset/pusher--chatkit`.</p>
 
                 <p><?= Html::a('More info &raquo;', ['/site/about'], ['class' => 'btn btn-default']) ?>
             </div>
