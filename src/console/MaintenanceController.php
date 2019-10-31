@@ -93,10 +93,13 @@ class MaintenanceController extends Controller
 
         $i = 0;
         foreach ($packages as $name => $data) {
-            $package = AssetPackage::fromFullName($name);
             if ($i++ % 10 === 0) { $this->stdout('.'); }
-            if ($i % 1000 === 0) { $this->stdout(" [ 1000 ]\n"); }
-            if ($this->packageStorage->checkIsSane($package)) {
+            if ($i % 1000 === 0) { $this->stdout(" [ $i ]\n"); }
+
+            $package = AssetPackage::fromFullName($name);
+            if ($this->packageRepository->isAvoided($package)
+                || $this->packageStorage->checkIsSane($package)
+            ) {
                 continue;
             }
 

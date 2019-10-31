@@ -269,6 +269,7 @@ class Storage extends Component implements StorageInterface
 
     public function checkIsSane(AssetPackage $package)
     {
+        $isOk = true;
         $name = $package->getNormalName();
         try {
             $directoryIterator = new \DirectoryIterator($this->buildPath('p', $name));
@@ -288,11 +289,10 @@ class Storage extends Component implements StorageInterface
             $fileHash = hash_file('sha256', $path);
             if ($sha !== $fileHash) {
                 unlink($path);
-
-                return false;
+                $isOk = false;
             }
         }
 
-        return true;
+        return $isOk;
     }
 }

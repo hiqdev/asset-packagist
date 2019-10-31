@@ -74,6 +74,15 @@ class PackageRepository
         ], $this->getWhereCondition($package))->execute();
     }
 
+    public function isAvoided(AssetPackage $package)
+    {
+        return (new Query())
+            ->select('is_avoided')
+            ->from('package')
+            ->where($this->getWhereCondition($package))
+            ->scalar($this->db);
+    }
+
     protected function getWhereCondition(AssetPackage $package)
     {
         return [
@@ -90,7 +99,7 @@ class PackageRepository
     {
         return (new Query())
             ->from('package')
-            ->where(['type' => $package->getType(), 'name' => $package->getName()])
+            ->where($this->getWhereCondition($package))
             ->exists($this->db);
     }
 
