@@ -133,7 +133,11 @@ class Storage extends Component implements StorageInterface
         $json = file_get_contents($path);
         $updateTime = filemtime($path);
         $hash = hash('sha256', $json);
-        $data = Json::decode($json);
+        try {
+            $data = Json::decode($json);
+        } catch (\Exception $e) {
+            return null;
+        }
         $releases = isset($data['packages'][$name]) ? $data['packages'][$name] : [];
 
         return compact('hash', 'releases', 'updateTime');
@@ -261,5 +265,34 @@ class Storage extends Component implements StorageInterface
         }
 
         return $packages;
+    }
+
+    public function checkIsSane(AssetPackage $package)
+    {
+        $name = $package->getNormalName();
+        try {
+            $directoryIterator = new \DirectoryIterator($this->buildPath('p', $name));
+            $iterator = new \RegexIterator($directoryIterator, '/^.+\.json$/i', \RecursiveRegexIterator::GET_MATCH);
+        } catch (\UnexpectedValueException $e) {
+            return false;
+        }
+
+        foreach ($iterator as $match) {
+            $filename = $match[0];
+            $sha = basename($filename, '.json');
+            if ($sha === 'latest') {
+                continue;
+            }
+
+            $path = $this->buildPath('p', $name, $filename);
+            $fileHash = hash_file('sha256', $path);
+            if ($sha !== $fileHash) {
+                unlink($path);
+
+                return false;
+            }
+        }
+
+        return true;
     }
 }

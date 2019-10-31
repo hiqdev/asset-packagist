@@ -86,4 +86,27 @@ class MaintenanceController extends Controller
             $this->stdout(Console::renderColoredString($message));
         }
     }
+
+    public function actionCheckHashes()
+    {
+        $packages = $this->packageStorage->listPackages();
+
+        $i = 0;
+        foreach ($packages as $name => $data) {
+            $package = AssetPackage::fromFullName($name);
+            if ($i++ % 10 === 0) { $this->stdout('.'); }
+            if ($i % 1000 === 0) { $this->stdout(" [ 1000 ]\n"); }
+            if ($this->packageStorage->checkIsSane($package)) {
+                continue;
+            }
+
+            Yii::$app->queue->push(Yii::createObject(PackageUpdateCommand::class, [$package]));
+
+            $message = "\nPackage %N" . $package->getFullName() . '%n is corrupted. ';
+            $message .= "%GAdded to queue for update%n\n";
+            $this->stdout(Console::renderColoredString($message));
+        }
+
+        return 0;
+    }
 }
