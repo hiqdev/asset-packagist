@@ -19,7 +19,7 @@ return [
     'components' => [
         'db' => [
             'class' => \yii\db\Connection::class,
-            'dsn' => 'mysql:host=localhost;dbname=' . $params['db.name'],
+            'dsn' => "mysql:host={$params['db.hostname']};dbname={$params['db.name']}",
             'username' => $params['db.username'],
             'password' => $params['db.password'],
             'charset' => 'utf8',
