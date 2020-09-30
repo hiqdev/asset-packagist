@@ -72,7 +72,7 @@ class QueueController extends Controller
 
     private function ensureLimits()
     {
-        if ($this->executedJobsCount++ > static::MAX_EXECUTED_JOBS && function_exists('posix_kill')) {
+        if ($this->executedJobsCount > static::MAX_EXECUTED_JOBS && function_exists('posix_kill')) {
             return 15; // SIGTERM
         }
 
@@ -91,6 +91,7 @@ class QueueController extends Controller
         Event::on(Queue::class, Queue::EVENT_BEFORE_EXEC, function ($event) use ($out) {
             /** @var JobEvent $event */
             $out("%GNew job%n '" . get_class($event->job) . "'\n");
+            $this->executedJobsCount++;
             $this->ensureLimits();
         });
 
