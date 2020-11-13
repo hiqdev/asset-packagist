@@ -5,7 +5,6 @@
 [![Build Status](https://img.shields.io/travis/hiqdev/asset-packagist.svg)](https://travis-ci.org/hiqdev/asset-packagist)
 [![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/hiqdev/asset-packagist.svg)](https://scrutinizer-ci.com/g/hiqdev/asset-packagist/)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/hiqdev/asset-packagist.svg)](https://scrutinizer-ci.com/g/hiqdev/asset-packagist/)
-[![Dependency Status](https://www.versioneye.com/php/hiqdev:asset-packagist/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:asset-packagist/dev-master)
 
 ![Composer](https://raw.githubusercontent.com/hiqdev/asset-packagist/master/docs/asset-packagist.png)
 
