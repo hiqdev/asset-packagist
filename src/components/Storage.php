@@ -206,6 +206,7 @@ class Storage extends Component implements StorageInterface
                     'sha256' => $hash,
                 ],
             ],
+            'available-package-patterns' => ['bower-asset/*', 'npm-asset/*'],
         ];
         $this->acquireLock();
         $filename = $this->buildPath('packages.json');
