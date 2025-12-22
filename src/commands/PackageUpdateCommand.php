@@ -54,6 +54,7 @@ class PackageUpdateCommand extends AbstractPackageCommand
             'npm asset package must be present for create a VCS Repository' => CorruptedPackageException::class,
             'Could not parse version constraint' => CorruptedPackageException::class,
             'No valid bower.json was found in any branch or tag' => CorruptedPackageException::class,
+            'No valid package.json was found in any branch or tag' => CorruptedPackageException::class,
         ];
 
         foreach ($avoidMarkers as $marker => $exceptionClass) {
