@@ -40,6 +40,7 @@ class PackageUpdateCommand extends AbstractPackageCommand
                 throw $e;
             }
 
+            $queue->priority(20);
             $queue->push(Yii::createObject(CollectDependenciesCommand::class, [$this->package]));
         }
 

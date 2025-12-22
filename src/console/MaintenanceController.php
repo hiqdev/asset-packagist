@@ -75,10 +75,12 @@ class MaintenanceController extends Controller
     public function actionUpdateExpired()
     {
         $packages = $this->packageRepository->getExpiredForUpdate();
+        $queue = Yii::$app->queue;
+        $queue->priority(10);
 
         foreach ($packages as $package) {
             $package->load();
-            Yii::$app->queue->push(Yii::createObject(PackageUpdateCommand::class, [$package]));
+            $queue->push(Yii::createObject(PackageUpdateCommand::class, [$package]));
             $package->unload();
 
             $message = 'Package %N' . $package->getFullName() . '%n';
