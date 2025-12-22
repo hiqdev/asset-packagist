@@ -159,6 +159,14 @@ class AssetPackage extends BaseObject
             $this->_releases = $data['releases'];
             $this->_updateTime = $data['updateTime'];
         }
+
+    }
+
+    public function unload()
+    {
+        unset($this->_hash);
+        unset($this->_releases);
+        unset($this->_updatetime);
     }
 
     public function update()
