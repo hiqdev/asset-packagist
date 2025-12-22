@@ -52,6 +52,7 @@ class PackageUpdateCommand extends AbstractPackageCommand
             'file could not be downloaded (HTTP/1.1 404 Not Found)' => PackageNotExistsException::class,
             'npm asset package must be present for create a VCS Repository' => CorruptedPackageException::class,
             'Could not parse version constraint' => CorruptedPackageException::class,
+            'No valid bower.json was found in any branch or tag' => CorruptedPackageException::class,
         ];
 
         foreach ($avoidMarkers as $marker => $exceptionClass) {
