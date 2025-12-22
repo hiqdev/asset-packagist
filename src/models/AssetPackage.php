@@ -16,9 +16,9 @@ use hiqdev\assetpackagist\components\Storage;
 use hiqdev\assetpackagist\registry\RegistryFactory;
 use hiqdev\assetpackagist\repositories\PackageRepository;
 use Yii;
-use yii\base\Object;
+use yii\base\BaseObject;
 
-class AssetPackage extends Object
+class AssetPackage extends BaseObject
 {
     protected $_type;
     protected $_name;

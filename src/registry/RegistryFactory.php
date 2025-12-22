@@ -24,10 +24,10 @@ use Fxp\Composer\AssetPlugin\Repository\AssetRepositoryManager;
 use Fxp\Composer\AssetPlugin\Repository\VcsPackageFilter;
 use Fxp\Composer\AssetPlugin\Util\AssetPlugin;
 use hiqdev\assetpackagist\log\YiiLogIO;
-use yii\base\Object;
+use yii\base\BaseObject;
 use yii\di\Instance;
 
-class RegistryFactory extends Object
+class RegistryFactory extends BaseObject
 {
     /**
      * The composer output.
