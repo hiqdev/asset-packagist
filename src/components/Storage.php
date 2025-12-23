@@ -108,13 +108,13 @@ class Storage extends Component implements StorageInterface
                 if (file_put_contents($latestPath, $json) === false) {
                     throw new AssetFileStorageException('Failed to write file "latest.json" for asset-packge', $package);
                 }
-                $this->writeProviderLatest($name, $hash);
             } finally {
                 $this->releaseLock();
             }
         } else {
             touch($latestPath);
         }
+        $this->writeProviderLatest($name, $hash);
 
         return $hash;
     }
