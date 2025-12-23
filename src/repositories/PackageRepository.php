@@ -119,6 +119,19 @@ class PackageRepository
     }
 
     /**
+     * @return \hiqdev\assetpackagist\models\AssetPackage[]
+     */
+    public function getAllActive()
+    {
+        $rows = (new Query())
+            ->from('package')
+            ->andWhere(['is_avoided' => 0])
+            ->all();
+
+        return $this->hydrate($rows);
+    }
+
+    /**
      * @param array $rows
      * @return AssetPackage[]
      */

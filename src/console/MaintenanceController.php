@@ -90,6 +90,18 @@ class MaintenanceController extends Controller
         }
     }
 
+    public function actionRegenerateProviderLatest()
+    {
+        $packages = $this->packageRepository->getAllActive();
+
+        foreach ($packages as $package) {
+            $package->load();
+            $this->packageStorage->writePackage($package);
+            $package->unload();
+            $this->stdout("Package {$package->getFullName()} regenerated\n");
+        }
+    }
+
     public function actionCheckHashes()
     {
         $packages = $this->packageStorage->listPackages();
