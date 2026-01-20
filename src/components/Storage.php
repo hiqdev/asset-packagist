@@ -117,7 +117,7 @@ class Storage extends Component implements StorageInterface
         $this->acquirePackageLock($name);
 
         try {
-            if (!file_exists($path)) {
+            if (file_exists($path) && filesize($path) > 0) {
                 touch($latestPath);
             } else {
                 if ($this->mkdir(dirname($path)) === false) {
@@ -196,7 +196,7 @@ class Storage extends Component implements StorageInterface
         $path = $this->buildHashedPath('provider-latest', $hash);
 
         try {
-            if (file_exists($path)) {
+            if (file_exists($path) && filesize($path) > 0) {
                 touch($latestPath);
                 return $hash;
             }
