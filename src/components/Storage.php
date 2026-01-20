@@ -29,7 +29,7 @@ class Storage extends Component implements StorageInterface
         $this->_path = Yii::getAlias('@storage', false);
     }
 
-    protected function acquireLock()
+    protected function acquireTopLevelLock()
     {
         /* @var $mutex \yii\mutex\Mutex */
         $mutex = Yii::$app->mutex;
@@ -39,7 +39,7 @@ class Storage extends Component implements StorageInterface
         }
     }
 
-    protected function releaseLock()
+    protected function releaseTopLevelLock()
     {
         /* @var $mutex \yii\mutex\Mutex */
         $mutex = Yii::$app->mutex;
@@ -47,17 +47,35 @@ class Storage extends Component implements StorageInterface
         $mutex->release('lock');
     }
 
+    protected function acquirePackageLock($packageName)
+    {
+        $mutex  = Yii::$app->mutex;
+        $key    = 'package-lock-' . $packageName;
+
+        if (!$mutex->acquire($key, 5)) {
+            throw new \Exception('failed get package lock for package ' . $packageName);
+        }
+    }
+
+    protected function releasePackageLock($packageName)
+    {
+        $mutex  = Yii::$app->mutex;
+        $key    = 'package-lock-' . $packageName;
+
+        $mutex->release($key);
+    }
+
     /**
      * {@inheritdoc}
      */
     public function getNextId()
     {
-        $this->acquireLock();
+        $this->acquireTopLevelLock();
         {
             $nextID = $this->readLastId() + 1;
             $this->writeLastId($nextID);
         }
-        $this->releaseLock();
+        $this->releaseTopLevelLock();
 
         return $nextID;
     }
@@ -96,9 +114,12 @@ class Storage extends Component implements StorageInterface
         $hash = hash('sha256', $json);
         $path = $this->buildHashedPath($name, $hash);
         $latestPath = $this->buildHashedPath($name);
-        if (!file_exists($path)) {
-            $this->acquireLock();
-            try {
+        $this->acquirePackageLock($name);
+
+        try {
+            if (!file_exists($path)) {
+                touch($latestPath);
+            } else {
                 if ($this->mkdir(dirname($path)) === false) {
                     throw new AssetFileStorageException('Failed to create a directory for asset-package', $package);
                 }
@@ -108,12 +129,11 @@ class Storage extends Component implements StorageInterface
                 if (file_put_contents($latestPath, $json) === false) {
                     throw new AssetFileStorageException('Failed to write file "latest.json" for asset-packge', $package);
                 }
-            } finally {
-                $this->releaseLock();
             }
-        } else {
-            touch($latestPath);
+        } finally {
+            $this->releaseTopLevelLock();
         }
+
         $this->writeProviderLatest($name, $hash);
 
         return $hash;
@@ -159,6 +179,8 @@ class Storage extends Component implements StorageInterface
     protected function writeProviderLatest($name, $hash)
     {
         $latestPath = $this->buildHashedPath('provider-latest');
+        $this->acquireTopLevelLock();
+
         if (file_exists($latestPath)) {
             $data = Json::decode(file_get_contents($latestPath) ?: '[]');
         }
@@ -173,25 +195,25 @@ class Storage extends Component implements StorageInterface
         $hash = hash('sha256', $json);
         $path = $this->buildHashedPath('provider-latest', $hash);
 
-        if (!file_exists($path)) {
-            $this->acquireLock();
-
-            try {
-                if ($this->mkdir(dirname($path)) === false) {
-                    throw new AssetFileStorageException('Failed to create a directory for provider-latest storage');
-                }
-                if (file_put_contents($path, $json) === false) {
-                    throw new AssetFileStorageException('Failed to write package to provider-latest storage for package "' . $name . '"');
-                }
-                if (file_put_contents($latestPath, $json) === false) {
-                    throw new AssetFileStorageException('Failed to write file "latest.json" to provider-latest storage for package "' . $name . '"');
-                }
-                $this->writePackagesJson($hash);
-            } finally {
-                $this->releaseLock();
+        try {
+            if (file_exists($path)) {
+                touch($latestPath);
+                return $hash;
             }
-        } else {
-            touch($latestPath);
+
+            if ($this->mkdir(dirname($path)) === false) {
+                throw new AssetFileStorageException('Failed to create a directory for provider-latest storage');
+            }
+            if (file_put_contents($path, $json) === false) {
+                throw new AssetFileStorageException('Failed to write package to provider-latest storage for package "' . $name . '"');
+            }
+            if (file_put_contents($latestPath, $json) === false) {
+                throw new AssetFileStorageException('Failed to write file "latest.json" to provider-latest storage for package "' . $name . '"');
+            }
+
+            $this->writePackagesJson($hash);
+        } finally {
+            $this->releaseTopLevelLock();
         }
 
         return $hash;
@@ -208,16 +230,11 @@ class Storage extends Component implements StorageInterface
             ],
             'available-package-patterns' => ['bower-asset/*', 'npm-asset/*'],
         ];
-        $this->acquireLock();
         $filename = $this->buildPath('packages.json');
-        try {
-            if (file_put_contents($filename, Json::encode($data)) === false) {
-                throw new AssetFileStorageException('Failed to write main packages.json');
-            }
-            touch($filename);
-        } finally {
-            $this->releaseLock();
+        if (file_put_contents($filename, Json::encode($data)) === false) {
+            throw new AssetFileStorageException('Failed to write main packages.json');
         }
+        touch($filename);
     }
 
     /**
