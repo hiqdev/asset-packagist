@@ -104,6 +104,17 @@ class MaintenanceController extends Controller
 
     public function actionCheckHashes()
     {
+        $hasUnresolvedCorruption = false;
+
+        $providerLatestCheck = $this->packageStorage->checkProviderLatestIsSane();
+        if (!$providerLatestCheck['sane']) {
+            $hasUnresolvedCorruption = true;
+            $message = '%RProvider-latest storage is corrupted%n';
+            $message .= " (reason: {$providerLatestCheck['reason']}). ";
+            $message .= "%GRun `maintenance/regenerate-provider-latest` to repair.%n\n";
+            $this->stdout(Console::renderColoredString($message));
+        }
+
         $packages = $this->packageStorage->listPackages();
 
         $i = 0;
@@ -112,9 +123,25 @@ class MaintenanceController extends Controller
             if ($i % 1000 === 0) { $this->stdout(" [ $i ]\n"); }
 
             $package = AssetPackage::fromFullName($name);
-            if ($this->packageRepository->isAvoided($package)
-                || $this->packageStorage->checkIsSane($package)
-            ) {
+            $check = $this->packageStorage->checkPackageIsSane($package);
+            if ($check['sane']) {
+                continue;
+            }
+
+            $needsUpdate = $check['activeCorrupted'] || $check['activeMissing'];
+
+            if (!$needsUpdate) {
+                $message = "\nPackage %N" . $package->getFullName() . '%n had ';
+                $message .= $check['orphanedRemoved'] . " orphaned corrupted shard(s) removed.\n";
+                $this->stdout(Console::renderColoredString($message));
+                continue;
+            }
+
+            if ($this->packageRepository->isAvoided($package)) {
+                $hasUnresolvedCorruption = true;
+                $message = "\nPackage %R" . $package->getFullName() . '%n is actively corrupted but avoided. ';
+                $message .= "%RNo auto-repair - needs manual attention.%n\n";
+                $this->stdout(Console::renderColoredString($message));
                 continue;
             }
 
@@ -125,6 +152,6 @@ class MaintenanceController extends Controller
             $this->stdout(Console::renderColoredString($message));
         }
 
-        return 0;
+        return $hasUnresolvedCorruption ? 1 : 0;
     }
 }
