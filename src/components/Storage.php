@@ -117,21 +117,19 @@ class Storage extends Component implements StorageInterface
         $this->acquirePackageLock($name);
 
         try {
-            if (file_exists($path) && filesize($path) > 0) {
-                touch($latestPath);
-            } else {
+            if (!file_exists($path) || filesize($path) === 0) {
                 if ($this->mkdir(dirname($path)) === false) {
                     throw new AssetFileStorageException('Failed to create a directory for asset-package', $package);
                 }
                 if (file_put_contents($path, $json) === false) {
                     throw new AssetFileStorageException('Failed to write package', $package);
                 }
-                if (file_put_contents($latestPath, $json) === false) {
-                    throw new AssetFileStorageException('Failed to write file "latest.json" for asset-packge', $package);
-                }
+            }
+            if (!$this->writeLatestAtomic($latestPath, $json)) {
+                throw new AssetFileStorageException('Failed to write file "latest.json" for asset-packge', $package);
             }
         } finally {
-            $this->releaseTopLevelLock();
+            $this->releasePackageLock($name);
         }
 
         $this->writeProviderLatest($name, $hash);
@@ -176,6 +174,34 @@ class Storage extends Component implements StorageInterface
         return $this->buildPath('p', $name, $hash . '.json');
     }
 
+    /**
+     * Atomically replaces $path's content with $json, so concurrent lock-free
+     * readers (nginx, Composer, readPackage()) never observe a truncated file.
+     * No-op (besides a mtime touch) when the content did not change.
+     * @return bool whether the file was written
+     */
+    protected function writeLatestAtomic($path, $json)
+    {
+        $current = file_exists($path) ? file_get_contents($path) : null;
+        if ($current === $json) {
+            touch($path);
+
+            return true;
+        }
+
+        $tmpPath = $path . '.tmp.' . getmypid() . '.' . mt_rand();
+        if (file_put_contents($tmpPath, $json) === false) {
+            return false;
+        }
+        if (!rename($tmpPath, $path)) {
+            @unlink($tmpPath);
+
+            return false;
+        }
+
+        return true;
+    }
+
     protected function writeProviderLatest($name, $hash)
     {
         $latestPath = $this->buildHashedPath('provider-latest');
@@ -196,18 +222,15 @@ class Storage extends Component implements StorageInterface
         $path = $this->buildHashedPath('provider-latest', $hash);
 
         try {
-            if (file_exists($path) && filesize($path) > 0) {
-                touch($latestPath);
-                return $hash;
+            if (!file_exists($path) || filesize($path) === 0) {
+                if ($this->mkdir(dirname($path)) === false) {
+                    throw new AssetFileStorageException('Failed to create a directory for provider-latest storage');
+                }
+                if (file_put_contents($path, $json) === false) {
+                    throw new AssetFileStorageException('Failed to write package to provider-latest storage for package "' . $name . '"');
+                }
             }
-
-            if ($this->mkdir(dirname($path)) === false) {
-                throw new AssetFileStorageException('Failed to create a directory for provider-latest storage');
-            }
-            if (file_put_contents($path, $json) === false) {
-                throw new AssetFileStorageException('Failed to write package to provider-latest storage for package "' . $name . '"');
-            }
-            if (file_put_contents($latestPath, $json) === false) {
+            if (!$this->writeLatestAtomic($latestPath, $json)) {
                 throw new AssetFileStorageException('Failed to write file "latest.json" to provider-latest storage for package "' . $name . '"');
             }
 
@@ -231,10 +254,10 @@ class Storage extends Component implements StorageInterface
             'available-package-patterns' => ['bower-asset/*', 'npm-asset/*'],
         ];
         $filename = $this->buildPath('packages.json');
-        if (file_put_contents($filename, Json::encode($data)) === false) {
+        $json = Json::encode($data);
+        if (!$this->writeLatestAtomic($filename, $json)) {
             throw new AssetFileStorageException('Failed to write main packages.json');
         }
-        touch($filename);
     }
 
     /**
