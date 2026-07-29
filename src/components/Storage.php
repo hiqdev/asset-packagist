@@ -189,16 +189,12 @@ class Storage extends Component implements StorageInterface
 
         $tmpPath = $path . '.tmp.' . getmypid() . '.' . mt_rand();
         if (file_put_contents($tmpPath, $json) === false) {
-            // The containing directory may not be writable for new files even
-            // though the target file itself, once it exists, is (e.g. deploy-time
-            // directory ownership differs from the app user). Fall back to an
-            // in-place write rather than failing the whole update.
-            return file_exists($path) && file_put_contents($path, $json) !== false;
+            return false;
         }
         if (!rename($tmpPath, $path)) {
             @unlink($tmpPath);
 
-            return file_exists($path) && file_put_contents($path, $json) !== false;
+            return false;
         }
 
         return true;
