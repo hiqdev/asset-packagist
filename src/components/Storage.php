@@ -184,9 +184,7 @@ class Storage extends Component implements StorageInterface
     {
         $current = file_exists($path) ? file_get_contents($path) : null;
         if ($current === $json) {
-            touch($path);
-
-            return true;
+            return touch($path);
         }
 
         $tmpPath = $path . '.tmp.' . getmypid() . '.' . mt_rand();
