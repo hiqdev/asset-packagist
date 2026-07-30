@@ -46,4 +46,22 @@ interface StorageInterface
 
     // TODO: PHPDoc
     public function listPackages();
+
+    /**
+     * Checks whether $package's on-disk shards are sane, unlinking any
+     * filename-hash-vs-content-hash mismatches found and classifying the result.
+     *
+     * @param AssetPackage $package
+     * @return array{sane: bool, activeCorrupted: bool, activeMissing: bool, orphanedRemoved: int}
+     */
+    public function checkPackageIsSane(AssetPackage $package);
+
+    /**
+     * Checks whether the currently-live provider-latest shard (the one packages.json's
+     * provider-includes actually points at) exists and hash-matches, and that
+     * provider-latest/latest.json agrees with it.
+     *
+     * @return array{sane: bool, reason: string|null, hash: string|null}
+     */
+    public function checkProviderLatestIsSane();
 }
