@@ -35,4 +35,23 @@ class AssetPackageTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertSame($this->type . '-asset/' . $this->name, $this->object->getFullName());
     }
+
+    public function testGetRegistryNameUnscoped()
+    {
+        $this->assertSame($this->name, $this->object->getRegistryName());
+    }
+
+    public function testGetRegistryNameScoped()
+    {
+        $package = new AssetPackage('npm', 'ngneat--hot-toast');
+        $this->assertSame('@ngneat/hot-toast', $package->getRegistryName());
+    }
+
+    public function testNormalizeAndDenormalizeScopedNameRoundTrip()
+    {
+        $this->assertSame(
+            '@ngneat/hot-toast',
+            AssetPackage::denormalizeScopedName(AssetPackage::normalizeScopedName('@ngneat/hot-toast'))
+        );
+    }
 }
