@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <small class="repository-link">
                 <?php
                 if ($package->getType() === 'npm') {
-                    $link = 'https://npmjs.com/package/' . $package->getName();
+                    $link = 'https://www.npmjs.com/package/' . $package->getRegistryName();
                 } elseif ($package->getType() === 'bower') {
                     $link = 'https://bower.io/search?q=' . $package->getName();
                 }

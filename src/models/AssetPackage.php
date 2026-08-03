@@ -45,6 +45,15 @@ class AssetPackage extends BaseObject
     }
 
     /**
+     * Reverses normalizeScopedName(): turns `scope--package` back into `@scope/package`,
+     * matching how npm actually names scoped packages in its own URLs.
+     */
+    public static function denormalizeScopedName($name)
+    {
+        return preg_replace('#^([^/]+?)--#', '@${1}/', $name, 1);
+    }
+
+    /**
      * AssetPackage constructor.
      * @param string $type
      * @param string $name
@@ -129,6 +138,14 @@ class AssetPackage extends BaseObject
     public function getName()
     {
         return $this->_name;
+    }
+
+    /**
+     * Name as used by the origin registry (npm), e.g. `@scope/package` instead of `scope--package`.
+     */
+    public function getRegistryName()
+    {
+        return static::denormalizeScopedName($this->_name);
     }
 
     public function getHash()
