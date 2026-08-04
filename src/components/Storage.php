@@ -107,17 +107,6 @@ class Storage extends Component implements StorageInterface
         $name = $package->getNormalName();
         $releases = $package->getReleases();
 
-        if (empty($releases)) {
-            $existing = $this->readPackage($package);
-            if ($existing !== null && !empty($existing['releases'])) {
-                throw new AssetFileStorageException(
-                    'Refusing to overwrite existing releases of "' . $name . '" with an empty release set '
-                    . '(the fetch likely failed or resolved to the wrong upstream name)',
-                    $package
-                );
-            }
-        }
-
         $data = [
             'packages' => [
                 $name => $releases,
@@ -130,6 +119,17 @@ class Storage extends Component implements StorageInterface
         $this->acquirePackageLock($name);
 
         try {
+            if (empty($releases)) {
+                $existing = $this->readPackage($package);
+                if ($existing !== null && !empty($existing['releases'])) {
+                    throw new AssetFileStorageException(
+                        'Refusing to overwrite existing releases of "' . $name . '" with an empty release set '
+                        . '(the fetch likely failed or resolved to the wrong upstream name)',
+                        $package
+                    );
+                }
+            }
+
             if ($this->shardNeedsWrite($path, $hash)) {
                 if ($this->mkdir(dirname($path)) === false) {
                     throw new AssetFileStorageException('Failed to create a directory for asset-package', $package);
