@@ -11,6 +11,7 @@
 namespace hiqdev\assetpackagist\tests\unit\models;
 
 use hiqdev\assetpackagist\components\Storage;
+use hiqdev\assetpackagist\exceptions\AssetFileStorageException;
 use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
 use yii\helpers\Json;
@@ -251,6 +252,50 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(
             $json,
             file_get_contents($this->storageDir . "/p/bower-asset/jquery/{$hash}.json")
+        );
+    }
+
+    public function testWritePackageRefusesToBlankExistingReleases()
+    {
+        $existingJson = Json::encode([
+            'packages' => [
+                'bower-asset/jquery' => [
+                    '3.6.0' => ['name' => 'bower-asset/jquery', 'version' => '3.6.0'],
+                ],
+            ],
+        ]);
+        $existingHash = hash('sha256', $existingJson);
+
+        $this->writeShard('p/bower-asset/jquery/latest.json', $existingJson);
+        $this->writeShard("p/bower-asset/jquery/{$existingHash}.json", $existingJson);
+
+        // freshly constructed, never loaded/updated -> getReleases() is empty,
+        // simulating a fetch that resolved to nothing (case mismatch, registry hiccup, ...)
+        $package = new AssetPackage('bower', 'jquery');
+
+        $this->expectException(AssetFileStorageException::class);
+
+        try {
+            $this->object->writePackage($package);
+        } finally {
+            $this->assertSame(
+                $existingJson,
+                file_get_contents($this->storageDir . '/p/bower-asset/jquery/latest.json'),
+                'existing releases must survive an empty-release write attempt'
+            );
+        }
+    }
+
+    public function testWritePackageAllowsEmptyReleasesWhenNothingExistedBefore()
+    {
+        $package = new AssetPackage('bower', 'new-package');
+
+        $this->object->writePackage($package);
+
+        $expectedJson = Json::encode(['packages' => ['bower-asset/new-package' => []]]);
+        $this->assertSame(
+            $expectedJson,
+            file_get_contents($this->storageDir . '/p/bower-asset/new-package/latest.json')
         );
     }
 }

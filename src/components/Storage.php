@@ -105,9 +105,22 @@ class Storage extends Component implements StorageInterface
     public function writePackage(AssetPackage $package)
     {
         $name = $package->getNormalName();
+        $releases = $package->getReleases();
+
+        if (empty($releases)) {
+            $existing = $this->readPackage($package);
+            if ($existing !== null && !empty($existing['releases'])) {
+                throw new AssetFileStorageException(
+                    'Refusing to overwrite existing releases of "' . $name . '" with an empty release set '
+                    . '(the fetch likely failed or resolved to the wrong upstream name)',
+                    $package
+                );
+            }
+        }
+
         $data = [
             'packages' => [
-                $name => $package->getReleases(),
+                $name => $releases,
             ],
         ];
         $json = Json::encode($data);
