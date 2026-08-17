@@ -19,10 +19,10 @@ use Composer\Package\RootPackage;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\RepositoryFactory;
 use Composer\Repository\RepositoryManager;
-use Fxp\Composer\AssetPlugin\Config\Config as AssetConfig;
-use Fxp\Composer\AssetPlugin\Repository\AssetRepositoryManager;
-use Fxp\Composer\AssetPlugin\Repository\VcsPackageFilter;
-use Fxp\Composer\AssetPlugin\Util\AssetPlugin;
+use hiqdev\assetpackagist\fxp\Config\Config as AssetConfig;
+use hiqdev\assetpackagist\fxp\Repository\AssetRepositoryManager;
+use hiqdev\assetpackagist\fxp\Repository\VcsPackageFilter;
+use hiqdev\assetpackagist\fxp\Util\AssetPlugin;
 use hiqdev\assetpackagist\log\YiiLogIO;
 use yii\base\BaseObject;
 use yii\di\Instance;
@@ -95,20 +95,12 @@ class RegistryFactory extends BaseObject
          */
         $this->repositoryManager = RepositoryFactory::manager($this->io, $this->composerConfig);
 
-        /**
-         * Read fxp/composer-asset-plugin config
-         * See https://github.com/fxpio/composer-asset-plugin/blob/master/Resources/doc/index.md
-         * Note: The "COMPOSER_HOME/config.json" file is already the "config" key.
-         */
+        // Keep the historical fxp-asset settings as input to the internal port.
+        // No external Composer plugin is loaded or activated.
         $arrayConfig = [];
         if ($this->composerConfig->has('fxp-asset')) {
             $arrayConfig = $this->composerConfig->get('fxp-asset');
         }
-
-        /**
-         * Enabling the fxp/composer-asset-plugin plugin
-         * See activate method in https://github.com/fxpio/composer-asset-plugin/blob/master/FxpAssetPlugin.php.
-         */
         $this->assetConfig = new AssetConfig($arrayConfig);
 
         //Dummy Package

@@ -298,4 +298,51 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             file_get_contents($this->storageDir . '/p/bower-asset/new-package/latest.json')
         );
     }
+
+    /**
+     * @dataProvider assetTypes
+     */
+    public function testWritePackageKeepsTheCompleteComposerHashChain($type, $name)
+    {
+        $package = new class($type, $name) extends AssetPackage {
+            public $fixtureReleases;
+
+            public function getReleases()
+            {
+                return $this->fixtureReleases;
+            }
+        };
+        $package->fixtureReleases = [
+            '1.0.0' => [
+                'uid' => 1000001,
+                'name' => $package->getNormalName(),
+                'version' => '1.0.0',
+                'version_normalized' => '1.0.0.0',
+                'type' => $type . '-asset',
+                'dist' => ['type' => 'tar', 'url' => 'https://example.test/package.tgz'],
+            ],
+        ];
+
+        $packageHash = $this->object->writePackage($package);
+        $packageJson = file_get_contents($this->storageDir . '/p/' . $package->getNormalName() . '/latest.json');
+        $this->assertSame($packageHash, hash('sha256', $packageJson));
+        $this->assertSame($packageJson, file_get_contents($this->storageDir . '/p/' . $package->getNormalName() . '/' . $packageHash . '.json'));
+
+        $providerJson = file_get_contents($this->storageDir . '/p/provider-latest/latest.json');
+        $providerHash = hash('sha256', $providerJson);
+        $this->assertSame($providerJson, file_get_contents($this->storageDir . '/p/provider-latest/' . $providerHash . '.json'));
+        $this->assertSame($packageHash, Json::decode($providerJson)['providers'][$package->getNormalName()]['sha256']);
+        $this->assertSame(
+            $providerHash,
+            Json::decode(file_get_contents($this->storageDir . '/packages.json'))['provider-includes']['p/provider-latest/%hash%.json']['sha256']
+        );
+    }
+
+    public function assetTypes()
+    {
+        return [
+            ['bower', 'fixture-bower'],
+            ['npm', 'fixture-npm'],
+        ];
+    }
 }
