@@ -99,25 +99,13 @@ $this->params['breadcrumbs'][] = $this->title;
     ];
     </code></pre>
 
-    <h1>Migrating from composer-asset-plugin</h1>
+    <h1>Composer 2 compatibility</h1>
 
-    <p>Moving from <a href="https://github.com/fxpio/composer-asset-plugin">composer-asset-plugin</a> is not
-        straightforward when you host several applications on single server. It's known that asset packagist
-        and asset plugin don't work well together when plugin is installed in global scope. So, to not affect
-        other applications by deleting the plugin, you may disable the plugin locally via <code>composer.json</code>
-        config option <i>(you need plugin version ≥ 1.3.0 for this)</i>:</p>
-
-    <pre><code>
-    "config": {
-        "fxp-asset": {
-            "enabled": false
-        }
-    }
-    </code></pre>
+    <p>Asset Packagist publishes native Composer metadata for Bower and npm packages. No Composer plugin,
+        global installation, or legacy asset configuration is required.</p>
 
     <h1>Acknowledgements</h1>
 
-    <p>This project uses Francois Pluchino's <a href="https://github.com/fxpio/composer-asset-plugin">composer-asset-plugin</a>
-        to convert Bower and NPM packages to Composer format.</p>
+    <p>The package conversion registry is maintained as part of Asset Packagist.</p>
     <p>The search is powered by <a href="https://libraries.io/">https://libraries.io/</a>.</p>
 </div>
