@@ -121,6 +121,42 @@ abstract class AbstractAssetsRepository extends ComposerRepository
     }
 
     /**
+     * Loads asset packages through the registry's native package endpoint.
+     *
+     * Composer 2 no longer calls the legacy Pool-aware whatProvides() hook,
+     * so the asset prefix must be removed before constructing the registry URL.
+     */
+    public function loadPackages(array $packageNameMap, array $acceptableStabilities, array $stabilityFlags, array $alreadyLoaded = [])
+    {
+        $packages = [];
+        $namesFound = [];
+
+        foreach ($packageNameMap as $name => $constraint) {
+            if ($this->findWhatProvides($name) === []) {
+                continue;
+            }
+
+            $repositoryName = Util::convertAliasName($name);
+            $packageName = Util::cleanPackageName($repositoryName);
+            $packageUrl = $this->buildPackageUrl($packageName);
+            $cacheName = $packageName . '-' . sha1($packageName) . '-package.json';
+            $data = $this->fetchFile($packageUrl, $cacheName);
+
+            foreach ($this->createArrayRepositoryConfig($data['versions'] ?? []) as $package) {
+                if ($package->getName() === $name) {
+                    $packages[] = $package;
+                    $namesFound[] = $name;
+                }
+            }
+        }
+
+        return [
+            'namesFound' => array_values(array_unique($namesFound)),
+            'packages' => $packages,
+        ];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function whatProvides(Pool $pool, $name, $bypassFilters = false)
