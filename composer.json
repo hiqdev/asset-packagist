@@ -47,7 +47,7 @@
     "require": {
         "php": "^8.5",
         "composer/composer": "^2.8",
-        "hiqdev/hidev": "<2.0 || dev-master",
+        "hiqdev/hidev": "<2.0 || dev-master || dev-refresh",
         "hiqdev/hisite": "<2.0 || dev-master",
         "hiqdev/yii2-pnotify": "<2.0 || dev-master",
         "hiqdev/yii2-hiart-guzzle": "<2.0 || dev-master",
