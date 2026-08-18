@@ -14,9 +14,9 @@ use hiqdev\assetpackagist\models\AssetPackage;
 use hiqdev\assetpackagist\repositories\PackageRepository;
 use Yii;
 use yii\base\Component;
-use yii\queue\Job;
+use yii\queue\JobInterface;
 
-abstract class AbstractPackageCommand extends Component implements Job
+abstract class AbstractPackageCommand extends Component implements JobInterface
 {
     const EVENT_BEFORE_RUN = 'beforeRun';
     const EVENT_AFTER_RUN = 'afterRun';
