@@ -48,7 +48,7 @@ class NpmRepository extends AbstractAssetsRepository
      */
     protected function getPackageUrl()
     {
-        return $this->canonicalizeUrl($this->baseUrl.'/%package%');
+        return $this->getUrl() . '/%package%';
     }
 
     /**
@@ -56,7 +56,7 @@ class NpmRepository extends AbstractAssetsRepository
      */
     protected function getSearchUrl()
     {
-        return $this->canonicalizeUrl($this->baseUrl.'/-/all');
+        return $this->getUrl() . '/-/all';
     }
 
     /**

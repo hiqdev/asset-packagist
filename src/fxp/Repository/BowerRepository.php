@@ -39,7 +39,7 @@ class BowerRepository extends AbstractAssetsRepository
      */
     protected function getPackageUrl()
     {
-        return $this->canonicalizeUrl($this->baseUrl.'/%package%');
+        return $this->getUrl() . '/%package%';
     }
 
     /**
@@ -47,7 +47,7 @@ class BowerRepository extends AbstractAssetsRepository
      */
     protected function getSearchUrl()
     {
-        return $this->canonicalizeUrl($this->baseUrl.'/search/%query%');
+        return $this->getUrl() . '/search/%query%';
     }
 
     /**

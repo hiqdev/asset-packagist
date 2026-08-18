@@ -14,6 +14,7 @@ namespace hiqdev\assetpackagist\fxp\Repository;
 use Composer\Config;
 use Composer\DependencyResolver\Pool;
 use Composer\Downloader\TransportException;
+use Composer\Util\HttpDownloader;
 use Composer\EventDispatcher\EventDispatcher;
 use Composer\IO\IOInterface;
 use Composer\Json\JsonFile;
@@ -70,9 +71,10 @@ abstract class AbstractAssetsRepository extends ComposerRepository
      * @param array           $repoConfig
      * @param IOInterface     $io
      * @param Config          $config
-     * @param EventDispatcher $eventDispatcher
+     * @param HttpDownloader $httpDownloader
+     * @param EventDispatcher|null $eventDispatcher
      */
-    public function __construct(array $repoConfig, IOInterface $io, Config $config, EventDispatcher $eventDispatcher = null)
+    public function __construct(array $repoConfig, IOInterface $io, Config $config, HttpDownloader $httpDownloader, ?EventDispatcher $eventDispatcher = null)
     {
         $repoConfig = array_merge($repoConfig, array(
             'url' => $this->getUrl(),
@@ -80,7 +82,7 @@ abstract class AbstractAssetsRepository extends ComposerRepository
         $this->assetRepositoryManager = $repoConfig['asset-repository-manager'];
         $this->repositoryManager = $this->assetRepositoryManager->getRepositoryManager();
 
-        parent::__construct($repoConfig, $io, $config, $eventDispatcher);
+        parent::__construct($repoConfig, $io, $config, $httpDownloader, $eventDispatcher);
 
         $this->assetType = Assets::createType($this->getType());
         $this->lazyProvidersUrl = $this->getPackageUrl();
@@ -219,7 +221,7 @@ abstract class AbstractAssetsRepository extends ComposerRepository
     /**
      * {@inheritdoc}
      */
-    protected function loadRootServerFile()
+    protected function loadRootServerFile(?int $rootMaxAge = null)
     {
         return array(
             'providers' => array(),

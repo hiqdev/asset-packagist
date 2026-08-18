@@ -15,42 +15,42 @@ use Yii;
 
 class YiiLogIO extends NullIO
 {
-    public function isVerbose()
+    public function isVerbose(): bool
     {
         return YII_ENV_TEST;
     }
 
-    public function isVeryVerbose()
+    public function isVeryVerbose(): bool
     {
         return YII_ENV_DEV;
     }
 
-    public function isDebug()
+    public function isDebug(): bool
     {
         return YII_DEBUG;
     }
 
-    public function write($messages, $newline = true, $verbosity = self::NORMAL)
+    public function write($messages, bool $newline = true, int $verbosity = self::NORMAL): void
     {
         Yii::trace($messages, __METHOD__);
     }
 
-    public function writeError($messages, $newline = true, $verbosity = self::NORMAL)
+    public function writeError($messages, bool $newline = true, int $verbosity = self::NORMAL): void
     {
         Yii::trace($messages, __METHOD__);
     }
 
-    public function overwrite($messages, $newline = true, $size = 80, $verbosity = self::NORMAL)
+    public function overwrite($messages, bool $newline = true, ?int $size = null, int $verbosity = self::NORMAL): void
     {
         Yii::trace($messages, __METHOD__);
     }
 
-    public function overwriteError($messages, $newline = true, $size = 80, $verbosity = self::NORMAL)
+    public function overwriteError($messages, bool $newline = true, ?int $size = null, int $verbosity = self::NORMAL): void
     {
         Yii::trace($messages, __METHOD__);
     }
 
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = []): void
     {
         Yii::trace($message, __METHOD__);
     }

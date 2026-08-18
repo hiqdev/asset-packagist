@@ -19,6 +19,7 @@ use Composer\Package\RootPackage;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\RepositoryFactory;
 use Composer\Repository\RepositoryManager;
+use Composer\Repository\RepositorySet;
 use hiqdev\assetpackagist\fxp\Config\Config as AssetConfig;
 use hiqdev\assetpackagist\fxp\Repository\AssetRepositoryManager;
 use hiqdev\assetpackagist\fxp\Repository\VcsPackageFilter;
@@ -105,7 +106,7 @@ class RegistryFactory extends BaseObject
 
         //Dummy Package
         $this->rootPackage = new RootPackage('asset-packagist', '0.0.0.0', '0.0.0');
-        $this->installationManager = new InstallationManager();
+        $this->installationManager = Factory::create($this->io, null, true)->getInstallationManager();
         $this->packageFilter = new VcsPackageFilter($this->assetConfig, $this->rootPackage, $this->installationManager);
         $this->assetRepositoryManager = new AssetRepositoryManager($this->io, $this->repositoryManager, $this->assetConfig, $this->packageFilter);
 
@@ -121,10 +122,13 @@ class RegistryFactory extends BaseObject
         return new CompositeRepository($this->repositoryManager->getRepositories());
     }
 
-    public function getPool($minimumStability = 'dev')
+    public function getPool($minimumStability = 'dev', $packageName = null)
     {
-        $pool = new Pool($minimumStability);
-        $pool->addRepository($this->getRepository());
-        return $pool;
+        $repositorySet = new RepositorySet($minimumStability);
+        $repositorySet->addRepository($this->getRepository());
+
+        return $packageName === null
+            ? $repositorySet->createPoolWithAllPackages()
+            : $repositorySet->createPoolForPackage($packageName);
     }
 }
