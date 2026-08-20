@@ -33,7 +33,7 @@ class GitDriver extends BaseGitDriver
     /**
      * {@inheritdoc}
      */
-    public function getComposerInformation($identifier)
+    public function getComposerInformation(string $identifier): ?array
     {
         $resource = sprintf('%s:%s', escapeshellarg($identifier), $this->repoConfig['filename']);
 
@@ -43,7 +43,7 @@ class GitDriver extends BaseGitDriver
     /**
      * {@inheritdoc}
      */
-    public function initialize()
+    public function initialize(): void
     {
         /* @var AssetRepositoryManager $arm */
         $arm = $this->repoConfig['asset-repository-manager'];

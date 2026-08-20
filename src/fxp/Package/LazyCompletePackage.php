@@ -21,7 +21,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getTransportOptions()
+    public function getTransportOptions(): array
     {
         $this->initialize();
 
@@ -31,7 +31,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getTargetDir()
+    public function getTargetDir(): ?string
     {
         $this->initialize();
 
@@ -41,7 +41,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getExtra()
+    public function getExtra(): array
     {
         $this->initialize();
 
@@ -51,7 +51,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getBinaries()
+    public function getBinaries(): array
     {
         $this->initialize();
 
@@ -61,7 +61,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getInstallationSource()
+    public function getInstallationSource(): ?string
     {
         $this->initialize();
 
@@ -71,7 +71,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getSourceType()
+    public function getSourceType(): ?string
     {
         $this->initialize();
 
@@ -81,7 +81,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getSourceUrl()
+    public function getSourceUrl(): ?string
     {
         $this->initialize();
 
@@ -91,7 +91,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getSourceReference()
+    public function getSourceReference(): ?string
     {
         $this->initialize();
 
@@ -101,7 +101,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getSourceMirrors()
+    public function getSourceMirrors(): ?array
     {
         $this->initialize();
 
@@ -111,7 +111,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getSourceUrls()
+    public function getSourceUrls(): array
     {
         $this->initialize();
 
@@ -121,7 +121,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getDistType()
+    public function getDistType(): ?string
     {
         $this->initialize();
 
@@ -131,7 +131,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getDistUrl()
+    public function getDistUrl(): ?string
     {
         $this->initialize();
 
@@ -141,7 +141,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getDistReference()
+    public function getDistReference(): ?string
     {
         $this->initialize();
 
@@ -151,7 +151,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getDistSha1Checksum()
+    public function getDistSha1Checksum(): ?string
     {
         $this->initialize();
 
@@ -161,7 +161,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getDistMirrors()
+    public function getDistMirrors(): ?array
     {
         $this->initialize();
 
@@ -171,7 +171,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getDistUrls()
+    public function getDistUrls(): array
     {
         $this->initialize();
 
@@ -181,7 +181,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getReleaseDate()
+    public function getReleaseDate(): ?\DateTimeInterface
     {
         $this->initialize();
 
@@ -191,7 +191,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getRequires()
+    public function getRequires(): array
     {
         $this->initialize();
 
@@ -201,7 +201,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getConflicts()
+    public function getConflicts(): array
     {
         $this->initialize();
 
@@ -211,7 +211,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getDevRequires()
+    public function getDevRequires(): array
     {
         $this->initialize();
 
@@ -221,7 +221,7 @@ class LazyCompletePackage extends AbstractLazyCompletePackage implements LazyPac
     /**
      * {@inheritdoc}
      */
-    public function getSuggests()
+    public function getSuggests(): array
     {
         $this->initialize();
 

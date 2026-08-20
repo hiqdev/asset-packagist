@@ -24,7 +24,7 @@ class GitHubDriver extends AbstractGitHubDriver
     /**
      * {@inheritdoc}
      */
-    public function getComposerInformation($identifier)
+    public function getComposerInformation(string $identifier): ?array
     {
         if ($this->gitDriver) {
             return $this->gitDriver->getComposerInformation($identifier);
@@ -94,7 +94,7 @@ class GitHubDriver extends AbstractGitHubDriver
      */
     protected function parseComposerContent($resource)
     {
-        $composer = (array) JsonFile::parseJson($this->getContents($resource));
+        $composer = (array) JsonFile::parseJson($this->getContents($resource)->getBody(), $resource);
         if (empty($composer['content']) || 'base64' !== $composer['encoding'] || !($composer = base64_decode($composer['content']))) {
             throw new \RuntimeException('Could not retrieve '.$this->repoConfig['filename'].' from '.$resource);
         }
@@ -133,7 +133,7 @@ class GitHubDriver extends AbstractGitHubDriver
      *
      * @param string $url
      */
-    protected function setupGitDriver($url)
+    protected function setupGitDriver(string $url): void
     {
         $this->gitDriver = new GitDriver(
             array(
@@ -144,8 +144,8 @@ class GitHubDriver extends AbstractGitHubDriver
             ),
             $this->io,
             $this->config,
-            $this->process,
-            $this->remoteFilesystem
+            $this->httpDownloader,
+            $this->process
         );
         $this->gitDriver->initialize();
     }

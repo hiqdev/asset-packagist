@@ -15,6 +15,7 @@ use Composer\Cache;
 use Composer\Downloader\TransportException;
 use Composer\Json\JsonFile;
 use Composer\Repository\Vcs\GitHubDriver as BaseGitHubDriver;
+use Composer\Util\Http\Response;
 use hiqdev\assetpackagist\fxp\Repository\Util as RepoUtil;
 
 /**
@@ -34,7 +35,7 @@ abstract class AbstractGitHubDriver extends BaseGitHubDriver
      */
     protected $redirectApi;
 
-    public function initialize()
+    public function initialize(): void
     {
         if (!isset($this->repoConfig['no-api'])) {
             $this->repoConfig['no-api'] = $this->getNoApiOption();
@@ -74,26 +75,9 @@ abstract class AbstractGitHubDriver extends BaseGitHubDriver
      *
      * @return mixed The result
      */
-    protected function getContents($url, $fetchingRepoData = false)
+    protected function getContents(string $url, bool $fetchingRepoData = false): Response
     {
-        $url = $this->getValidContentUrl($url);
-
-        if (null !== $this->redirectApi) {
-            return parent::getContents($url, $fetchingRepoData);
-        }
-
-        try {
-            $contents = $this->getRemoteContents($url);
-            $this->redirectApi = false;
-
-            return $contents;
-        } catch (TransportException $e) {
-            if ($this->hasRedirectUrl($url)) {
-                $url = $this->getValidContentUrl($url);
-            }
-
-            return parent::getContents($url, $fetchingRepoData);
-        }
+        return parent::getContents($url, $fetchingRepoData);
     }
 
     /**
@@ -215,21 +199,9 @@ abstract class AbstractGitHubDriver extends BaseGitHubDriver
     /**
      * {@inheritdoc}
      */
-    public function getBranches()
+    public function getBranches(): array
     {
-        if ($this->gitDriver) {
-            return $this->gitDriver->getBranches();
-        }
-
-        if (null === $this->branches) {
-            $this->branches = array();
-            $resource = $this->getApiUrl().'/repos/'.$this->owner.'/'.$this->repository.'/git/refs/heads?per_page=100';
-            $branchBlacklist = 'gh-pages' === $this->getRootIdentifier() ? array() : array('gh-pages');
-
-            $this->doAddBranches($resource, $branchBlacklist);
-        }
-
-        return $this->branches;
+        return parent::getBranches();
     }
 
     /**
