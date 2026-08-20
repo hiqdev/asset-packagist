@@ -8,6 +8,9 @@
  * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
  */
 
+use hiqdev\assetpackagist\components\GuestUser;
+use yii\web\User;
+
 return [
     'id'    => 'asset-packagist',
     'name'  => 'Asset Packagist',
@@ -46,6 +49,12 @@ return [
             'class' => \hiqdev\assetpackagist\librariesio\LibrariesioRepository::class,
             'apiKey' => $params['librariesio.api_key'],
         ],
+        'user' => [
+            'class' => GuestUser::class,
+            'identityClass' => \hisite\models\User::class,
+            'enableSession' => false,
+            'enableAutoLogin' => false,
+        ],
     ],
     'container' => [
         'singletons' => [
@@ -60,7 +69,10 @@ return [
             },
             \yii\queue\Queue::class => function () {
                 return Yii::$app->get('queue');
-            }
+            },
+            User::class => static function (): User {
+                return Yii::$app->get('user');
+            },
         ],
     ],
 ];
