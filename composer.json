@@ -47,13 +47,11 @@
     "require": {
         "php": "^8.5",
         "composer/composer": "^2.8",
-        "hiqdev/hidev": "<2.0 || dev-master || dev-refresh",
-        "hiqdev/hisite": "<2.0 || dev-master",
-        "hiqdev/yii2-pnotify": "<2.0 || dev-master",
-        "hiqdev/yii2-hiart-guzzle": "<2.0 || dev-master",
-        "hiqdev/yii2-hiart-librariesio": "<2.0 || dev-master",
-        "guzzlehttp/guzzle": "^7.0",
-        "yiisoft/yii2-queue": "^2.0.2"
+        "hiqdev/hidev": "dev-master || dev-refresh",
+        "hiqdev/hisite": "dev-master",
+        "hiqdev/yii2-pnotify": "dev-master",
+        "hiqdev/yii2-hiart-guzzle": "dev-master",
+        "hiqdev/yii2-hiart-librariesio": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "^2.0",
