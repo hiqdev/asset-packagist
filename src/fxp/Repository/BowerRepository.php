@@ -19,6 +19,51 @@ namespace hiqdev\assetpackagist\fxp\Repository;
 class BowerRepository extends AbstractAssetsRepository
 {
     /**
+     * Loads Bower packages from their VCS repository.
+     *
+     * Unlike npm, the Bower registry response contains only a repository URL,
+     * not a map of version metadata. Composer 2 calls this method instead of
+     * the legacy Pool-aware whatProvides() hook, so recreate that VCS path
+     * here and delegate filtering to the asset VCS repository.
+     */
+    public function loadPackages(array $packageNameMap, array $acceptableStabilities, array $stabilityFlags, array $alreadyLoaded = [])
+    {
+        $packages = [];
+        $namesFound = [];
+
+        foreach ($packageNameMap as $name => $constraint) {
+            if ($this->findWhatProvides($name) === []) {
+                continue;
+            }
+
+            $repositoryName = Util::convertAliasName($name);
+            $packageName = Util::cleanPackageName($repositoryName);
+            $packageUrl = $this->buildPackageUrl($packageName);
+            $cacheName = $packageName . '-' . sha1($packageName) . '-package.json';
+            $data = $this->fetchFile($packageUrl, $cacheName);
+            $repositoryConfig = $this->createVcsRepositoryConfig($data, Util::cleanPackageName($name));
+            $repositoryConfig['asset-repository-manager'] = $this->assetRepositoryManager;
+            $repositoryConfig['vcs-package-filter'] = $this->packageFilter;
+
+            $repository = $this->repositoryManager->createRepository($repositoryConfig['type'], $repositoryConfig);
+            $result = $repository->loadPackages(
+                [$name => $constraint],
+                $acceptableStabilities,
+                $stabilityFlags,
+                $alreadyLoaded
+            );
+
+            $packages = array_merge($packages, $result['packages']);
+            $namesFound = array_merge($namesFound, $result['namesFound']);
+        }
+
+        return [
+            'namesFound' => array_values(array_unique($namesFound)),
+            'packages' => $packages,
+        ];
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getType()

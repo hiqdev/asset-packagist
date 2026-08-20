@@ -29,7 +29,7 @@ abstract class AbstractLazyCompletePackage extends CompletePackage implements La
     /**
      * {@inheritdoc}
      */
-    public function getAutoload()
+    public function getAutoload(): array
     {
         $this->initialize();
 
@@ -39,7 +39,7 @@ abstract class AbstractLazyCompletePackage extends CompletePackage implements La
     /**
      * {@inheritdoc}
      */
-    public function getDevAutoload()
+    public function getDevAutoload(): array
     {
         $this->initialize();
 
@@ -49,7 +49,7 @@ abstract class AbstractLazyCompletePackage extends CompletePackage implements La
     /**
      * {@inheritdoc}
      */
-    public function getIncludePaths()
+    public function getIncludePaths(): array
     {
         $this->initialize();
 
@@ -59,7 +59,7 @@ abstract class AbstractLazyCompletePackage extends CompletePackage implements La
     /**
      * {@inheritdoc}
      */
-    public function getNotificationUrl()
+    public function getNotificationUrl(): ?string
     {
         $this->initialize();
 
@@ -69,7 +69,7 @@ abstract class AbstractLazyCompletePackage extends CompletePackage implements La
     /**
      * {@inheritdoc}
      */
-    public function getArchiveExcludes()
+    public function getArchiveExcludes(): array
     {
         $this->initialize();
 
@@ -79,7 +79,7 @@ abstract class AbstractLazyCompletePackage extends CompletePackage implements La
     /**
      * {@inheritdoc}
      */
-    public function getScripts()
+    public function getScripts(): array
     {
         $this->initialize();
 
@@ -89,7 +89,7 @@ abstract class AbstractLazyCompletePackage extends CompletePackage implements La
     /**
      * {@inheritdoc}
      */
-    public function getRepositories()
+    public function getRepositories(): array
     {
         $this->initialize();
 
@@ -99,7 +99,7 @@ abstract class AbstractLazyCompletePackage extends CompletePackage implements La
     /**
      * {@inheritdoc}
      */
-    public function getLicense()
+    public function getLicense(): array
     {
         $this->initialize();
 
@@ -109,7 +109,7 @@ abstract class AbstractLazyCompletePackage extends CompletePackage implements La
     /**
      * {@inheritdoc}
      */
-    public function getKeywords()
+    public function getKeywords(): array
     {
         $this->initialize();
 
@@ -119,7 +119,7 @@ abstract class AbstractLazyCompletePackage extends CompletePackage implements La
     /**
      * {@inheritdoc}
      */
-    public function getAuthors()
+    public function getAuthors(): array
     {
         $this->initialize();
 
@@ -129,7 +129,7 @@ abstract class AbstractLazyCompletePackage extends CompletePackage implements La
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         $this->initialize();
 
@@ -139,7 +139,7 @@ abstract class AbstractLazyCompletePackage extends CompletePackage implements La
     /**
      * {@inheritdoc}
      */
-    public function getHomepage()
+    public function getHomepage(): ?string
     {
         $this->initialize();
 
@@ -149,7 +149,7 @@ abstract class AbstractLazyCompletePackage extends CompletePackage implements La
     /**
      * {@inheritdoc}
      */
-    public function getSupport()
+    public function getSupport(): array
     {
         $this->initialize();
 

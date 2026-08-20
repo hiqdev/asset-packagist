@@ -14,6 +14,8 @@ namespace hiqdev\assetpackagist\fxp\Repository;
 use Composer\Config;
 use Composer\EventDispatcher\EventDispatcher;
 use Composer\IO\IOInterface;
+use Composer\Util\HttpDownloader;
+use Composer\Util\ProcessExecutor;
 use Composer\Package\AliasPackage;
 use Composer\Package\Loader\ArrayLoader;
 use Composer\Package\Loader\LoaderInterface;
@@ -76,10 +78,12 @@ abstract class AbstractAssetVcsRepository extends VcsRepository
      * @param array           $repoConfig
      * @param IOInterface     $io
      * @param Config          $config
-     * @param EventDispatcher $dispatcher
-     * @param array           $drivers
+     * @param HttpDownloader          $httpDownloader
+     * @param EventDispatcher|null    $dispatcher
+     * @param ProcessExecutor|null    $process
+     * @param array|null              $drivers
      */
-    public function __construct(array $repoConfig, IOInterface $io, Config $config, EventDispatcher $dispatcher = null, array $drivers = null)
+    public function __construct(array $repoConfig, IOInterface $io, Config $config, HttpDownloader $httpDownloader, ?EventDispatcher $dispatcher = null, ?ProcessExecutor $process = null, ?array $drivers = null)
     {
         $drivers = $drivers ?: Assets::getVcsDrivers();
         $assetType = substr($repoConfig['type'], 0, strpos($repoConfig['type'], '-'));
@@ -97,13 +101,13 @@ abstract class AbstractAssetVcsRepository extends VcsRepository
             ? $repoConfig['vcs-package-filter']
             : null;
 
-        parent::__construct($repoConfig, $io, $config, $dispatcher, $drivers);
+        parent::__construct($repoConfig, $io, $config, $httpDownloader, $dispatcher, $process, $drivers);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function count()
+    public function count(): int
     {
         return null !== $this->packages ? count($this->packages) : 0;
     }

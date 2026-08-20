@@ -13,6 +13,7 @@ namespace hiqdev\assetpackagist\fxp\Repository\Vcs;
 
 use Composer\Cache;
 use Composer\Json\JsonFile;
+use Composer\Util\Http\Response;
 use Composer\Repository\Vcs\VcsDriverInterface;
 
 /**
@@ -93,7 +94,11 @@ class Util
             $meth = $ref->getMethod($method);
             $meth->setAccessible(true);
 
-            $commit = JsonFile::parseJson($meth->invoke($driver, $resource), $resource);
+            $commit = $meth->invoke($driver, $resource);
+            if ($commit instanceof Response) {
+                $commit = $commit->getBody();
+            }
+            $commit = JsonFile::parseJson($commit, $resource);
             $keys = explode('.', $resourceKey);
 
             while (!empty($keys)) {
