@@ -45,21 +45,21 @@
         }
     ],
     "require": {
-        "composer/composer": "^1.0",
-        "fxp/composer-asset-plugin": "^1.4.2",
-        "hiqdev/hidev": "<2.0 || dev-master",
-        "hiqdev/hisite": "<2.0 || dev-master",
-        "hiqdev/yii2-pnotify": "<2.0 || dev-master",
-        "hiqdev/yii2-hiart-guzzle": "<2.0 || dev-master",
-        "hiqdev/yii2-hiart-librariesio": "<2.0 || dev-master",
-        "guzzlehttp/guzzle": "^6.0",
-        "yiisoft/yii2-queue": "^2.0.2"
+        "php": "^8.5",
+        "composer/composer": "^2.10.1",
+        "hiqdev/hidev": "dev-master || dev-refresh",
+        "hiqdev/hisite": "dev-master",
+        "hiqdev/yii2-pnotify": "dev-master",
+        "hiqdev/yii2-hiart-guzzle": "dev-master",
+        "hiqdev/yii2-hiart-librariesio": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "^2.0",
         "hiqdev/hidev-php": "<2.0",
         "hiqdev/hidev-hiqdev": "<2.0"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "hiqdev\\assetpackagist\\": "src"

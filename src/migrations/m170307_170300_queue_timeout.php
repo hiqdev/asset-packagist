@@ -19,5 +19,5 @@ use yii\queue\db\migrations\M170307170300Later;
  */
 class m170307_170300_queue_timeout extends M170307170300Later
 {
-    public $tableName = '{{%queue}}';
+    public string $tableName = '{{%queue}}';
 }
