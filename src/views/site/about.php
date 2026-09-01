@@ -106,6 +106,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1>Acknowledgements</h1>
 
-    <p>The package conversion registry is maintained as part of Asset Packagist.</p>
+    <p>The package conversion registry is based on François Pluchino's
+        <a href="https://github.com/fxpio/composer-asset-plugin">composer-asset-plugin</a>
+        and is maintained as part of Asset Packagist.</p>
     <p>The search is powered by <a href="https://libraries.io/">https://libraries.io/</a>.</p>
 </div>
