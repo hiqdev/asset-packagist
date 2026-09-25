@@ -64,15 +64,15 @@ $stability_colors = [
                     ?>
                 </th>
                 <td>
-                    <code><?= $release['source']['reference'] ?: $release['dist']['reference'] ?: 'n/a' ?></code>
+                    <code><?= ($release['source']['reference'] ?? null) ?: ($release['dist']['reference'] ?? null) ?: 'n/a' ?></code>
                 </td>
                 <td>
                     <?php
                     $links = [];
-                    if ($release['dist']['url']) {
+                    if (!empty($release['dist']['url'])) {
                         $links[] = Html::a(Yii::t('app', 'Get ZIP'), $release['dist']['url']);
                     }
-                    if ($release['source']['url']) {
+                    if (!empty($release['source']['url'])) {
                         $links[] = Html::a(Yii::t('app', 'see sources'), $release['source']['url']);
                     }
 
