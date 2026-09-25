@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
  */
 
+use hiqdev\assetpackagist\components\ConsoleRequest;
+
 return [
     'bootstrap' => ['log'],
     'controllerMap' => [
@@ -32,6 +34,9 @@ return [
         ],
     ],
     'components' => [
+        'request' => [
+            'class' => ConsoleRequest::class,
+        ],
         'log' => [
             'flushInterval' => 1,
             'targets' => [
