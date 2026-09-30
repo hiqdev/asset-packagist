@@ -47,10 +47,18 @@ class Storage extends Component implements StorageInterface
         $mutex->release('lock');
     }
 
+    /**
+     * MySQL limits GET_LOCK() names to 64 chars, package names can be longer, so hash the name.
+     */
+    protected function packageLockKey($packageName)
+    {
+        return 'package-lock-' . sha1($packageName);
+    }
+
     protected function acquirePackageLock($packageName)
     {
         $mutex  = Yii::$app->mutex;
-        $key    = 'package-lock-' . $packageName;
+        $key    = $this->packageLockKey($packageName);
 
         if (!$mutex->acquire($key, 5)) {
             throw new \Exception('failed get package lock for package ' . $packageName);
@@ -60,7 +68,7 @@ class Storage extends Component implements StorageInterface
     protected function releasePackageLock($packageName)
     {
         $mutex  = Yii::$app->mutex;
-        $key    = 'package-lock-' . $packageName;
+        $key    = $this->packageLockKey($packageName);
 
         $mutex->release($key);
     }
