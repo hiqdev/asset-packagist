@@ -188,7 +188,7 @@ class AssetPackage extends BaseObject
 
     public function update()
     {
-        $pool = $this->getRegistry()->getPool();
+        $pool = $this->getRegistry()->getPool('dev', $this->getFullName());
         $this->_releases = $this->prepareReleases($pool);
         $this->getStorage()->writePackage($this);
         $this->load();

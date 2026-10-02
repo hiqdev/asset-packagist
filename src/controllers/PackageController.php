@@ -91,6 +91,7 @@ class PackageController extends Controller
         try {
             $package = $this->getAssetPackage($fullname);
             $params = [
+                'query' => $fullname,
                 'package' => $package,
                 'forceUpdate' => false,
             ];
