@@ -36,7 +36,7 @@ class Util
      *
      * @return RepositoryInterface|null
      */
-    public static function addRepository(IOInterface $io, RepositoryManager $rm, array &$repos, $name, array $repoConfig, Pool $pool = null)
+    public static function addRepository(IOInterface $io, RepositoryManager $rm, array &$repos, $name, array $repoConfig, ?Pool $pool = null)
     {
         $repoConfig['name'] = $name;
         $repo = $rm->createRepository($repoConfig['type'], $repoConfig);
@@ -57,7 +57,7 @@ class Util
      *
      * @return RepositoryInterface|null
      */
-    public static function addRepositoryInstance(IOInterface $io, RepositoryManager $rm, array &$repos, $name, RepositoryInterface $repo, Pool $pool = null)
+    public static function addRepositoryInstance(IOInterface $io, RepositoryManager $rm, array &$repos, $name, RepositoryInterface $repo, ?Pool $pool = null)
     {
         $notAddedRepo = null;
 

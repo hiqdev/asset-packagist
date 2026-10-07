@@ -29,7 +29,7 @@ class Validator
      *
      * @return false|string
      */
-    public static function validateBranch($branch, VersionParser $parser = null)
+    public static function validateBranch($branch, ?VersionParser $parser = null)
     {
         if (null === $parser) {
             $parser = new VersionParser();
@@ -53,7 +53,7 @@ class Validator
      *
      * @return false|string
      */
-    public static function validateTag($tag, AssetTypeInterface $assetType, VersionParser $parser = null)
+    public static function validateTag($tag, AssetTypeInterface $assetType, ?VersionParser $parser = null)
     {
         if (in_array($tag, array('master', 'trunk', 'default'))) {
             return false;

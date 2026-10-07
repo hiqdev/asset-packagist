@@ -41,3 +41,7 @@ phpunit.phar
 
 # Binaries
 ocular.phar
+
+# phpunit cache
+/.phpunit.result.cache
+/.phpunit.cache

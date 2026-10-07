@@ -22,12 +22,12 @@ class AssetPackageTest extends \PHPUnit\Framework\TestCase
     protected $type = 'bower';
     protected $name = 'jquery';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new AssetPackage($this->type, $this->name);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
     }
 
