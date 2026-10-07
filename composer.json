@@ -51,7 +51,8 @@
         "hiqdev/hisite": "dev-master",
         "hiqdev/yii2-pnotify": "dev-master",
         "hiqdev/yii2-hiart-guzzle": "dev-master",
-        "hiqdev/yii2-hiart-librariesio": "dev-master"
+        "hiqdev/yii2-hiart-librariesio": "dev-master",
+        "yiisoft/yii2-queue": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "^2.0",

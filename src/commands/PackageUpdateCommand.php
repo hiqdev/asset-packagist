@@ -47,34 +47,52 @@ class PackageUpdateCommand extends AbstractPackageCommand
         $this->afterRun();
     }
 
-    private function transformException(\Exception $e)
+    /**
+     * Returns the permanent-problem exception class for an update failure message,
+     * or null when the failure may be temporary.
+     *
+     * @param string $message
+     * @return string|null
+     */
+    public static function permanentProblemClass($message)
     {
-        $avoidMarkers = [
-            'file could not be downloaded (HTTP/1.1 404 Not Found)' => PackageNotExistsException::class,
+        // Composer 2 reports e.g. `(HTTP/2 404 )`, Composer 1 reported `(HTTP/1.1 404 Not Found)`
+        if (preg_match('{file could not be downloaded \(HTTP/[\d.]+ 404\b}i', $message)) {
+            return PackageNotExistsException::class;
+        }
+
+        $markers = [
             'npm asset package must be present for create a VCS Repository' => CorruptedPackageException::class,
             'Could not parse version constraint' => CorruptedPackageException::class,
             'No valid bower.json was found in any branch or tag' => CorruptedPackageException::class,
             'No valid package.json was found in any branch or tag' => CorruptedPackageException::class,
         ];
-
-        foreach ($avoidMarkers as $marker => $exceptionClass) {
-            if (!stripos($e->getMessage(), $marker)) {
-                continue;
+        foreach ($markers as $marker => $exceptionClass) {
+            if (stripos($message, $marker) !== false) {
+                return $exceptionClass;
             }
-
-            $newException = new $exceptionClass($e->getMessage(), 0, $e);
-
-            if (
-                $newException instanceof PermanentProblemExceptionInterface
-                && $this->packageRepository->exists($this->package)
-            ) {
-                Yii::warning('Package ' . $this->package->getFullName() . ' is marked as avoided', __CLASS__);
-                $this->packageRepository->markAvoided($this->package);
-            }
-
-            throw $newException;
         }
 
-        return false;
+        return null;
+    }
+
+    private function transformException(\Exception $e)
+    {
+        $exceptionClass = static::permanentProblemClass($e->getMessage());
+        if ($exceptionClass === null) {
+            return false;
+        }
+
+        $newException = new $exceptionClass($e->getMessage(), 0, $e);
+
+        if (
+            $newException instanceof PermanentProblemExceptionInterface
+            && $this->packageRepository->exists($this->package)
+        ) {
+            Yii::warning('Package ' . $this->package->getFullName() . ' is marked as avoided', __CLASS__);
+            $this->packageRepository->markAvoided($this->package);
+        }
+
+        throw $newException;
     }
 }

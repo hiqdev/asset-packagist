@@ -16,13 +16,21 @@ use hiqdev\assetpackagist\models\AssetPackage;
 use hiqdev\assetpackagist\repositories\PackageRepository;
 use Yii;
 use yii\console\Controller;
+use yii\db\Query;
 use yii\helpers\Console;
+use yii\queue\db\Queue as DbQueue;
 
 /**
  * Provides maintenance actions for the asset-packagist service.
  */
 class MaintenanceController extends Controller
 {
+    /**
+     * @var int `update-expired` does nothing while more jobs than this wait in the queue,
+     * so a backlog that outlives a nightly run is not enqueued a second time
+     */
+    public $maxPending = 1000;
+
     /**
      * @var StorageInterface
      */
@@ -72,10 +80,27 @@ class MaintenanceController extends Controller
     /**
      * Updates expired packages.
      */
+    public function options($actionID)
+    {
+        $options = parent::options($actionID);
+        if ($actionID === 'update-expired') {
+            $options[] = 'maxPending';
+        }
+
+        return $options;
+    }
+
     public function actionUpdateExpired()
     {
-        $packages = $this->packageRepository->getExpiredForUpdate();
         $queue = Yii::$app->queue;
+        $pending = $this->countPendingJobs($queue);
+        if ($pending > $this->maxPending) {
+            $this->stdout("Skipped: $pending jobs are still waiting in the queue (more than --max-pending={$this->maxPending}).\n");
+
+            return;
+        }
+
+        $packages = $this->packageRepository->getExpiredForUpdate();
         $queue->priority(10);
 
         foreach ($packages as $package) {
@@ -88,6 +113,22 @@ class MaintenanceController extends Controller
             $message .= ". %GAdded to queue for update%n\n";
             $this->stdout(Console::renderColoredString($message));
         }
+    }
+
+    /**
+     * @param \yii\queue\Queue $queue
+     * @return int number of jobs not yet taken by a worker, 0 when the driver cannot tell
+     */
+    protected function countPendingJobs($queue)
+    {
+        if (!$queue instanceof DbQueue) {
+            return 0;
+        }
+
+        return (int) (new Query())
+            ->from($queue->tableName)
+            ->where(['channel' => $queue->channel, 'reserved_at' => null])
+            ->count('*', $queue->db);
     }
 
     public function actionRegenerateProviderLatest()
