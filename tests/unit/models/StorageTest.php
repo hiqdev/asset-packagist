@@ -13,6 +13,7 @@ namespace hiqdev\assetpackagist\tests\unit\models;
 use hiqdev\assetpackagist\components\Storage;
 use hiqdev\assetpackagist\exceptions\AssetFileStorageException;
 use hiqdev\assetpackagist\models\AssetPackage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Yii;
 use yii\helpers\Json;
 
@@ -299,9 +300,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @dataProvider assetTypes
-     */
+    #[DataProvider('assetTypes')]
     public function testWritePackageKeepsTheCompleteComposerHashChain($type, $name)
     {
         $package = new class($type, $name) extends AssetPackage {
@@ -338,7 +337,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function assetTypes()
+    public static function assetTypes()
     {
         return [
             ['bower', 'fixture-bower'],

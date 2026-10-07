@@ -56,7 +56,9 @@
     "require-dev": {
         "yiisoft/yii2-debug": "^2.0",
         "hiqdev/hidev-php": "<2.0",
-        "hiqdev/hidev-hiqdev": "<2.0"
+        "hiqdev/hidev-hiqdev": "<2.0",
+        "opis/closure": "3.x-dev as 3.6.x-dev",
+        "phpunit/phpunit": "^12.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -79,5 +81,13 @@
             "type": "composer",
             "url": "https://asset-packagist.org"
         }
-    ]
+    ],
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "yiisoft/composer-config-plugin": true,
+            "php-http/discovery": true,
+            "hiqdev/composer-config-plugin": false
+        }
+    }
 }

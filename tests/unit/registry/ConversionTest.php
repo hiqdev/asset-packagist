@@ -24,7 +24,7 @@ class ConversionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('npm-asset-library', $converted['type']);
         $this->assertSame('>=1.3.0,<2.0.0', $converted['require']['npm-asset/left-pad']);
         $this->assertSame(
-            '{"name":"npm-asset\/scope--widget","type":"npm-asset-library","version":"1.2.3","description":"fixture package","bin":[],"dist":{"type":"tar","url":"https:\/\/registry.example\/widget-1.2.3.tgz","shasum":"deadbeef"},"require":{"npm-asset\/left-pad":">=1.3.0,<2.0.0"}}',
+            '{"name":"npm-asset/scope--widget","type":"npm-asset-library","version":"1.2.3","description":"fixture package","bin":[],"dist":{"type":"tar","url":"https://registry.example/widget-1.2.3.tgz","shasum":"deadbeef"},"require":{"npm-asset/left-pad":">=1.3.0,<2.0.0"}}',
             Json::encode($converted)
         );
     }

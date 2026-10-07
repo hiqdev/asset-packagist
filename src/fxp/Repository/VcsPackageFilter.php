@@ -79,7 +79,7 @@ class VcsPackageFilter
      * @param InstallationManager                $installationManager The installation manager
      * @param InstalledFilesystemRepository|null $installedRepository The installed repository
      */
-    public function __construct(Config $config, RootPackageInterface $package, InstallationManager $installationManager, InstalledFilesystemRepository $installedRepository = null)
+    public function __construct(Config $config, RootPackageInterface $package, InstallationManager $installationManager, ?InstalledFilesystemRepository $installedRepository = null)
     {
         $this->config = $config;
         $this->package = $package;
