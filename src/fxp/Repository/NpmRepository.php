@@ -199,7 +199,13 @@ class NpmRepository extends AbstractAssetsRepository
     private function convertUrl($url)
     {
         if (0 === strpos($url, 'git+http')) {
-            return substr($url, 4);
+            $url = substr($url, 4);
+        }
+        if (0 === strpos($url, 'http://')) {
+            return 'https://'.substr($url, 7);
+        }
+        if (0 === strpos($url, 'git://github.com/')) {
+            return 'https://'.substr($url, 6);
         }
 
         return $url;

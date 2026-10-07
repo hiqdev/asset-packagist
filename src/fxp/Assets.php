@@ -50,12 +50,7 @@ class Assets
     protected static $vcsRepositoryDrivers = array(
         'vcs' => 'hiqdev\assetpackagist\fxp\Repository\AssetVcsRepository',
         'github' => 'hiqdev\assetpackagist\fxp\Repository\AssetVcsRepository',
-        'git-bitbucket' => 'hiqdev\assetpackagist\fxp\Repository\AssetVcsRepository',
         'git' => 'hiqdev\assetpackagist\fxp\Repository\AssetVcsRepository',
-        'hg-bitbucket' => 'hiqdev\assetpackagist\fxp\Repository\AssetVcsRepository',
-        'hg' => 'hiqdev\assetpackagist\fxp\Repository\AssetVcsRepository',
-        'perforce' => 'hiqdev\assetpackagist\fxp\Repository\AssetVcsRepository',
-        'svn' => 'hiqdev\assetpackagist\fxp\Repository\AssetVcsRepository',
     );
 
     /**
@@ -63,13 +58,7 @@ class Assets
      */
     protected static $vcsDrivers = array(
         'github' => 'hiqdev\assetpackagist\fxp\Repository\Vcs\GitHubDriver',
-        'git-bitbucket' => 'hiqdev\assetpackagist\fxp\Repository\Vcs\GitBitbucketDriver',
         'git' => 'hiqdev\assetpackagist\fxp\Repository\Vcs\GitDriver',
-        'hg-bitbucket' => 'hiqdev\assetpackagist\fxp\Repository\Vcs\HgBitbucketDriver',
-        'hg' => 'hiqdev\assetpackagist\fxp\Repository\Vcs\HgDriver',
-        'perforce' => 'hiqdev\assetpackagist\fxp\Repository\Vcs\PerforceDriver',
-        // svn must be last because identifying a subversion server for sure is practically impossible
-        'svn' => 'hiqdev\assetpackagist\fxp\Repository\Vcs\SvnDriver',
     );
 
     /**

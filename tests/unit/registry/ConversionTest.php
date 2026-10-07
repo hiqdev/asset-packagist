@@ -42,4 +42,24 @@ class ConversionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('~3.7.0', $converted['require']['bower-asset/jquery']);
         $this->assertSame(['bower-asset-main' => ['dist/widget.js']], $converted['extra']);
     }
+
+    public function testConvertsBowerUrlDependenciesWithoutAliasingTheUrl()
+    {
+        $vcsRepos = [];
+        $converted = (new BowerPackageConverter(new BowerAssetType()))->convert([
+            'name' => 'widget',
+            'version' => '2.0.0',
+            'dependencies' => [
+                'shorthand' => 'owner/shorthand#1.2.3',
+                'full' => 'https://github.com/owner/full.git#1.2.3',
+            ],
+        ], $vcsRepos);
+
+        $this->assertSame('1.2.3', $converted['require']['bower-asset/shorthand']);
+        $this->assertSame('1.2.3', $converted['require']['bower-asset/full']);
+        $this->assertSame([
+            ['type' => 'bower-vcs', 'url' => 'https://github.com/owner/shorthand.git', 'name' => 'bower-asset/shorthand'],
+            ['type' => 'bower-vcs', 'url' => 'https://github.com/owner/full.git', 'name' => 'bower-asset/full'],
+        ], $vcsRepos);
+    }
 }

@@ -64,7 +64,7 @@ abstract class AbstractGitHubDriver extends BaseGitHubDriver
         $noApiOpt['default'] = (bool) RepoUtil::getArrayValue($noApiOpt, 'default', $defaultValue);
         $noApiOpt['packages'] = (array) RepoUtil::getArrayValue($noApiOpt, 'packages', array());
 
-        return (bool) RepoUtil::getArrayValue($noApiOpt['packages'], $packageName, $defaultValue);
+        return (bool) RepoUtil::getArrayValue($noApiOpt['packages'], $packageName, $noApiOpt['default']);
     }
 
     /**
