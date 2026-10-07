@@ -80,7 +80,7 @@ class BowerPackageConverter extends AbstractPackageConverter
             $pos = strpos($version, '#');
             $pos = false === $pos ? strlen($version) : $pos;
             $realVersion = substr($version, $pos);
-            $version = 'git://github.com/'.substr($version, 0, $pos).'.git'.$realVersion;
+            $version = 'https://github.com/'.substr($version, 0, $pos).'.git'.$realVersion;
         }
 
         return array($dependency, $version);
