@@ -26,10 +26,10 @@ use yii\queue\db\Queue as DbQueue;
 class MaintenanceController extends Controller
 {
     /**
-     * @var int `update-expired` does nothing while more jobs than this wait in the queue,
-     * so a backlog that outlives a nightly run is not enqueued a second time
+     * @var int `update-expired` fills the queue up to this many waiting jobs and no further,
+     * so a backlog that outlives one run is not enqueued a second time
      */
-    public $maxPending = 1000;
+    public $maxPending = 5000;
 
     /**
      * @var StorageInterface
@@ -78,7 +78,7 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * Updates expired packages.
+     * {@inheritdoc}
      */
     public function options($actionID)
     {
@@ -90,17 +90,22 @@ class MaintenanceController extends Controller
         return $options;
     }
 
+    /**
+     * Queues expired packages for update, least recently updated first,
+     * until the queue holds `maxPending` waiting jobs.
+     */
     public function actionUpdateExpired()
     {
         $queue = Yii::$app->queue;
         $pending = $this->countPendingJobs($queue);
-        if ($pending > $this->maxPending) {
-            $this->stdout("Skipped: $pending jobs are still waiting in the queue (more than --max-pending={$this->maxPending}).\n");
+        $room = $this->maxPending - $pending;
+        if ($room <= 0) {
+            $this->stdout("Skipped: $pending jobs are still waiting in the queue (--max-pending={$this->maxPending}).\n");
 
             return;
         }
 
-        $packages = $this->packageRepository->getExpiredForUpdate();
+        $packages = $this->packageRepository->getExpiredForUpdate($room);
         $queue->priority(10);
 
         foreach ($packages as $package) {
