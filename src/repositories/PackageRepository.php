@@ -104,15 +104,18 @@ class PackageRepository
     }
 
     /**
+     * @param int|null $limit maximum number of packages to return, least recently updated first
      * @return \hiqdev\assetpackagist\models\AssetPackage[]
      */
-    public function getExpiredForUpdate()
+    public function getExpiredForUpdate($limit = null)
     {
         $rows = (new Query())
             ->from('package')
             ->where(['<', 'last_update', time() - 60 * 60 * 24 * 7]) // Older than 7 days
             ->andWhere(['not', ['last_update' => null]])
             ->andWhere(['is_avoided' => 0])
+            ->orderBy(['last_update' => SORT_ASC])
+            ->limit($limit)
             ->all();
 
         return $this->hydrate($rows);
