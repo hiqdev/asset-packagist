@@ -11,7 +11,6 @@
 
 namespace hiqdev\assetpackagist\fxp\Converter;
 
-
 /**
  * Utils for semver converter.
  *
