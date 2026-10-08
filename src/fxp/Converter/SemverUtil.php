@@ -11,7 +11,6 @@
 
 namespace hiqdev\assetpackagist\fxp\Converter;
 
-use hiqdev\assetpackagist\fxp\Package\Version\VersionParser;
 
 /**
  * Utils for semver converter.
@@ -140,10 +139,26 @@ abstract class SemverUtil
 
         $matches = array();
         preg_match('/^[a-z]+/', $end, $matches);
-        $type = isset($matches[0]) ? VersionParser::normalizeStability($matches[0]) : null;
+        $type = isset($matches[0]) ? self::normalizeStability($matches[0]) : null;
         $end = substr($end, strlen($type));
 
         return array($type, $version, $end);
+    }
+
+    /**
+     * Normalizes a stability without rejecting unknown pre-release labels
+     * such as `next` or `master`: matchVersion() turns them into `patch`.
+     * Composer's VersionParser::normalizeStability() throws on them.
+     *
+     * @param string $stability
+     *
+     * @return string
+     */
+    protected static function normalizeStability($stability)
+    {
+        $stability = strtolower($stability);
+
+        return 'rc' === $stability ? 'RC' : $stability;
     }
 
     /**

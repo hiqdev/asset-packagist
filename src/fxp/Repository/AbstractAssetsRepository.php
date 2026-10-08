@@ -66,6 +66,13 @@ abstract class AbstractAssetsRepository extends ComposerRepository
     protected $packageFilter;
 
     /**
+     * Composer 2 keeps the parent's IO private, so keep our own copy.
+     *
+     * @var IOInterface
+     */
+    protected $io;
+
+    /**
      * Constructor.
      *
      * @param array           $repoConfig
@@ -83,6 +90,7 @@ abstract class AbstractAssetsRepository extends ComposerRepository
         $this->repositoryManager = $this->assetRepositoryManager->getRepositoryManager();
 
         parent::__construct($repoConfig, $io, $config, $httpDownloader, $eventDispatcher);
+        $this->io = $io;
 
         $this->assetType = Assets::createType($this->getType());
         $this->lazyProvidersUrl = $this->getPackageUrl();
