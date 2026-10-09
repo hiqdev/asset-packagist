@@ -18,6 +18,18 @@ use yii\helpers\Json;
 
 class Storage extends Component implements StorageInterface
 {
+    /**
+     * @var int seconds a superseded provider-latest shard is kept, so clients and
+     * the CDN still holding an older packages.json can fetch the shard it names
+     */
+    public $providerShardTtl = 3600;
+
+    /**
+     * @var int max superseded provider-latest shards removed per write, bounding
+     * the time spent under the top-level lock while a backlog is drained
+     */
+    public $providerShardPruneLimit = 100;
+
     protected $_path;
     protected $_locker;
 
@@ -248,8 +260,11 @@ class Storage extends Component implements StorageInterface
         $latestPath = $this->buildHashedPath('provider-latest');
         $this->acquireTopLevelLock();
 
+        $previousHash = null;
         if (file_exists($latestPath)) {
-            $data = Json::decode(file_get_contents($latestPath) ?: '[]');
+            $previousJson = file_get_contents($latestPath);
+            $previousHash = $previousJson ? hash('sha256', $previousJson) : null;
+            $data = Json::decode($previousJson ?: '[]');
         }
         if (!isset($data) || !is_array($data)) {
             $data = [];
@@ -276,11 +291,55 @@ class Storage extends Component implements StorageInterface
             }
 
             $this->writePackagesJson($hash);
+
+            // the TTL counts from when a shard stops being live, not from when it was
+            // written: clients that read the previous packages.json still need it
+            $previousPath = $this->buildHashedPath('provider-latest', $previousHash);
+            if ($previousHash !== null && $previousHash !== $hash && file_exists($previousPath)) {
+                touch($previousPath);
+            }
+            $this->pruneProviderLatest($hash);
         } finally {
             $this->releaseTopLevelLock();
         }
 
         return $hash;
+    }
+
+    /**
+     * Removes superseded provider-latest shards, and tmp files left by interrupted
+     * writes, once they are older than $providerShardTtl. Every package update
+     * writes a full new provider map, so without this the directory grows by a
+     * whole provider map per update. Must be called under the top-level lock.
+     * @param string $liveHash hash of the shard packages.json currently names
+     * @return int number of files removed
+     */
+    protected function pruneProviderLatest($liveHash)
+    {
+        $dir = $this->buildPath('p', 'provider-latest');
+        $handle = @opendir($dir);
+        if ($handle === false) {
+            return 0;
+        }
+
+        $expiredBefore = time() - $this->providerShardTtl;
+        $removed = 0;
+        while ($removed < $this->providerShardPruneLimit && ($entry = readdir($handle)) !== false) {
+            if ($entry === $liveHash . '.json') {
+                continue;
+            }
+            if (!preg_match('/^[0-9a-f]{64}\.json$|^(latest|[0-9a-f]{64})\.json\.tmp\./', $entry)) {
+                continue;
+            }
+            $path = $dir . DIRECTORY_SEPARATOR . $entry;
+            $mtime = @filemtime($path);
+            if ($mtime !== false && $mtime < $expiredBefore && @unlink($path)) {
+                ++$removed;
+            }
+        }
+        closedir($handle);
+
+        return $removed;
     }
 
     protected function writePackagesJson($hash)

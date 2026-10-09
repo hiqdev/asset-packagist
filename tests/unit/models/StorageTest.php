@@ -344,4 +344,96 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ['npm', 'fixture-npm'],
         ];
     }
+
+    protected function writeFixturePackage($name, $version)
+    {
+        $package = new class('npm', $name) extends AssetPackage {
+            public $fixtureReleases;
+
+            public function getReleases()
+            {
+                return $this->fixtureReleases;
+            }
+        };
+        $package->fixtureReleases = [
+            $version => ['name' => $package->getNormalName(), 'version' => $version],
+        ];
+
+        return $this->object->writePackage($package);
+    }
+
+    protected function liveProviderHash()
+    {
+        return hash_file('sha256', $this->storageDir . '/p/provider-latest/latest.json');
+    }
+
+    protected function writeExpiredShard($name)
+    {
+        $path = $this->storageDir . '/p/provider-latest/' . $name;
+        $this->writeShard('p/provider-latest/' . $name, '{}');
+        touch($path, time() - 7200);
+
+        return $path;
+    }
+
+    public function testWriteProviderLatestPrunesExpiredSupersededShards()
+    {
+        $this->writeFixturePackage('first', '1.0.0');
+        $expiredShard = $this->writeExpiredShard(str_repeat('a', 64) . '.json');
+        $expiredTmp = $this->writeExpiredShard(str_repeat('b', 64) . '.json.tmp.7.123');
+        $expiredLatestTmp = $this->writeExpiredShard('latest.json.tmp.7.456');
+        $unrelated = $this->writeExpiredShard('README');
+        $freshShard = $this->storageDir . '/p/provider-latest/' . str_repeat('c', 64) . '.json';
+        $this->writeShard('p/provider-latest/' . str_repeat('c', 64) . '.json', '{}');
+
+        $this->writeFixturePackage('second', '1.0.0');
+
+        $this->assertFileDoesNotExist($expiredShard);
+        $this->assertFileDoesNotExist($expiredTmp);
+        $this->assertFileDoesNotExist($expiredLatestTmp);
+        $this->assertFileExists($unrelated);
+        $this->assertFileExists($freshShard);
+        $this->assertTrue($this->object->checkProviderLatestIsSane()['sane']);
+    }
+
+    public function testWriteProviderLatestKeepsTheJustSupersededShardForTheTtl()
+    {
+        $this->writeFixturePackage('first', '1.0.0');
+        $previousHash = $this->liveProviderHash();
+        $previousPath = $this->storageDir . '/p/provider-latest/' . $previousHash . '.json';
+        // live for longer than the TTL before being superseded
+        touch($previousPath, time() - 7200);
+
+        $this->writeFixturePackage('second', '1.0.0');
+
+        $this->assertNotSame($previousHash, $this->liveProviderHash());
+        $this->assertFileExists($previousPath);
+        $this->assertGreaterThan(time() - 60, filemtime($previousPath));
+    }
+
+    public function testWriteProviderLatestNeverPrunesTheLiveShard()
+    {
+        $this->object->providerShardTtl = 0;
+        $this->writeFixturePackage('first', '1.0.0');
+        touch($this->storageDir . '/p/provider-latest/' . $this->liveProviderHash() . '.json', time() - 7200);
+
+        // rewriting identical content keeps the same live shard
+        $this->writeFixturePackage('first', '1.0.0');
+
+        $this->assertTrue($this->object->checkProviderLatestIsSane()['sane']);
+    }
+
+    public function testWriteProviderLatestPrunesAtMostTheLimitPerWrite()
+    {
+        $this->object->providerShardPruneLimit = 2;
+        $this->writeFixturePackage('first', '1.0.0');
+        $expired = [];
+        for ($i = 0; $i < 5; ++$i) {
+            $expired[] = $this->writeExpiredShard(str_repeat((string) $i, 64) . '.json');
+        }
+
+        $this->writeFixturePackage('second', '1.0.0');
+
+        $this->assertCount(3, array_filter($expired, 'file_exists'));
+    }
 }
