@@ -11,6 +11,7 @@
 namespace hiqdev\assetpackagist\tests\unit\models;
 
 use hiqdev\assetpackagist\components\Storage;
+use hiqdev\assetpackagist\exceptions\AssetFileStorageException;
 use hiqdev\assetpackagist\models\AssetPackage;
 use Yii;
 use yii\base\InvalidArgumentException;
@@ -145,6 +146,35 @@ class StorageProviderMapTest extends \PHPUnit\Framework\TestCase
 
         $this->assertContains('release:lock', $this->mutexCalls);
         $this->assertSame('{broken', file_get_contents($this->providerLatestPath()));
+    }
+
+    public function testWriteProviderLatestRepairsAPackagesJsonLeftBehind()
+    {
+        $this->writeFixturePackage('first', '1.0.0');
+        $live = file_get_contents($this->storageDir . '/packages.json');
+        $this->writeFixturePackage('first', '2.0.0');
+        // a write that failed after latest.json, before packages.json
+        file_put_contents($this->storageDir . '/packages.json', $live);
+        $this->assertFalse($this->object->checkProviderLatestIsSane()['sane']);
+
+        $this->writeFixturePackage('first', '2.0.0');
+
+        $this->assertTrue($this->object->checkProviderLatestIsSane()['sane']);
+    }
+
+    public function testWriteProviderLatestRefusesAnEmptyMap()
+    {
+        $this->writeFixturePackage('first', '1.0.0');
+        file_put_contents($this->providerLatestPath(), '');
+
+        try {
+            $this->writeFixturePackage('second', '1.0.0');
+            $this->fail('An empty provider map must not be overwritten');
+        } catch (AssetFileStorageException $e) {
+        }
+
+        $this->assertContains('release:lock', $this->mutexCalls);
+        $this->assertSame('', file_get_contents($this->providerLatestPath()));
     }
 
     public function testRemoveUnnormalizedProviders()
