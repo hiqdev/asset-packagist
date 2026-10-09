@@ -16,6 +16,12 @@ class PackageUpdateCommandTest extends TestCase
         $this->assertSame($expected, PackageUpdateCommand::permanentProblemClass($message));
     }
 
+    public function testDetectsInvalidNames()
+    {
+        $this->assertTrue(PackageUpdateCommand::isInvalidName('The "https://registry.npmjs.org/@a%2Fb-c%2Fd-file" file could not be downloaded (HTTP/2 405 ):'));
+        $this->assertFalse(PackageUpdateCommand::isInvalidName('The "https://registry.npmjs.org/x" file could not be downloaded (HTTP/2 404 )'));
+    }
+
     public static function failureMessages()
     {
         return [
@@ -25,6 +31,10 @@ class PackageUpdateCommandTest extends TestCase
             ],
             'composer 1 registry 404' => [
                 'The "https://registry.bower.io/packages/x" file could not be downloaded (HTTP/1.1 404 Not Found)',
+                PackageNotExistsException::class,
+            ],
+            'composer 2 npm invalid name' => [
+                'The "https://registry.npmjs.org/@dfinity%2Fagent-dfinity%2Fidentity-provider-file" file could not be downloaded (HTTP/2 405 ):' . "\n" . '{"code":"MethodNotAllowedError","message":"GET is not allowed"}',
                 PackageNotExistsException::class,
             ],
             'server error is temporary' => [

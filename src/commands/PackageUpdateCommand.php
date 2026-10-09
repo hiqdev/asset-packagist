@@ -14,6 +14,7 @@ use hiqdev\assetpackagist\exceptions\CorruptedPackageException;
 use hiqdev\assetpackagist\exceptions\PackageNotExistsException;
 use hiqdev\assetpackagist\exceptions\PermanentProblemExceptionInterface;
 use Yii;
+use yii\db\IntegrityException;
 
 /**
  * Class PackageUpdateCommand runs package update command and creates tasks to
@@ -57,7 +58,7 @@ class PackageUpdateCommand extends AbstractPackageCommand
     public static function permanentProblemClass($message)
     {
         // Composer 2 reports e.g. `(HTTP/2 404 )`, Composer 1 reported `(HTTP/1.1 404 Not Found)`
-        if (preg_match('{file could not be downloaded \(HTTP/[\d.]+ 404\b}i', $message)) {
+        if (preg_match('{file could not be downloaded \(HTTP/[\d.]+ 404\b}i', $message) || static::isInvalidName($message)) {
             return PackageNotExistsException::class;
         }
 
@@ -76,6 +77,19 @@ class PackageUpdateCommand extends AbstractPackageCommand
         return null;
     }
 
+    /**
+     * Whether the registry rejected the package name itself, e.g. the synthetic
+     * `<parent>-<dep>-file` names the converter makes up for URL dependencies:
+     * npm answers `405 GET is not allowed` for them, and always will.
+     *
+     * @param string $message
+     * @return bool
+     */
+    public static function isInvalidName($message)
+    {
+        return (bool) preg_match('{file could not be downloaded \(HTTP/[\d.]+ 405\b}i', $message);
+    }
+
     private function transformException(\Exception $e)
     {
         $exceptionClass = static::permanentProblemClass($e->getMessage());
@@ -84,6 +98,15 @@ class PackageUpdateCommand extends AbstractPackageCommand
         }
 
         $newException = new $exceptionClass($e->getMessage(), 0, $e);
+
+        // Record an invalid name too, so that CollectDependenciesCommand stops queueing it
+        if (static::isInvalidName($e->getMessage()) && !$this->packageRepository->exists($this->package)) {
+            try {
+                $this->packageRepository->insert($this->package);
+            } catch (IntegrityException $ignored) {
+                // another worker has just recorded it
+            }
+        }
 
         if (
             $newException instanceof PermanentProblemExceptionInterface
