@@ -30,6 +30,13 @@ class Storage extends Component implements StorageInterface
      */
     public $providerShardPruneLimit = 100;
 
+    /**
+     * @var int seconds to wait for the top-level lock. Every provider-latest write
+     * re-encodes the whole provider map under it, so with many queue workers the
+     * wait regularly exceeds a few seconds
+     */
+    public $topLevelLockTimeout = 30;
+
     protected $_path;
     protected $_locker;
 
@@ -46,7 +53,7 @@ class Storage extends Component implements StorageInterface
         /* @var $mutex \yii\mutex\Mutex */
         $mutex = Yii::$app->mutex;
 
-        if (!$mutex->acquire('lock', 5)) {
+        if (!$mutex->acquire('lock', $this->topLevelLockTimeout)) {
             throw new \Exception('failed get lock');
         }
     }
@@ -257,37 +264,79 @@ class Storage extends Component implements StorageInterface
 
     protected function writeProviderLatest($name, $hash)
     {
+        // Most updates leave the package unchanged. latest.json is replaced by rename,
+        // so it can be read without the lock, and the no-op write is skipped entirely.
+        // Keys are unique and quoted, so finding the encoded entry is enough and
+        // much cheaper than decoding the whole map.
+        $latestPath = $this->buildHashedPath('provider-latest');
+        $latestJson = file_exists($latestPath) ? file_get_contents($latestPath) : false;
+        $entry = substr(Json::encode([$name => ['sha256' => $hash]]), 1, -1);
+        if ($latestJson && strpos($latestJson, $entry) !== false) {
+            return hash('sha256', $latestJson);
+        }
+
+        return $this->updateProviderLatest(function (array &$providers) use ($name, $hash) {
+            $providers[$name] = ['sha256' => $hash];
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeUnnormalizedProviders()
+    {
+        $removed = [];
+        $this->updateProviderLatest(function (array &$providers) use (&$removed) {
+            foreach (array_keys($providers) as $name) {
+                if ($name !== AssetPackage::normalizeName($name)) {
+                    $removed[] = $name;
+                    unset($providers[$name]);
+                }
+            }
+        });
+
+        return $removed;
+    }
+
+    /**
+     * Applies $update to the provider map under the top-level lock and writes the result
+     * as a new shard, latest.json and packages.json.
+     * @param callable $update receives the providers array by reference
+     * @return string hash of the new provider map
+     */
+    protected function updateProviderLatest(callable $update)
+    {
         $latestPath = $this->buildHashedPath('provider-latest');
         $this->acquireTopLevelLock();
 
-        $previousHash = null;
-        if (file_exists($latestPath)) {
-            $previousJson = file_get_contents($latestPath);
-            $previousHash = $previousJson ? hash('sha256', $previousJson) : null;
-            $data = Json::decode($previousJson ?: '[]');
-        }
-        if (!isset($data) || !is_array($data)) {
-            $data = [];
-        }
-        if (!isset($data['providers'])) {
-            $data['providers'] = [];
-        }
-        $data['providers'][$name] = ['sha256' => $hash];
-        $json = Json::encode($data);
-        $hash = hash('sha256', $json);
-        $path = $this->buildHashedPath('provider-latest', $hash);
-
         try {
+            $previousHash = null;
+            if (file_exists($latestPath)) {
+                $previousJson = file_get_contents($latestPath);
+                $previousHash = $previousJson ? hash('sha256', $previousJson) : null;
+                $data = Json::decode($previousJson ?: '[]');
+            }
+            if (!isset($data) || !is_array($data)) {
+                $data = [];
+            }
+            if (!isset($data['providers'])) {
+                $data['providers'] = [];
+            }
+            $update($data['providers']);
+            $json = Json::encode($data);
+            $hash = hash('sha256', $json);
+            $path = $this->buildHashedPath('provider-latest', $hash);
+
             if ($this->shardNeedsWrite($path, $hash)) {
                 if ($this->mkdir(dirname($path)) === false) {
                     throw new AssetFileStorageException('Failed to create a directory for provider-latest storage');
                 }
                 if (!$this->writeShardAtomic($path, $json)) {
-                    throw new AssetFileStorageException('Failed to write package to provider-latest storage for package "' . $name . '"');
+                    throw new AssetFileStorageException('Failed to write provider-latest storage');
                 }
             }
             if (!$this->writeLatestAtomic($latestPath, $json)) {
-                throw new AssetFileStorageException('Failed to write file "latest.json" to provider-latest storage for package "' . $name . '"');
+                throw new AssetFileStorageException('Failed to write file "latest.json" to provider-latest storage');
             }
 
             $this->writePackagesJson($hash);

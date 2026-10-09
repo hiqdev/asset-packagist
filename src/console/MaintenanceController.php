@@ -148,6 +148,20 @@ class MaintenanceController extends Controller
         }
     }
 
+    /**
+     * Removes provider map entries whose names are not normalized, such as mixed-case
+     * names left by old versions. `regenerate-provider-latest` only adds entries, so it
+     * can't remove them.
+     */
+    public function actionRemoveUnnormalizedProviders()
+    {
+        $removed = $this->packageStorage->removeUnnormalizedProviders();
+        foreach ($removed as $name) {
+            $this->stdout("Removed $name\n");
+        }
+        $this->stdout('Removed ' . count($removed) . " provider entries\n");
+    }
+
     public function actionCheckHashes()
     {
         $hasUnresolvedCorruption = false;
