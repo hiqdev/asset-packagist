@@ -64,4 +64,13 @@ interface StorageInterface
      * @return array{sane: bool, reason: string|null, hash: string|null}
      */
     public function checkProviderLatestIsSane();
+
+    /**
+     * Removes provider map entries whose names are not normalized (e.g. mixed case).
+     * Packages are always written under their normalized name, so such entries
+     * point at files that don't exist, and Composer never asks for them.
+     *
+     * @return string[] the removed names
+     */
+    public function removeUnnormalizedProviders();
 }
