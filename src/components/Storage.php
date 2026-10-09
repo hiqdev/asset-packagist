@@ -293,12 +293,16 @@ class Storage extends Component implements StorageInterface
             $this->writePackagesJson($hash);
 
             // the TTL counts from when a shard stops being live, not from when it was
-            // written: clients that read the previous packages.json still need it
+            // written: clients that read the previous packages.json still need it.
+            // If the refresh fails, skip pruning so its stale mtime can't expire it now.
             $previousPath = $this->buildHashedPath('provider-latest', $previousHash);
+            $refreshed = true;
             if ($previousHash !== null && $previousHash !== $hash && file_exists($previousPath)) {
-                touch($previousPath);
+                $refreshed = @touch($previousPath);
             }
-            $this->pruneProviderLatest($hash);
+            if ($refreshed) {
+                $this->pruneProviderLatest($hash);
+            }
         } finally {
             $this->releaseTopLevelLock();
         }
