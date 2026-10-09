@@ -15,11 +15,13 @@ use Composer\DependencyResolver\Pool;
 use Composer\Factory;
 use Composer\Installer\InstallationManager;
 use Composer\IO\IOInterface;
+use Composer\Package\BasePackage;
 use Composer\Package\RootPackage;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\RepositoryFactory;
 use Composer\Repository\RepositoryManager;
 use Composer\Repository\RepositorySet;
+use Composer\Semver\Constraint\MatchAllConstraint;
 use hiqdev\assetpackagist\fxp\Config\Config as AssetConfig;
 use hiqdev\assetpackagist\fxp\Repository\AssetRepositoryManager;
 use hiqdev\assetpackagist\fxp\Repository\VcsPackageFilter;
@@ -124,11 +126,40 @@ class RegistryFactory extends BaseObject
 
     public function getPool($minimumStability = 'dev', $packageName = null)
     {
-        $repositorySet = new RepositorySet($minimumStability);
-        $repositorySet->addRepository($this->getRepository());
+        if ($packageName === null) {
+            $repositorySet = new RepositorySet($minimumStability);
+            $repositorySet->addRepository($this->getRepository());
 
-        return $packageName === null
-            ? $repositorySet->createPoolWithAllPackages()
-            : $repositorySet->createPoolForPackage($packageName);
+            return $repositorySet->createPoolWithAllPackages();
+        }
+
+        return $this->getPackagePool($minimumStability, $packageName);
+    }
+
+    /**
+     * Loads only the versions of one package.
+     *
+     * `RepositorySet::createPoolForPackage()` runs the solver's PoolBuilder, which merges
+     * the constraints of every require of every loaded version, although it then loads none
+     * of them. For monorepo packages with thousands of versions that pin their siblings
+     * exactly, that merging alone exhausts the memory limit inside composer/semver.
+     *
+     * @param string $minimumStability
+     * @param string $packageName
+     * @return Pool
+     */
+    protected function getPackagePool($minimumStability, $packageName)
+    {
+        $acceptableStabilities = [];
+        foreach (BasePackage::STABILITIES as $stability => $value) {
+            if ($value <= BasePackage::STABILITIES[$minimumStability]) {
+                $acceptableStabilities[$stability] = $value;
+            }
+        }
+
+        $name = strtolower($packageName);
+        $result = $this->getRepository()->loadPackages([$name => new MatchAllConstraint()], $acceptableStabilities, []);
+
+        return new Pool($result['packages']);
     }
 }
