@@ -272,12 +272,35 @@ class Storage extends Component implements StorageInterface
         $latestJson = file_exists($latestPath) ? file_get_contents($latestPath) : false;
         $entry = substr(Json::encode([$name => ['sha256' => $hash]]), 1, -1);
         if ($latestJson && strpos($latestJson, $entry) !== false) {
-            return hash('sha256', $latestJson);
+            $latestHash = hash('sha256', $latestJson);
+            if ($this->isLiveProviderHash($latestHash)) {
+                return $latestHash;
+            }
         }
 
         return $this->updateProviderLatest(function (array &$providers) use ($name, $hash) {
             $providers[$name] = ['sha256' => $hash];
         });
+    }
+
+    /**
+     * Whether packages.json names the provider map with $hash and its shard exists,
+     * so a write that failed after latest.json is repaired by the next write.
+     * @param string $hash
+     * @return bool
+     */
+    protected function isLiveProviderHash($hash)
+    {
+        try {
+            $includes = $this->readPackagesJson();
+        } catch (\Exception $e) {
+            return false;
+        }
+        $live = isset($includes['p/provider-latest/%hash%.json']['sha256'])
+            ? $includes['p/provider-latest/%hash%.json']['sha256']
+            : null;
+
+        return $live === $hash && file_exists($this->buildHashedPath('provider-latest', $hash));
     }
 
     /**
@@ -313,8 +336,12 @@ class Storage extends Component implements StorageInterface
             $previousHash = null;
             if (file_exists($latestPath)) {
                 $previousJson = file_get_contents($latestPath);
-                $previousHash = $previousJson ? hash('sha256', $previousJson) : null;
-                $data = Json::decode($previousJson ?: '[]');
+                if ($previousJson === false || $previousJson === '') {
+                    // decoding it as an empty map would drop every other package
+                    throw new AssetFileStorageException('Provider-latest "latest.json" is empty or unreadable, restore it from the shard packages.json names');
+                }
+                $previousHash = hash('sha256', $previousJson);
+                $data = Json::decode($previousJson);
             }
             if (!isset($data) || !is_array($data)) {
                 $data = [];
