@@ -80,14 +80,16 @@ class PackageUpdateCommand extends AbstractPackageCommand
     /**
      * Whether the registry rejected the package name itself, e.g. the synthetic
      * `<parent>-<dep>-file` names the converter makes up for URL dependencies:
-     * npm answers `405 GET is not allowed` for them, and always will.
+     * npm answers `405 MethodNotAllowedError` for them, and always will.
+     * A 405 from any other URL may be a server problem, so it does not count.
      *
      * @param string $message
      * @return bool
      */
     public static function isInvalidName($message)
     {
-        return (bool) preg_match('{file could not be downloaded \(HTTP/[\d.]+ 405\b}i', $message);
+        return (bool) preg_match('{"https://registry\.npmjs\.org/[^"]+" file could not be downloaded \(HTTP/[\d.]+ 405\b}i', $message)
+            && stripos($message, 'MethodNotAllowedError') !== false;
     }
 
     private function transformException(\Exception $e)
