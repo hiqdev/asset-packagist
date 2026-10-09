@@ -51,6 +51,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         };
 
         $this->object = new Storage();
+        $this->object->providerShardTtl = 3600;
     }
 
     protected function tearDown(): void

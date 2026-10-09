@@ -20,9 +20,11 @@ class Storage extends Component implements StorageInterface
 {
     /**
      * @var int seconds a superseded provider-latest shard is kept, so clients and
-     * the CDN still holding an older packages.json can fetch the shard it names
+     * the CDN still holding an older packages.json can fetch the shard it names.
+     * CDNs have been seen serving a packages.json over 13 hours old despite its
+     * 10 minute max-age, so this is days rather than hours
      */
-    public $providerShardTtl = 3600;
+    public $providerShardTtl = 604800;
 
     /**
      * @var int max superseded provider-latest shards removed per write, bounding
