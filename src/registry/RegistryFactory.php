@@ -108,7 +108,9 @@ class RegistryFactory extends BaseObject
 
         //Dummy Package
         $this->rootPackage = new RootPackage('asset-packagist', '0.0.0.0', '0.0.0');
-        $this->installationManager = Factory::create($this->io, null, true)->getInstallationManager();
+        // An empty local config, because a null one makes Composer read ./composer.json,
+        // which does not exist in the web root where package updates also run.
+        $this->installationManager = Factory::create($this->io, [], true)->getInstallationManager();
         $this->packageFilter = new VcsPackageFilter($this->assetConfig, $this->rootPackage, $this->installationManager);
         $this->assetRepositoryManager = new AssetRepositoryManager($this->io, $this->repositoryManager, $this->assetConfig, $this->packageFilter);
 
