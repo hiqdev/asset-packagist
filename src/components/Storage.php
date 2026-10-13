@@ -24,7 +24,7 @@ class Storage extends Component implements StorageInterface
      * CDNs have been seen serving a packages.json over 13 hours old despite its
      * 10 minute max-age, so this is days rather than hours
      */
-    public $providerShardTtl = 604800;
+    public $providerShardTtl = 345600;
 
     /**
      * @var int max superseded provider-latest shards removed per write, bounding
