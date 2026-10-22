@@ -11,6 +11,7 @@
 
 namespace hiqdev\assetpackagist\fxp\Repository;
 
+use Composer\Downloader\TransportException;
 use Composer\Package\AliasPackage;
 use Composer\Package\BasePackage;
 use Composer\Package\CompletePackageInterface;
@@ -47,6 +48,10 @@ class AssetVcsRepository extends AbstractAssetVcsRepository
 
     /**
      * Init the driver with branches and tags.
+     *
+     * A transport failure (e.g. an exhausted GitHub API rate limit, which Composer reports as
+     * a 401) is rethrown: swallowing it left an empty or partial release set that looked like
+     * a repository without a valid asset file.
      */
     protected function initFullDriver()
     {
@@ -56,6 +61,8 @@ class AssetVcsRepository extends AbstractAssetVcsRepository
             $this->initTags($driver);
             $this->initBranches($driver);
             $driver->cleanup();
+        } catch (TransportException $e) {
+            throw $e;
         } catch (\Exception $e) {
             // do nothing
         }

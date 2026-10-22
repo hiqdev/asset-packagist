@@ -209,10 +209,15 @@ class LazyAssetPackageLoader implements LazyLoaderInterface
 
             /* @var CompletePackageInterface $realPackage */
             $realPackage = $this->loader->load($data);
+        } catch (TransportException $e) {
+            // A missing file is a 404 the driver already turns into an empty package,
+            // so this is a failed fetch: skipping it would silently drop the version.
+            $this->driver->cleanup();
+
+            throw $e;
         } catch (\Exception $e) {
             if ($this->verbose) {
-                $filename = $this->assetType->getFilename();
-                $this->io->write('<'.$this->getIoTag().'>Skipped '.$this->type.' '.$package->getPrettyVersion().', '.($e instanceof TransportException ? 'no '.$filename.' file was found' : $e->getMessage()).'</'.$this->getIoTag().'>');
+                $this->io->write('<'.$this->getIoTag().'>Skipped '.$this->type.' '.$package->getPrettyVersion().', '.$e->getMessage().'</'.$this->getIoTag().'>');
             }
         }
         $this->driver->cleanup();

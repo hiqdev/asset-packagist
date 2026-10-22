@@ -74,6 +74,17 @@ class PackageRepository
         ], $this->getWhereCondition($package))->execute();
     }
 
+    /**
+     * @param AssetPackage $package
+     * @return int number of packages that were avoided and are not anymore
+     */
+    public function unmarkAvoided(AssetPackage $package)
+    {
+        return $this->db->createCommand()->update('package', [
+            'is_avoided' => false,
+        ], array_merge($this->getWhereCondition($package), ['is_avoided' => true]))->execute();
+    }
+
     public function isAvoided(AssetPackage $package)
     {
         return (new Query())
