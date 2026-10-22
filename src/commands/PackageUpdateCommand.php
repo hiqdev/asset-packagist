@@ -34,6 +34,10 @@ class PackageUpdateCommand extends AbstractPackageCommand
             try {
                 $this->package->update();
                 $this->packageRepository->save($this->package);
+                // An avoided package that updates fine was avoided by mistake, e.g. after a failed fetch
+                if ($this->packageRepository->unmarkAvoided($this->package)) {
+                    Yii::warning('Package ' . $this->package->getFullName() . ' is not avoided anymore', __CLASS__);
+                }
             } catch (\Exception $e) {
                 Yii::error('Failed to update package "' . $this->package->getFullName() . '": ' . $e->getMessage(), __CLASS__);
                 $this->transformException($e);
