@@ -10,6 +10,8 @@
 
 namespace hiqdev\assetpackagist\tests\unit\models;
 
+use Composer\DependencyResolver\Pool;
+use Composer\Package\CompletePackage;
 use hiqdev\assetpackagist\models\AssetPackage;
 
 class AssetPackageTest extends \PHPUnit\Framework\TestCase
@@ -53,5 +55,24 @@ class AssetPackageTest extends \PHPUnit\Framework\TestCase
             '@ngneat/hot-toast',
             AssetPackage::denormalizeScopedName(AssetPackage::normalizeScopedName('@ngneat/hot-toast'))
         );
+    }
+
+    public function testPrepareReleasesFindsMixedCaseName()
+    {
+        $release = new CompletePackage('bower-asset/jquery.marquee', '1.6.1.0', '1.6.1');
+        $release->setSourceType('git');
+        $release->setSourceUrl('https://github.com/aamirafridi/jQuery.Marquee.git');
+        $release->setSourceReference('abc123');
+
+        $package = new class('bower', 'JQuery.Marquee') extends AssetPackage {
+            public function prepareUid($version)
+            {
+                return 1;
+            }
+        };
+        $releases = $package->prepareReleases(new Pool([$release]));
+
+        $this->assertSame(['1.6.1'], array_keys($releases));
+        $this->assertSame('bower-asset/jquery.marquee', $releases['1.6.1']['name']);
     }
 }

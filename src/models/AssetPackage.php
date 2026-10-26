@@ -202,7 +202,9 @@ class AssetPackage extends BaseObject
     {
         $releases = [];
 
-        foreach ($pool->whatProvides($this->getFullName()) as $package) {
+        // Composer keys packages by lowercased name, but stored names may keep the
+        // registry's casing (e.g. bower `JQuery.Marquee`).
+        foreach ($pool->whatProvides(strtolower($this->getFullName())) as $package) {
             if ($package instanceof \Composer\Package\AliasPackage) {
                 continue;
             }
