@@ -227,6 +227,10 @@ class AssetPackage extends BaseObject
                     'url' => $package->getDistUrl(),
                     'reference' => $package->getDistReference(),
                 ];
+                // npm tarballs come with a SHA-1, which Composer verifies on download
+                if ($package->getDistSha1Checksum()) {
+                    $release['dist']['shasum'] = $package->getDistSha1Checksum();
+                }
             }
             if ($package->getLicense()) {
                 $release['license'] = $package->getLicense();
