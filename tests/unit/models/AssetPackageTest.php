@@ -75,4 +75,26 @@ class AssetPackageTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['1.6.1'], array_keys($releases));
         $this->assertSame('bower-asset/jquery.marquee', $releases['1.6.1']['name']);
     }
+
+    public function testPrepareReleasesKeepsDistShasum()
+    {
+        $withSum = new CompletePackage('npm-asset/cropper', '4.1.0.0', '4.1.0');
+        $withSum->setDistType('tar');
+        $withSum->setDistUrl('https://registry.npmjs.org/cropper/-/cropper-4.1.0.tgz');
+        $withSum->setDistSha1Checksum('3c2faaa78f730a3c71814cee61e17c7a674b943f');
+        $withoutSum = new CompletePackage('npm-asset/cropper', '4.0.0.0', '4.0.0');
+        $withoutSum->setDistType('tar');
+        $withoutSum->setDistUrl('https://registry.npmjs.org/cropper/-/cropper-4.0.0.tgz');
+
+        $package = new class('npm', 'cropper') extends AssetPackage {
+            public function prepareUid($version)
+            {
+                return 1;
+            }
+        };
+        $releases = $package->prepareReleases(new Pool([$withSum, $withoutSum]));
+
+        $this->assertSame('3c2faaa78f730a3c71814cee61e17c7a674b943f', $releases['4.1.0']['dist']['shasum']);
+        $this->assertArrayNotHasKey('shasum', $releases['4.0.0']['dist']);
+    }
 }
