@@ -39,6 +39,14 @@ class Storage extends Component implements StorageInterface
      */
     public $topLevelLockTimeout = 30;
 
+    /**
+     * @var int seconds between provider map publishes. Every package write updates
+     * provider-latest/latest.json, but the hashed shard and packages.json follow it
+     * at most this often: the map is about 10 MB gzipped, and Composer downloads it
+     * again every time packages.json names a new one. 0 publishes on every write
+     */
+    public $providerPublishInterval = 3600;
+
     protected $_path;
     protected $_locker;
 
@@ -269,13 +277,14 @@ class Storage extends Component implements StorageInterface
         // Most updates leave the package unchanged. latest.json is replaced by rename,
         // so it can be read without the lock, and the no-op write is skipped entirely.
         // Keys are unique and quoted, so finding the encoded entry is enough and
-        // much cheaper than decoding the whole map.
+        // much cheaper than decoding the whole map. Once a publish is due, any write
+        // publishes the changes collected in latest.json since the last one.
         $latestPath = $this->buildHashedPath('provider-latest');
         $latestJson = file_exists($latestPath) ? file_get_contents($latestPath) : false;
         $entry = substr(Json::encode([$name => ['sha256' => $hash]]), 1, -1);
         if ($latestJson && strpos($latestJson, $entry) !== false) {
             $latestHash = hash('sha256', $latestJson);
-            if ($this->isLiveProviderHash($latestHash)) {
+            if (!$this->isProviderPublishDue() || $this->isLiveProviderHash($latestHash)) {
                 return $latestHash;
             }
         }
@@ -306,6 +315,33 @@ class Storage extends Component implements StorageInterface
     }
 
     /**
+     * Whether the last provider map publish is older than $providerPublishInterval.
+     * Every publish rewrites or touches packages.json, so its mtime is the time of
+     * the last one.
+     * @return bool
+     */
+    protected function isProviderPublishDue()
+    {
+        if ($this->providerPublishInterval <= 0) {
+            return true;
+        }
+        $path = $this->buildPath('packages.json');
+        clearstatcache(true, $path);
+        $mtime = @filemtime($path);
+
+        return $mtime === false || $mtime <= time() - $this->providerPublishInterval;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function publishProviderLatest()
+    {
+        return $this->updateProviderLatest(function () {
+        }, true);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function removeUnnormalizedProviders()
@@ -318,31 +354,30 @@ class Storage extends Component implements StorageInterface
                     unset($providers[$name]);
                 }
             }
-        });
+        }, true);
 
         return $removed;
     }
 
     /**
-     * Applies $update to the provider map under the top-level lock and writes the result
-     * as a new shard, latest.json and packages.json.
+     * Applies $update to the provider map in latest.json under the top-level lock,
+     * then publishes the result as a shard and packages.json when a publish is due.
      * @param callable $update receives the providers array by reference
+     * @param bool|null $publish whether to publish, null to publish when due
      * @return string hash of the new provider map
      */
-    protected function updateProviderLatest(callable $update)
+    protected function updateProviderLatest(callable $update, $publish = null)
     {
         $latestPath = $this->buildHashedPath('provider-latest');
         $this->acquireTopLevelLock();
 
         try {
-            $previousHash = null;
             if (file_exists($latestPath)) {
                 $previousJson = file_get_contents($latestPath);
                 if ($previousJson === false || $previousJson === '') {
                     // decoding it as an empty map would drop every other package
                     throw new AssetFileStorageException('Provider-latest "latest.json" is empty or unreadable, restore it from the shard packages.json names');
                 }
-                $previousHash = hash('sha256', $previousJson);
                 $data = Json::decode($previousJson);
             }
             if (!isset($data) || !is_array($data)) {
@@ -354,38 +389,64 @@ class Storage extends Component implements StorageInterface
             $update($data['providers']);
             $json = Json::encode($data);
             $hash = hash('sha256', $json);
-            $path = $this->buildHashedPath('provider-latest', $hash);
 
-            if ($this->shardNeedsWrite($path, $hash)) {
-                if ($this->mkdir(dirname($path)) === false) {
-                    throw new AssetFileStorageException('Failed to create a directory for provider-latest storage');
-                }
-                if (!$this->writeShardAtomic($path, $json)) {
-                    throw new AssetFileStorageException('Failed to write provider-latest storage');
-                }
+            if ($this->mkdir(dirname($latestPath)) === false) {
+                throw new AssetFileStorageException('Failed to create a directory for provider-latest storage');
             }
             if (!$this->writeLatestAtomic($latestPath, $json)) {
                 throw new AssetFileStorageException('Failed to write file "latest.json" to provider-latest storage');
             }
 
-            $this->writePackagesJson($hash);
-
-            // the TTL counts from when a shard stops being live, not from when it was
-            // written: clients that read the previous packages.json still need it.
-            // If the refresh fails, skip pruning so its stale mtime can't expire it now.
-            $previousPath = $this->buildHashedPath('provider-latest', $previousHash);
-            $refreshed = true;
-            if ($previousHash !== null && $previousHash !== $hash && file_exists($previousPath)) {
-                $refreshed = @touch($previousPath);
-            }
-            if ($refreshed) {
-                $this->pruneProviderLatest($hash);
+            if ($publish === null ? $this->isProviderPublishDue() : $publish) {
+                $this->publishProviderShard($json, $hash);
             }
         } finally {
             $this->releaseTopLevelLock();
         }
 
         return $hash;
+    }
+
+    /**
+     * Writes the provider map as the shard named $hash, points packages.json at it
+     * and prunes superseded shards. Must be called under the top-level lock.
+     * @param string $json
+     * @param string $hash
+     */
+    protected function publishProviderShard($json, $hash)
+    {
+        try {
+            $includes = file_exists($this->buildPath('packages.json')) ? $this->readPackagesJson() : [];
+        } catch (\Exception $e) {
+            $includes = [];
+        }
+        $previousHash = isset($includes['p/provider-latest/%hash%.json']['sha256'])
+            ? $includes['p/provider-latest/%hash%.json']['sha256']
+            : null;
+
+        $path = $this->buildHashedPath('provider-latest', $hash);
+        if ($this->shardNeedsWrite($path, $hash)) {
+            if (!$this->writeShardAtomic($path, $json)) {
+                throw new AssetFileStorageException('Failed to write provider-latest storage');
+            }
+        } else {
+            // a shard that stays live for days must not look expired to pruning
+            @touch($path);
+        }
+
+        $this->writePackagesJson($hash);
+
+        // the TTL counts from when a shard stops being live, not from when it was
+        // written: clients that read the previous packages.json still need it.
+        // If the refresh fails, skip pruning so its stale mtime can't expire it now.
+        $previousPath = $this->buildHashedPath('provider-latest', $previousHash);
+        $refreshed = true;
+        if ($previousHash !== null && $previousHash !== $hash && file_exists($previousPath)) {
+            $refreshed = @touch($previousPath);
+        }
+        if ($refreshed) {
+            $this->pruneProviderLatest($hash);
+        }
     }
 
     /**
@@ -588,10 +649,17 @@ class Storage extends Component implements StorageInterface
             return ['sane' => false, 'reason' => 'provider_latest_shard_missing_or_corrupted', 'hash' => $hash];
         }
 
+        // latest.json runs ahead of the live shard until the next publish, so it only
+        // has to hold a provider map
         $latestPath = $this->buildHashedPath('provider-latest');
         $latestContent = file_exists($latestPath) ? file_get_contents($latestPath) : false;
-        if ($latestContent === false || hash('sha256', $latestContent) !== $hash) {
-            return ['sane' => false, 'reason' => 'provider_latest_pointer_diverged', 'hash' => $hash];
+        try {
+            $latest = $latestContent ? Json::decode($latestContent) : null;
+        } catch (\Exception $e) {
+            $latest = null;
+        }
+        if (!isset($latest['providers']) || !is_array($latest['providers'])) {
+            return ['sane' => false, 'reason' => 'provider_latest_unreadable', 'hash' => $hash];
         }
 
         return ['sane' => true, 'reason' => null, 'hash' => $hash];

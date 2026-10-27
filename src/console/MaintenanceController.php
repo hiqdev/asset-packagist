@@ -146,6 +146,17 @@ class MaintenanceController extends Controller
             $package->unload();
             $this->stdout("Package {$package->getFullName()} regenerated\n");
         }
+        $this->actionPublishProviderLatest();
+    }
+
+    /**
+     * Publishes the provider map now. Package updates publish it at most once per
+     * `providerPublishInterval`, so their changes reach Composer up to that much later.
+     */
+    public function actionPublishProviderLatest()
+    {
+        $hash = $this->packageStorage->publishProviderLatest();
+        $this->stdout("Published provider map $hash\n");
     }
 
     /**

@@ -59,7 +59,8 @@ interface StorageInterface
     /**
      * Checks whether the currently-live provider-latest shard (the one packages.json's
      * provider-includes actually points at) exists and hash-matches, and that
-     * provider-latest/latest.json agrees with it.
+     * provider-latest/latest.json holds a provider map. latest.json may be ahead of
+     * the live shard until the next publish.
      *
      * @return array{sane: bool, reason: string|null, hash: string|null}
      */
@@ -73,4 +74,12 @@ interface StorageInterface
      * @return string[] the removed names
      */
     public function removeUnnormalizedProviders();
+
+    /**
+     * Publishes provider-latest/latest.json now as the live shard and packages.json,
+     * without waiting for the publish interval.
+     *
+     * @return string hash of the published provider map
+     */
+    public function publishProviderLatest();
 }

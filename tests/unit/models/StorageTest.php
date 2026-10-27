@@ -52,6 +52,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->object = new Storage();
         $this->object->providerShardTtl = 3600;
+        $this->object->providerPublishInterval = 0;
     }
 
     protected function tearDown(): void
@@ -210,19 +211,31 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('provider_latest_shard_missing_or_corrupted', $result['reason']);
     }
 
-    public function testCheckProviderLatestIsSaneDetectsDivergedPointer()
+    public function testCheckProviderLatestIsSaneAcceptsAnUnpublishedLatest()
     {
         $json = Json::encode(['providers' => ['bower-asset/jquery' => ['sha256' => 'x']]]);
         $hash = hash('sha256', $json);
 
         $this->writeShard("p/provider-latest/{$hash}.json", $json);
-        $this->writeShard('p/provider-latest/latest.json', $json . 'DIVERGED');
+        $this->writeShard('p/provider-latest/latest.json', Json::encode(['providers' => ['bower-asset/jquery' => ['sha256' => 'y']]]));
+        $this->writePackagesJsonFixture($hash);
+
+        $this->assertTrue($this->object->checkProviderLatestIsSane()['sane']);
+    }
+
+    public function testCheckProviderLatestIsSaneDetectsUnreadableLatest()
+    {
+        $json = Json::encode(['providers' => ['bower-asset/jquery' => ['sha256' => 'x']]]);
+        $hash = hash('sha256', $json);
+
+        $this->writeShard("p/provider-latest/{$hash}.json", $json);
+        $this->writeShard('p/provider-latest/latest.json', $json . 'BROKEN');
         $this->writePackagesJsonFixture($hash);
 
         $result = $this->object->checkProviderLatestIsSane();
 
         $this->assertFalse($result['sane']);
-        $this->assertSame('provider_latest_pointer_diverged', $result['reason']);
+        $this->assertSame('provider_latest_unreadable', $result['reason']);
     }
 
     protected function writePackagesJsonFixture($hash)
