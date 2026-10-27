@@ -68,6 +68,7 @@ class StorageProviderMapTest extends \PHPUnit\Framework\TestCase
         };
 
         $this->object = new Storage();
+        $this->object->providerPublishInterval = 0;
     }
 
     protected function tearDown(): void
@@ -155,10 +156,11 @@ class StorageProviderMapTest extends \PHPUnit\Framework\TestCase
         $this->writeFixturePackage('first', '2.0.0');
         // a write that failed after latest.json, before packages.json
         file_put_contents($this->storageDir . '/packages.json', $live);
-        $this->assertFalse($this->object->checkProviderLatestIsSane()['sane']);
+        $this->assertNotSame($this->liveProviderHash(), $this->publishedProviderHash());
 
         $this->writeFixturePackage('first', '2.0.0');
 
+        $this->assertSame($this->liveProviderHash(), $this->publishedProviderHash());
         $this->assertTrue($this->object->checkProviderLatestIsSane()['sane']);
     }
 
@@ -175,6 +177,64 @@ class StorageProviderMapTest extends \PHPUnit\Framework\TestCase
 
         $this->assertContains('release:lock', $this->mutexCalls);
         $this->assertSame('', file_get_contents($this->providerLatestPath()));
+    }
+
+    protected function publishedProviderHash()
+    {
+        return Json::decode(file_get_contents($this->storageDir . '/packages.json'))['provider-includes']['p/provider-latest/%hash%.json']['sha256'];
+    }
+
+    protected function providerShards()
+    {
+        return glob($this->storageDir . '/p/provider-latest/' . str_repeat('[0-9a-f]', 64) . '.json');
+    }
+
+    public function testWriteProviderLatestDefersPublishWithinTheInterval()
+    {
+        $this->object->providerPublishInterval = 3600;
+        // nothing published yet, so the first write publishes
+        $this->writeFixturePackage('first', '1.0.0');
+        $published = $this->publishedProviderHash();
+        $this->assertSame($published, $this->liveProviderHash());
+
+        $this->writeFixturePackage('second', '1.0.0');
+
+        $providers = Json::decode(file_get_contents($this->providerLatestPath()))['providers'];
+        $this->assertArrayHasKey('npm-asset/second', $providers);
+        $this->assertSame($published, $this->publishedProviderHash());
+        $this->assertCount(1, $this->providerShards());
+        $this->assertTrue($this->object->checkProviderLatestIsSane()['sane']);
+    }
+
+    public function testWriteProviderLatestPublishesOnceTheIntervalHasPassed()
+    {
+        $this->object->providerPublishInterval = 3600;
+        $this->writeFixturePackage('first', '1.0.0');
+        $this->writeFixturePackage('second', '1.0.0');
+        $pending = $this->liveProviderHash();
+        $this->assertNotSame($pending, $this->publishedProviderHash());
+        touch($this->storageDir . '/packages.json', time() - 3601);
+
+        // an unchanged package is enough to publish what is pending
+        $this->writeFixturePackage('first', '1.0.0');
+
+        $this->assertSame($pending, $this->publishedProviderHash());
+        $this->assertFileExists($this->storageDir . '/p/provider-latest/' . $pending . '.json');
+        $this->assertGreaterThan(time() - 60, filemtime($this->storageDir . '/packages.json'));
+        $this->assertTrue($this->object->checkProviderLatestIsSane()['sane']);
+    }
+
+    public function testPublishProviderLatestPublishesPendingChangesNow()
+    {
+        $this->object->providerPublishInterval = 3600;
+        $this->writeFixturePackage('first', '1.0.0');
+        $this->writeFixturePackage('second', '1.0.0');
+
+        $hash = $this->object->publishProviderLatest();
+
+        $this->assertSame($this->liveProviderHash(), $hash);
+        $this->assertSame($hash, $this->publishedProviderHash());
+        $this->assertCount(2, $this->providerShards());
     }
 
     public function testRemoveUnnormalizedProviders()
