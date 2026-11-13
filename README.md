@@ -2,7 +2,6 @@
 
 [![Latest Stable Version](https://poser.pugx.org/hiqdev/asset-packagist/v/stable)](https://packagist.org/packages/hiqdev/asset-packagist)
 [![Total Downloads](https://poser.pugx.org/hiqdev/asset-packagist/downloads)](https://packagist.org/packages/hiqdev/asset-packagist)
-[![Build Status](https://img.shields.io/travis/hiqdev/asset-packagist.svg)](https://travis-ci.org/hiqdev/asset-packagist)
 
 ![Composer](https://raw.githubusercontent.com/hiqdev/asset-packagist/master/docs/asset-packagist.png)
 
