@@ -13,6 +13,7 @@ namespace hiqdev\assetpackagist\commands;
 use hiqdev\assetpackagist\exceptions\CorruptedPackageException;
 use hiqdev\assetpackagist\exceptions\PackageNotExistsException;
 use hiqdev\assetpackagist\exceptions\PermanentProblemExceptionInterface;
+use hiqdev\assetpackagist\fxp\Exception\UnpublishedPackageException;
 use Yii;
 use yii\db\IntegrityException;
 
@@ -62,7 +63,7 @@ class PackageUpdateCommand extends AbstractPackageCommand
     public static function permanentProblemClass($message)
     {
         // Composer 2 reports e.g. `(HTTP/2 404 )`, Composer 1 reported `(HTTP/1.1 404 Not Found)`
-        if (preg_match('{file could not be downloaded \(HTTP/[\d.]+ 404\b}i', $message) || static::isInvalidName($message)) {
+        if (preg_match('{file could not be downloaded \(HTTP/[\d.]+ 404\b}i', $message) || static::isGone($message)) {
             return PackageNotExistsException::class;
         }
 
@@ -96,6 +97,18 @@ class PackageUpdateCommand extends AbstractPackageCommand
             && stripos($message, 'MethodNotAllowedError') !== false;
     }
 
+    /**
+     * Whether the package is known to be gone for good, either because npm rejects
+     * its name or because all of its versions were unpublished.
+     *
+     * @param string $message
+     * @return bool
+     */
+    public static function isGone($message)
+    {
+        return static::isInvalidName($message) || stripos($message, UnpublishedPackageException::MARKER) !== false;
+    }
+
     private function transformException(\Exception $e)
     {
         $exceptionClass = static::permanentProblemClass($e->getMessage());
@@ -105,8 +118,8 @@ class PackageUpdateCommand extends AbstractPackageCommand
 
         $newException = new $exceptionClass($e->getMessage(), 0, $e);
 
-        // Record an invalid name too, so that CollectDependenciesCommand stops queueing it
-        if (static::isInvalidName($e->getMessage()) && !$this->packageRepository->exists($this->package)) {
+        // Record a gone package too, so that CollectDependenciesCommand stops queueing it
+        if (static::isGone($e->getMessage()) && !$this->packageRepository->exists($this->package)) {
             try {
                 $this->packageRepository->insert($this->package);
             } catch (IntegrityException $ignored) {
