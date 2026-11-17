@@ -26,6 +26,14 @@ class PackageUpdateCommandTest extends TestCase
         $this->assertFalse(PackageUpdateCommand::isInvalidName(str_replace('registry.npmjs.org', 'example.com', $npm405)));
     }
 
+    public function testDetectsGonePackages()
+    {
+        $this->assertTrue(PackageUpdateCommand::isGone('Package "x" was unpublished from the npm registry'));
+        $this->assertTrue(PackageUpdateCommand::isGone('The "https://registry.npmjs.org/a-b-file" file could not be downloaded (HTTP/2 405 ):' . "\n" . '{"code":"MethodNotAllowedError"}'));
+        // a 404 still avoids a recorded package, but does not record an unknown one
+        $this->assertFalse(PackageUpdateCommand::isGone('The "https://registry.npmjs.org/x" file could not be downloaded (HTTP/2 404 )'));
+    }
+
     public static function failureMessages()
     {
         return [
@@ -39,6 +47,10 @@ class PackageUpdateCommandTest extends TestCase
             ],
             'composer 2 npm invalid name' => [
                 'The "https://registry.npmjs.org/@dfinity%2Fagent-dfinity%2Fidentity-provider-file" file could not be downloaded (HTTP/2 405 ):' . "\n" . '{"code":"MethodNotAllowedError","message":"GET is not allowed"}',
+                PackageNotExistsException::class,
+            ],
+            'npm unpublished stub' => [
+                'Package "tinyphp-bootstrap" was unpublished from the npm registry at 2026-11-05T14:02:58.233Z',
                 PackageNotExistsException::class,
             ],
             '405 from another host is temporary' => [

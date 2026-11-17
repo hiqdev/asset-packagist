@@ -19,6 +19,7 @@ use Composer\Repository\ArrayRepository;
 use hiqdev\assetpackagist\fxp\Converter\NpmPackageUtil;
 use hiqdev\assetpackagist\fxp\Converter\PackageUtil;
 use hiqdev\assetpackagist\fxp\Exception\InvalidCreateRepositoryException;
+use hiqdev\assetpackagist\fxp\Exception\UnpublishedPackageException;
 
 /**
  * NPM repository.
@@ -76,6 +77,25 @@ class NpmRepository extends AbstractAssetsRepository
         $packageName = str_replace('%40', '@', $packageName);
 
         return parent::buildPackageUrl($packageName);
+    }
+
+    /**
+     * npm answers 404 for a scoped package whose versions were all unpublished,
+     * but keeps a stub for an unscoped one: HTTP 200 with `time.unpublished`
+     * and no `versions`.
+     *
+     * {@inheritdoc}
+     */
+    protected function assertPackageIsPublished(array $data, $packageName)
+    {
+        if (empty($data['versions']) && isset($data['time']['unpublished'])) {
+            $unpublished = $data['time']['unpublished'];
+            $time = is_array($unpublished) && isset($unpublished['time']) && is_string($unpublished['time'])
+                ? $unpublished['time']
+                : null;
+
+            throw UnpublishedPackageException::create($packageName, $time);
+        }
     }
 
     /**

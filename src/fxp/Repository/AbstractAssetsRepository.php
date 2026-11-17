@@ -149,6 +149,7 @@ abstract class AbstractAssetsRepository extends ComposerRepository
             $packageUrl = $this->buildPackageUrl($packageName);
             $cacheName = $packageName . '-' . sha1($packageName) . '-package.json';
             $data = $this->fetchFile($packageUrl, $cacheName);
+            $this->assertPackageIsPublished($data, $packageName);
 
             foreach ($this->createArrayRepositoryConfig($data['versions'] ?? []) as $package) {
                 if ($package->getName() === $name) {
@@ -162,6 +163,16 @@ abstract class AbstractAssetsRepository extends ComposerRepository
             'namesFound' => array_values(array_unique($namesFound)),
             'packages' => $packages,
         ];
+    }
+
+    /**
+     * Throws when the registry answered for a package that no longer exists.
+     *
+     * @param array  $data        The package data from the registry
+     * @param string $packageName The package name in the registry
+     */
+    protected function assertPackageIsPublished(array $data, $packageName)
+    {
     }
 
     /**
