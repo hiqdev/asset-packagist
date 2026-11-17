@@ -40,6 +40,12 @@ class Storage extends Component implements StorageInterface
     public $topLevelLockTimeout = 30;
 
     /**
+     * @var int seconds to wait for a package lock. Its holder updates the provider map
+     * under it, so this must outlast the top-level lock timeout
+     */
+    public $packageLockTimeout = 40;
+
+    /**
      * @var int seconds between provider map publishes. Every package write updates
      * provider-latest/latest.json, but the hashed shard and packages.json follow it
      * at most this often: the map is about 10 MB gzipped, and Composer downloads it
@@ -89,7 +95,7 @@ class Storage extends Component implements StorageInterface
         $mutex  = Yii::$app->mutex;
         $key    = $this->packageLockKey($packageName);
 
-        if (!$mutex->acquire($key, 5)) {
+        if (!$mutex->acquire($key, $this->packageLockTimeout)) {
             throw new \Exception('failed get package lock for package ' . $packageName);
         }
     }
@@ -178,11 +184,13 @@ class Storage extends Component implements StorageInterface
             if (!$this->writeLatestAtomic($latestPath, $json)) {
                 throw new AssetFileStorageException('Failed to write file "latest.json" for asset-packge', $package);
             }
+            // Still under the package lock: otherwise two concurrent writes of the same package
+            // can update the provider map in the opposite order to latest.json, leaving the
+            // map naming the older version for good
+            $this->writeProviderLatest($name, $hash);
         } finally {
             $this->releasePackageLock($name);
         }
-
-        $this->writeProviderLatest($name, $hash);
 
         return $hash;
     }

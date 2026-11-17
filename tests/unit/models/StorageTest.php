@@ -301,6 +301,43 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testWritePackageUpdatesTheProviderMapUnderThePackageLock()
+    {
+        $log = new \ArrayObject();
+        Yii::$app->mutex = new class($log) {
+            private $log;
+
+            public function __construct($log)
+            {
+                $this->log = $log;
+            }
+
+            public function acquire($name, $timeout = 0)
+            {
+                $this->log[] = 'acquire ' . $name;
+
+                return true;
+            }
+
+            public function release($name)
+            {
+                $this->log[] = 'release ' . $name;
+
+                return true;
+            }
+        };
+        $packageLock = 'package-lock-' . sha1('bower-asset/jquery');
+
+        $this->object->writePackage(new AssetPackage('bower', 'jquery'));
+
+        $this->assertSame([
+            "acquire $packageLock",
+            'acquire lock',
+            'release lock',
+            "release $packageLock",
+        ], $log->getArrayCopy());
+    }
+
     public function testWritePackageAllowsEmptyReleasesWhenNothingExistedBefore()
     {
         $package = new AssetPackage('bower', 'new-package');
